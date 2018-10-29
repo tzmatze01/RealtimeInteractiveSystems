@@ -1,33 +1,33 @@
 package main;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.Date;
+import main.handler.LoginHandler;
+import main.handler.LogoutHandler;
+import main.handler.MovementHandler;
+import main.messages.LoginMessage;
+import main.messages.LogoutMessage;
+import main.messages.MovementMessage;
+import main.messages.type.MessageType;
+import main.server.ServerManager;
 
 public class Main {
 
 
-    public static void main(String [] args) throws IOException {
+    public static void main(String [] args) {
 
-        ServerSocket serverSocket = new ServerSocket(9090);
 
-        try {
-            while (true) {
-                Socket socket = serverSocket.accept();
+        ServerManager manager = new ServerManager(9090);
 
-                BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        LoginHandler<LoginMessage> hLogin = new LoginHandler<>();
+        LogoutHandler<LogoutMessage> hLogout = new LogoutHandler<>();
+        MovementHandler<MovementMessage> hMovement = new MovementHandler();
 
-                System.out.println("i hend bekomma: " + br.readLine());
+        manager.register(hLogin);
+        manager.register(hLogout);
+        manager.register(hMovement);
 
-                br.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        manager.run();
 
-        }
+        MessageType type = MessageType.LOGIN;
+
     }
 }

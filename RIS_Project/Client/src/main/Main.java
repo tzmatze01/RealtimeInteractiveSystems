@@ -13,17 +13,23 @@ public class Main {
     public static void main(String [] args) throws IOException {
 
 
-        System.out.println("zahl eingeben: ");
-
         Socket s = new Socket("127.0.0.1", 9090);
-
-        Scanner sc = new Scanner(System.in);
-        int i = sc.nextInt();
-
+        String name = "asda:";
+        boolean isAlive = true;
         PrintWriter pw = new PrintWriter(s.getOutputStream());
 
-        pw.print("Die oigebene zohl isch: " + i);
+        while(isAlive) {
 
+            System.out.println("text eingeben: ");
+
+
+            Scanner sc = new Scanner(System.in);
+            String str = sc.nextLine();
+
+
+            pw.print(name + "" + str);
+            pw.flush();
+        }
         pw.close();
 
 
