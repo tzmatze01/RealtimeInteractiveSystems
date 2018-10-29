@@ -12,4 +12,8 @@ public abstract class NetworkMessageHandler<T extends Message> implements Runnab
 
     // computation of the messages
     public abstract void handle(T message);
+        // puts message in Queue to calculate later in run method?
+
+        // TODO idee: 'shooter' mit grundmelodie riff, jeder abgeschossene gegner ergibt weiteren ton.
+        // jeder neue spieler ist ein weiteres instrument
 }
