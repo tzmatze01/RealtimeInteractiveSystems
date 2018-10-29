@@ -1,13 +1,18 @@
 package main;
 
-import main.shapes.Circle;
-import main.shapes.Star;
+import main.shapes.*;
+import main.shapes.Image;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -19,7 +24,7 @@ public class Main extends JPanel {
 
 
     public Main(int i, String shape) {
-        setBackground(Color.BLACK);
+        setBackground(Color.WHITE);
         setPreferredSize(new Dimension(400, 400));
 
         switch (shape) {
@@ -45,6 +50,9 @@ public class Main extends JPanel {
         }
     }
 
+
+    // this overrideed methoded draws the Graphics2D Objects in shapes
+    // g is pane itself?
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -53,7 +61,10 @@ public class Main extends JPanel {
                 ((Circle) s).draw(g);
             } else if (s instanceof Star) {
                 ((Star) s).draw(g);
+            } else if (s instanceof Image) {
+                ((Image) s).draw(g);
             }
+
         }
     }
 
@@ -67,6 +78,11 @@ public class Main extends JPanel {
         repaint();
     }
 
+    public void addImage(int x, int y, String path)
+    {
+        shapes.add(new Image(x, y, path));
+        repaint();
+    }
 
     public static void main(String[] argv) {
 
@@ -80,7 +96,13 @@ public class Main extends JPanel {
                 JOptionPane.PLAIN_MESSAGE, null, shapes, shapes[0]);
 
         JFrame frame = new JFrame();
-        frame.add(new Main(amount, shape));
+
+        Main main = new Main(amount, shape);
+        main.addImage(50, 50, "src/main/resources/player.png");
+
+
+        frame.add(main);
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
