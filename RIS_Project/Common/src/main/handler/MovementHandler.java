@@ -5,17 +5,13 @@ import main.messages.MovementMessage;
 
 public class MovementHandler<T extends Message> extends NetworkMessageHandler<T> {
 
-    @Override
-    public void handle(T message) {
-
-
-        run();
-    }
 
     @Override
-    public void run() {
+    public void handleMessage(T message) {
 
+        System.out.println("Movement Handler: "+message.getType());
     }
+
 
     //typ der verabeitenden nachricht
     // diese nehmen nachrichten an und versenden sie an NetMsgHandler

@@ -4,14 +4,10 @@ import main.messages.Message;
 
 public class LoginHandler<T extends Message> extends NetworkMessageHandler<T> {
 
-
     @Override
-    public void handle(T message) {
+    public void handleMessage(T message) {
 
+        System.out.println("Login Handler: "+message.getType());
     }
 
-    @Override
-    public void run() {
-
-    }
 }

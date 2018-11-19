@@ -8,6 +8,7 @@ public class LoginMessage extends Message {
     private String password;
 
     public LoginMessage(String userName, String password) {
+
         super(MessageType.LOGIN);
         this.userName = userName;
         this.password = password;

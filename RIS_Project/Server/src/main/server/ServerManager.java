@@ -60,9 +60,8 @@ public class ServerManager extends Manager {
                 Message message = ((Message)ois.readObject());
 
                 NetworkMessageHandler nmh = listeners.get(message.getType());
-                nmh.handle(message);
-                nmh.run();
-
+                nmh.addMessage(message);
+                //nmh.run();
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {

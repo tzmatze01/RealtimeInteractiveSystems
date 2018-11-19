@@ -5,14 +5,11 @@ import main.messages.Message;
 
 public class LogoutHandler<T extends Message> extends NetworkMessageHandler<T>{
 
-
     @Override
-    public void handle(T message) {
+    public void handleMessage(T message) {
 
+        System.out.println("Logout Handler: "+message.getType());
     }
 
-    @Override
-    public void run() {
 
-    }
 }

@@ -21,13 +21,21 @@ public class Main {
         LogoutHandler<LogoutMessage> hLogout = new LogoutHandler<>();
         MovementHandler<MovementMessage> hMovement = new MovementHandler();
 
+        Thread tLogin = new Thread(hLogin);
+        Thread tLogout = new Thread(hLogin);
+        Thread tMovement = new Thread(hLogin);
+
+        tLogin.start();
+        tLogout.start();
+        tMovement.start();
+
         manager.register(hLogin);
         manager.register(hLogout);
         manager.register(hMovement);
 
         manager.run();
 
-        MessageType type = MessageType.LOGIN;
+        //MessageType type = MessageType.LOGIN;
 
     }
 }
