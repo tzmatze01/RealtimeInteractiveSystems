@@ -2,11 +2,19 @@ package main.messages;
 
 import main.messages.type.MessageType;
 
-public class LogoutMessage extends Message {
+public class LogoutMessage implements Message {
 
 
 
-    public LogoutMessage() {
-        super(MessageType.LOGOUT);
+    public LogoutMessage()
+    {
+        //super(MessageType.LOGOUT);
+
+    }
+
+    @Override
+    public MessageType getType()
+    {
+        return MessageType.LOGOUT;
     }
 }

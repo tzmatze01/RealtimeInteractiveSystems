@@ -12,9 +12,7 @@ public abstract class NetworkMessageHandler<T extends Message> implements Runnab
     private final BlockingQueue<T> messageQueue = new LinkedBlockingDeque<>();
     private boolean isAlive = true;
 
-    private T handledMessage;
-
-    public abstract void handleMessage(T message);
+    //protected T handledMessageType;;
 
     public void addMessage(T message) { this.messageQueue.offer(message); }
 
@@ -22,10 +20,12 @@ public abstract class NetworkMessageHandler<T extends Message> implements Runnab
 
     public boolean isAlive() { return isAlive; }
 
-    // returns Type of the handled messages
-    public MessageType getHandledMessageType() { return this.handledMessage.getType(); }
+    public abstract void handleMessage(T message);
 
-    @Override
+    // returns Type of the handled messages
+    public abstract MessageType getHandledMessageType();
+
+    //@Override
     public void run()
     {
         while(isAlive)

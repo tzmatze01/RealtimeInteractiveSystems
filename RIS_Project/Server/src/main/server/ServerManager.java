@@ -15,11 +15,8 @@ import java.util.Map;
 
 // netzwerk listener
 
-public class ServerManager extends Manager {
+public class ServerManager extends Manager implements Runnable {
 
-    // hier werden sockets angenommen
-
-    // hier sind threads drin
     private Map<MessageType, NetworkMessageHandler> listeners;
 
     private int port;
@@ -46,6 +43,8 @@ public class ServerManager extends Manager {
 
         while(isAlive)
         {
+            System.out.print("Waiting for mssgs...");
+
             try {
                 socket = serverSocket.accept();
             }
@@ -56,6 +55,7 @@ public class ServerManager extends Manager {
             // read the incoming messages
             ObjectInputStream ois = null;
             try {
+
                 ois = new ObjectInputStream(socket.getInputStream());
                 Message message = ((Message)ois.readObject());
 
@@ -76,14 +76,15 @@ public class ServerManager extends Manager {
         }
     }
 
-    public void register(NetworkMessageHandler nmh)
+    public void registerMessageHandler(NetworkMessageHandler nmh)
     {
         if(!listeners.containsKey(nmh.getHandledMessageType())) {
             listeners.put(nmh.getHandledMessageType(), nmh);
         }
         else
         {
-            // TODO Error messages
+            // TODO Error messages handler already exists
         }
     }
+
 }

@@ -22,7 +22,7 @@ public class ClientManager extends Manager {
         this.isAlive = true;
     }
 
-    @Override
+    //@Override
     public void register(NetworkMessageHandler nmh) {
 
     }
@@ -30,6 +30,11 @@ public class ClientManager extends Manager {
     @Override
     public void run() {
 
-        while isAlive
+        //while isAlive
+    }
+
+    @Override
+    public void registerMessageHandler(NetworkMessageHandler nmh) {
+
     }
 }
