@@ -15,16 +15,11 @@ import java.util.Map;
 
 // netzwerk listener
 
-public class ServerManager extends Manager implements Runnable {
-
-    private Map<MessageType, NetworkMessageHandler> listeners;
-
-    private int port;
-    private boolean isAlive;
+public class ServerManager extends Manager {
 
     private ServerSocket serverSocket;
     private Socket socket;
-
+    private int port;
 
     public ServerManager(int port) {
         this.port = port;
@@ -54,37 +49,22 @@ public class ServerManager extends Manager implements Runnable {
 
             // read the incoming messages
             ObjectInputStream ois = null;
-            try {
-
+            try
+            {
                 ois = new ObjectInputStream(socket.getInputStream());
                 Message message = ((Message)ois.readObject());
 
                 NetworkMessageHandler nmh = listeners.get(message.getType());
                 nmh.addMessage(message);
-                //nmh.run();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            }
+            catch (IOException e)
+            {
                 e.printStackTrace();
             }
-
-
-            // unterscheiden was für messages
-            // richtigen Hanler aus pool suchen
-            // handler thread starten
-            // ---> ??Queue vorlesung
+            catch (ClassNotFoundException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
-
-    public void registerMessageHandler(NetworkMessageHandler nmh)
-    {
-        if(!listeners.containsKey(nmh.getHandledMessageType())) {
-            listeners.put(nmh.getHandledMessageType(), nmh);
-        }
-        else
-        {
-            // TODO Error messages handler already exists
-        }
-    }
-
 }

@@ -12,8 +12,6 @@ public abstract class NetworkMessageHandler<T extends Message> implements Runnab
     private final BlockingQueue<T> messageQueue = new LinkedBlockingDeque<>();
     private boolean isAlive = true;
 
-    //protected T handledMessageType;;
-
     public void addMessage(T message) { this.messageQueue.offer(message); }
 
     public void setAlive(boolean isAlive) { this.isAlive = isAlive; }
@@ -25,7 +23,7 @@ public abstract class NetworkMessageHandler<T extends Message> implements Runnab
     // returns Type of the handled messages
     public abstract MessageType getHandledMessageType();
 
-    //@Override
+    @Override
     public void run()
     {
         while(isAlive)
@@ -41,7 +39,4 @@ public abstract class NetworkMessageHandler<T extends Message> implements Runnab
             }
         }
     }
-
-    // TODO idee: 'shooter' mit grundmelodie riff, jeder abgeschossene gegner ergibt weiteren ton.
-    // jeder neue spieler ist ein weiteres instrument
 }

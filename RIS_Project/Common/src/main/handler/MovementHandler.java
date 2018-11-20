@@ -22,7 +22,4 @@ public class MovementHandler<T extends Message> extends NetworkMessageHandler<T>
         return MessageType.MOVEMENT;
     }
 
-
-    //typ der verabeitenden nachricht
-    // diese nehmen nachrichten an und versenden sie an NetMsgHandler
 }

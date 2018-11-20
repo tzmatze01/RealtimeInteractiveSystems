@@ -1,4 +1,4 @@
-package main.network;
+package main.client;
 
 import main.handler.NetworkMessageHandler;
 import main.manager.Manager;

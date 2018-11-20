@@ -3,13 +3,26 @@ package main.manager;
 import main.handler.NetworkMessageHandler;
 import main.messages.type.MessageType;
 
-public abstract class Manager {
+import java.util.Map;
 
-    private boolean isAlive;
+public abstract class Manager implements Runnable {
+
+    protected Map<MessageType, NetworkMessageHandler> listeners;
+    protected boolean isAlive;
 
     public void setAlive(boolean isAlive){ this.isAlive = isAlive; }
 
-    public abstract void registerMessageHandler(NetworkMessageHandler nmh);
+    public void registerMessageHandler(NetworkMessageHandler nmh)
+    {
+        if(!listeners.containsKey(nmh.getHandledMessageType()))
+        {
+            listeners.put(nmh.getHandledMessageType(), nmh);
+        }
+        else
+        {
+            // TODO Error messages handler already exists
+        }
+    }
 
 
 }
