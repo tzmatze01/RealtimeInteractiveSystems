@@ -23,7 +23,6 @@ public class ServerManager extends Manager {
 
     public ServerManager(int port) {
         this.port = port;
-        this.isAlive = true;
         this.listeners = new HashMap<>();
     }
 

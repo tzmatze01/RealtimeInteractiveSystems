@@ -8,7 +8,7 @@ import java.util.Map;
 public abstract class Manager implements Runnable {
 
     protected Map<MessageType, NetworkMessageHandler> listeners;
-    protected boolean isAlive;
+    protected boolean isAlive = true;
 
     public void setAlive(boolean isAlive){ this.isAlive = isAlive; }
 
