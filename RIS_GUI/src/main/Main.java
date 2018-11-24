@@ -1,9 +1,13 @@
 package main;
 
+import main.game.World;
 import main.shapes.*;
 import main.shapes.Image;
 
 import java.awt.*;
+import java.awt.event.AWTEventListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -17,8 +21,41 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class Main extends JPanel {
+import java.util.Scanner;
 
+public class Main extends JFrame { //extends JPanel {
+
+    public Main() {
+
+        initUI();
+    }
+
+    private void initUI() {
+
+        World world = new World();
+        world.setFocusable(true);
+        world.addKeyListener(world);
+
+        add(world);
+
+        setSize(600, 400);
+
+        setLocationRelativeTo(null);
+        setResizable(false);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //setVisible(true);
+
+    }
+
+    public static void main(String[] args) {
+
+        EventQueue.invokeLater(() -> {
+            Main ex = new Main();
+            ex.setVisible(true);
+        });
+    }
+
+    /*
     private List<Object> shapes = new ArrayList<>();
     private Random random = new Random();
 
@@ -84,8 +121,20 @@ public class Main extends JPanel {
         repaint();
     }
 
+    public static void addKeyListener(JFrame frame)
+    {
+
+    }
+
     public static void main(String[] argv) {
 
+        /*
+
+        TUTORIAL
+
+        http://zetcode.com/tutorials/javagamestutorial/movingsprites/
+
+        //
         String shapeAmount = JOptionPane.showInputDialog(null,
                 "How many shapes?", "Random Shapes...", JOptionPane.PLAIN_MESSAGE);
         int amount = Integer.parseInt(shapeAmount);
@@ -108,6 +157,35 @@ public class Main extends JPanel {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
+        long eventMask = AWTEvent.KEY_EVENT_MASK;
+
+        frame.getToolkit().addAWTEventListener(new AWTEventListener() {
+
+
+            @Override
+            public void eventDispatched(AWTEvent event) {
+
+                System.out.println(event.paramString());
+                System.out.println(event.getID());
+
+                /*
+                EVENT IDs
+
+                KEY_TYPED : 400 - Button halten?
+                KEY_PRESSED : 401 - Button erstmalig gedrückt
+                KEY_RELEASED : 402 - Button losgelassen
+                 //
+
+                //Event.Key
+            }
+
+
+        }, eventMask);
+
+        //addKeyListener();
+
+
     }
+    */
 
 }
