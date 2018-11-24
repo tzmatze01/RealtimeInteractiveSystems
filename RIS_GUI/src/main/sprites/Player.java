@@ -32,6 +32,7 @@ public class Player {
 
     public void move() {
 
+        System.out.println("move player dx: "+x+" dy:"+y);
         x += dx;
         y += dy;
     }
@@ -63,43 +64,41 @@ public class Player {
 
     public void keyPressed(KeyEvent e) {
 
-        int key = e.getKeyCode();
+        int keyCode = e.getKeyCode();
 
-        if (key == KeyEvent.VK_LEFT) {
-            dx = -2;
-        }
-
-        if (key == KeyEvent.VK_RIGHT) {
-            dx = 2;
-        }
-
-        if (key == KeyEvent.VK_UP) {
-            dy = -2;
-        }
-
-        if (key == KeyEvent.VK_DOWN) {
-            dy = 2;
+        switch( keyCode ) {
+            case KeyEvent.VK_UP:
+                dy = -2;
+                break;
+            case KeyEvent.VK_DOWN:
+                dy = 2;
+                break;
+            case KeyEvent.VK_LEFT:
+                dx = -2;
+                break;
+            case KeyEvent.VK_RIGHT :
+                dx = 2;
+                break;
         }
     }
 
     public void keyReleased(KeyEvent e) {
 
-        int key = e.getKeyCode();
+        int keyCode = e.getKeyCode();
 
-        if (key == KeyEvent.VK_LEFT) {
-            dx = 0;
-        }
-
-        if (key == KeyEvent.VK_RIGHT) {
-            dx = 0;
-        }
-
-        if (key == KeyEvent.VK_UP) {
-            dy = 0;
-        }
-
-        if (key == KeyEvent.VK_DOWN) {
-            dy = 0;
+        switch( keyCode ) {
+            case KeyEvent.VK_UP:
+                dy = 0;
+                break;
+            case KeyEvent.VK_DOWN:
+                dy = 0;
+                break;
+            case KeyEvent.VK_LEFT:
+                dx = 0;
+                break;
+            case KeyEvent.VK_RIGHT :
+                dx = 0;
+                break;
         }
     }
 }

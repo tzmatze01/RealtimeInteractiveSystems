@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class World extends JPanel implements KeyListener {
+public class World extends JPanel implements KeyListener, ActionListener {
 
 
     private MovingObject mo;
@@ -16,12 +16,12 @@ public class World extends JPanel implements KeyListener {
     private Timer timer;
     private final int DELAY = 10;
 
-    private KeyLis listener;
 
     public World()
     {
         initBoard();
         //grabFocus();
+
 
         /*
         add(new JButton("Foo")); // something to draw off focus
@@ -32,32 +32,20 @@ public class World extends JPanel implements KeyListener {
         */
     }
 
-    private class KeyLis extends KeyAdapter {
-        @Override
-        public void keyPressed(KeyEvent e) {
-            switch (e.getKeyCode()) {
-                case KeyEvent.VK_LEFT:
-                    System.out.println("VK_LEFT pressed");
-                    break;
-                case KeyEvent.VK_RIGHT:
-                    System.out.println("VK_RIGHT pressed");
-                    break;
-            }
-        }
-    }
-
     private void initBoard() {
         setBackground(Color.black);
 
         player = new Player();
 
-        //timer = new Timer(DELAY, this);
-        //timer.start();
+        timer = new Timer(DELAY, this);
+        timer.start();
+        timer.start();
     }
 
 
     @Override
     public void paintComponent(Graphics g) {
+
         super.paintComponent(g);
 
         doDrawing(g);
@@ -68,18 +56,24 @@ public class World extends JPanel implements KeyListener {
 
     private void doDrawing(Graphics g) {
 
+        System.out.println("doDrawing");
+
         Graphics2D g2d = (Graphics2D) g;
 
         /*
         move the sprite and repaint the part of the board that has changed. We use a small optimisation technique
         that repaints only the small area of the window that actually changed.
-         */
 
+
+        g2d.drawImage(player.getImage(), player.getX(),
+                player.getY(), this);
+        */
+        //repaint();
         g2d.drawImage(player.getImage(), player.getX(),
                 player.getY(), this);
     }
 
-    /*
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
@@ -90,41 +84,41 @@ public class World extends JPanel implements KeyListener {
 
         player.move();
 
-        repaint(player.getX()-1, player.getY()-1,
-                player.getWidth()+2, player.getHeight()+2);
+        //repaint(player.getX()-1, player.getY()-1,player.getWidth()+2, player.getHeight()+2);
+
+        repaint();
     }
-    */
+
 
     @Override
-    public void keyTyped(KeyEvent e) {
-        System.out.println("world key typed");
-
-
-    }
+    public void keyTyped(KeyEvent e) { }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println("world key pressed");
+
+        player.keyPressed(e);
+        /*
+        int keyCode = e.getKeyCode();
+        switch( keyCode ) {
+            case KeyEvent.VK_UP:
+                System.out.println("up");
+                break;
+            case KeyEvent.VK_DOWN:
+                System.out.println("down");
+                break;
+            case KeyEvent.VK_LEFT:
+                System.out.println("left");
+                break;
+            case KeyEvent.VK_RIGHT :
+                System.out.println("right");
+                break;
+        }
+        */
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        System.out.println("world key released");
+        //System.out.println("world key released");
+        player.keyReleased(e);
     }
-      /*
-    public class CustomKeyListener extends KeyAdapter {
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-            System.out.println("world key pressed");
-            player.keyReleased(e);
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            System.out.println("world key pressed");
-            player.keyPressed(e);
-        }
-    }
-      */
 }
