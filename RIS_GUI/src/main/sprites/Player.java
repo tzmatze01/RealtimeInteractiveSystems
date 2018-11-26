@@ -6,21 +6,31 @@ import java.awt.event.KeyEvent;
 
 public class Player {
 
+    private int dMovement;
+    private int dRotation;
+
     private int dx;
     private int dy;
+
+    // player pos on screen
     private int x = 20;
     private int y = 10;
+
+    // image sizes
     private int w;
     private int h;
 
     private Image image;
 
-    private int circle;
+    private int rotation;
+    private int oldRotation;
 
 
     public Player() {
 
-        this.circle = 0;
+        this.rotation = 0;
+        this.oldRotation = 0;
+
         loadImage();
     }
 
@@ -29,7 +39,7 @@ public class Player {
         ImageIcon ii = new ImageIcon("src/main/resources/player2.png");
         image = ii.getImage();
 
-        image = image.getScaledInstance(50,80, 0);
+        image = image.getScaledInstance(80,40, 0);
 
         w = image.getWidth(null);
         h = image.getHeight(null);
@@ -37,27 +47,58 @@ public class Player {
 
     public void move() {
 
-        System.out.println("move player dx: "+x+" dy:"+y);
-        x += dx;
-        y += dy;
+        System.out.println("rotation:"+rotation);
 
-        // TODO geht nur mit geraden dy
-        if(dy < 0 && circle == 0)
+
+        // TODO geht nur mit geraden dRotation
+        if(dRotation < 0 && rotation == 0)
         {
-            circle = 360;
+            rotation = 360;
         }
 
-        if(dy > 0 && circle == 360)
+        if(dRotation > 0 && rotation == 360)
         {
-            circle = 0;
+            rotation = 0;
         }
 
-        circle += dy;
+        if(rotation != oldRotation)
+        {
+
+        }
+
+        rotation += dRotation;
+
+        double ddx = Math.abs(Math.cos(rotation) * dMovement);
+        double ddy = Math.abs(Math.sin(rotation) * dMovement);
+
+        System.out.println("ddx: "+ddx+" ddy: "+ddy);
+
+        // TODO oben links ist 0,0 check degrees
+        if(rotation >= 0 && rotation < 90)
+        {
+            x += ddx;
+            y += ddy;
+        }
+        if(rotation >= 90 && rotation < 180)
+        {
+            x -= ddx;
+            y += ddy;
+        }
+        if(rotation >= 180 && rotation < 270)
+        {
+            x -= ddx;
+            y -= ddy;
+        }
+        if(rotation >= 270 && rotation < 360)
+        {
+            x += ddx;
+            y -= ddy; 
+        }
     }
 
     public double getRotation()
     {
-        return Math.toRadians(this.circle);
+        return Math.toRadians(this.rotation);
     }
 
     public int getX() {
@@ -91,16 +132,20 @@ public class Player {
 
         switch( keyCode ) {
             case KeyEvent.VK_UP:
-                dy = -2;
+                dMovement = 2;
+                //dRotation = -2;
                 break;
             case KeyEvent.VK_DOWN:
-                dy = 2;
+                dMovement = -2;
+                //dRotation = 2;
                 break;
             case KeyEvent.VK_LEFT:
-                dx = -2;
+                dRotation = -2;
+                //dMovement = -2;
                 break;
             case KeyEvent.VK_RIGHT :
-                dx = 2;
+                dRotation = 2;
+                //dMovement = 2;
                 break;
         }
     }
@@ -111,16 +156,16 @@ public class Player {
 
         switch( keyCode ) {
             case KeyEvent.VK_UP:
-                dy = 0;
+                dMovement = 0;
                 break;
             case KeyEvent.VK_DOWN:
-                dy = 0;
+                dMovement = 0;
                 break;
             case KeyEvent.VK_LEFT:
-                dx = 0;
+                dRotation = 0;
                 break;
             case KeyEvent.VK_RIGHT :
-                dx = 0;
+                dRotation = 0;
                 break;
         }
     }

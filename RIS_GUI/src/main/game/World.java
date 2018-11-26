@@ -56,7 +56,8 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
     private void doDrawing(Graphics g) {
 
-        System.out.println("doDrawing");
+        // TODO two player movement
+        //System.out.println("doDrawing");
 
         Graphics2D g2d = (Graphics2D) g;
 
@@ -65,8 +66,8 @@ public class World extends JPanel implements KeyListener, ActionListener {
         that repaints only the small area of the window that actually changed.
         */
 
-        double imgW = player.getX() + (player.getWidth() / 2);
-        double imgH = player.getY() + (player.getHeight() / 2);
+        double imgW = player.getX() + player.getWidth(); //(player.getWidth() / 2);
+        double imgH = player.getY() + player.getHeight(); //(player.getHeight() / 2);
 
         g2d.rotate(player.getRotation(), imgW, imgH);
 
