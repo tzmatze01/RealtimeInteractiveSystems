@@ -8,14 +8,19 @@ public class Player {
 
     private int dx;
     private int dy;
-    private int x = 40;
-    private int y = 60;
+    private int x = 20;
+    private int y = 10;
     private int w;
     private int h;
+
     private Image image;
+
+    private int circle;
+
 
     public Player() {
 
+        this.circle = 0;
         loadImage();
     }
 
@@ -35,6 +40,24 @@ public class Player {
         System.out.println("move player dx: "+x+" dy:"+y);
         x += dx;
         y += dy;
+
+        // TODO geht nur mit geraden dy
+        if(dy < 0 && circle == 0)
+        {
+            circle = 360;
+        }
+
+        if(dy > 0 && circle == 360)
+        {
+            circle = 0;
+        }
+
+        circle += dy;
+    }
+
+    public double getRotation()
+    {
+        return Math.toRadians(this.circle);
     }
 
     public int getX() {

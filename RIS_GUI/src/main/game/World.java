@@ -63,14 +63,17 @@ public class World extends JPanel implements KeyListener, ActionListener {
         /*
         move the sprite and repaint the part of the board that has changed. We use a small optimisation technique
         that repaints only the small area of the window that actually changed.
-
-
-        g2d.drawImage(player.getImage(), player.getX(),
-                player.getY(), this);
         */
-        //repaint();
+
+        double imgW = player.getX() + (player.getWidth() / 2);
+        double imgH = player.getY() + (player.getHeight() / 2);
+
+        g2d.rotate(player.getRotation(), imgW, imgH);
+
         g2d.drawImage(player.getImage(), player.getX(),
                 player.getY(), this);
+
+
     }
 
 
