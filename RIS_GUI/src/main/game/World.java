@@ -113,10 +113,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
     private MovingObject generateMeteorite()
     {
-
         int meteoriteNumber = ThreadLocalRandom.current().nextInt(1, 4);
-
-        // TODO meteorite should be in aspect to images -> deformed
 
         int imgWidth =  ThreadLocalRandom.current().nextInt(METEORITE_MIN_WIDTH, METORITE_MAX_WIDTH);
         int imgHeight = ThreadLocalRandom.current().nextInt(METEORITE_MIN_HEIGHT, METORITE_MAX_HEIGHT);
@@ -124,21 +121,18 @@ public class World extends JPanel implements KeyListener, ActionListener {
         int yStart = ThreadLocalRandom.current().nextInt(0, screenHeight);
         int yEnd = ThreadLocalRandom.current().nextInt(0, screenHeight);
 
-        // dX is the screenWidth which is normed with screenWidth (= 1).
-        // Minus because it moves from right to left.
-        double dX = -1;
-        double dY = (double) Math.abs(yEnd - yStart) / screenHeight;
+        double m = (double) Math.abs(yEnd - yStart) / screenHeight;
 
-        // moving from high 'y' to low 'y' -> dY must be negative
+        // moving from high 'y' to low 'y' -> gradient must be negative
         if(yEnd > yStart)
-            dY = -dY;
+            m = -m;
 
         double velocity = 1;
 
-        System.out.println("generated meteorite with\nvelocity: "+velocity+"\nstarting at y: "+yStart+"\nending at y: "+yEnd+"\nwith dY: "+dY+"\n");
+        //System.out.println("generated meteorite with\nvelocity: "+velocity+"\nstarting at y: "+yStart+"\nending at y: "+yEnd+"\nwith dY: "+dY+"\n");
 
-        //  MovingObject(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int dX, int dY, int velocity)
-        return new MovingObject("meteorite"+meteoriteNumber+".png", imgWidth, imgHeight, screenWidth, yStart, dX, dY, velocity);
+        //  public MovingObject(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPosStart, int yPosEnd, double m, double velocity)
+        return new MovingObject("meteorite"+meteoriteNumber+".png", imgWidth, imgHeight, screenWidth, yStart, yEnd, m, velocity);
     }
 
     private void doDrawing(Graphics g) {
@@ -175,5 +169,6 @@ public class World extends JPanel implements KeyListener, ActionListener {
             g2d.drawImage(mo.getImage(), midX, midY, this);
         }
 
+        // TODO delete objects with xPos < 0
     }
 }

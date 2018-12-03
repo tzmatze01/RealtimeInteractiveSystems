@@ -20,11 +20,9 @@ public class MovingObject {
 
     private double velocity; // errechnet sich aus w & h des objects
 
-    private double dX;
-    private double dY;
+    private double m;
 
-
-    public MovingObject(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, double dX, double dY, double velocity)
+    public MovingObject(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPosStart, int yPosEnd, double m, double velocity)
     {
         this.imgFileName = imgFileName;
 
@@ -33,15 +31,14 @@ public class MovingObject {
 
         // objects always start on right side of screen
         this.xPos = xPos;
-        this.yPos = yPos;
+        this.yPos = yPosStart;
 
+        this.m = m;
         this.velocity = velocity;
 
         this.yPosStart = yPosStart;
         this.yPosEnd = yPosEnd;
 
-        this.dX = dX;
-        this.dY = dY;
 
         loadImage();
 
@@ -60,10 +57,11 @@ public class MovingObject {
     public void move()
     {
         // move with size / accelartion
-        this.xPos += dX * velocity;
-        this.yPos += dY * velocity;
+        this.xPos -= velocity;
+        this.yPos = (m * this.xPos) + yPosEnd;
 
-        //System.out.println("x: "+xPos+ " y: "+yPos+ "dX: "+dX);
+
+        System.out.println("x: "+xPos+ " y: "+yPos+ "m: "+m+" velo: "+velocity);
     }
 
     public int getX()
