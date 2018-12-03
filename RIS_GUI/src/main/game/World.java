@@ -6,9 +6,23 @@ import main.sprites.Player;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class World extends JPanel implements KeyListener, ActionListener {
 
+    private int screenWidth;
+    private int screenHeight;
+
+    // width should be alrger than height, to compute the
+    private static  int METEORITE_MIN_WIDTH = 50;
+    private static int METORITE_MAX_WIDTH = 250;
+
+    private static int METEORITE_MIN_HEIGHT = 50;
+    private static int METORITE_MAX_HEIGHT = 150;
+
+    private static int PLAYER_VELOCITY = 3;
 
     private MovingObject mo;
     private Player player;
@@ -17,25 +31,32 @@ public class World extends JPanel implements KeyListener, ActionListener {
     private final int DELAY = 10;
 
 
-    public World()
+    /*
+    TODO
+
+    level length: Spiel wird side scroller, bei dem objekte eingesammelt und abgeschosen werden können
+    objekte: stern, meteoriten, gegner?
+    level: definiert wieviele objekte generiert werden
+     */
+
+    private int level;
+    private List<MovingObject> movingObjects;
+
+    public World(int screenWidth, int screenHeight)
     {
+        this.screenWidth = screenWidth;
+        this.screenHeight = screenHeight;
+
+        this.level = 1;
+        this.movingObjects = new LinkedList<MovingObject>();
+
         initBoard();
-        //grabFocus();
-
-
-        /*
-        add(new JButton("Foo")); // something to draw off focus
-        listener = new KeyLis();
-        this.setFocusable(true);
-        this.requestFocus();
-        this.addKeyListener(listener);
-        */
     }
 
     private void initBoard() {
         setBackground(Color.black);
 
-        player = new Player();
+        player = new Player(PLAYER_VELOCITY);
 
         timer = new Timer(DELAY, this);
         timer.start();
@@ -53,76 +74,106 @@ public class World extends JPanel implements KeyListener, ActionListener {
         Toolkit.getDefaultToolkit().sync();
     }
 
-
-    private void doDrawing(Graphics g) {
-
-        // TODO two player movement
-        //System.out.println("doDrawing");
-
-        Graphics2D g2d = (Graphics2D) g;
-
-        /*
-        move the sprite and repaint the part of the board that has changed. We use a small optimisation technique
-        that repaints only the small area of the window that actually changed.
-        */
-
-        double imgW = player.getX() + player.getWidth(); //(player.getWidth() / 2);
-        double imgH = player.getY() + player.getHeight(); //(player.getHeight() / 2);
-
-        g2d.rotate(player.getRotation(), imgW, imgH);
-
-        g2d.drawImage(player.getImage(), player.getX(),
-                player.getY(), this);
-
-
-    }
-
-
     @Override
-    public void actionPerformed(ActionEvent e) {
-
-        step();
-    }
-
-    private void step() {
-
-        player.move();
-
-        //repaint(player.getX()-1, player.getY()-1,player.getWidth()+2, player.getHeight()+2);
-
-        repaint();
-    }
-
+    public void actionPerformed(ActionEvent e) { step(); }
 
     @Override
     public void keyTyped(KeyEvent e) { }
 
     @Override
-    public void keyPressed(KeyEvent e) {
-
-        player.keyPressed(e);
-        /*
-        int keyCode = e.getKeyCode();
-        switch( keyCode ) {
-            case KeyEvent.VK_UP:
-                System.out.println("up");
-                break;
-            case KeyEvent.VK_DOWN:
-                System.out.println("down");
-                break;
-            case KeyEvent.VK_LEFT:
-                System.out.println("left");
-                break;
-            case KeyEvent.VK_RIGHT :
-                System.out.println("right");
-                break;
-        }
-        */
-    }
+    public void keyPressed(KeyEvent e) { player.keyPressed(e); }
 
     @Override
-    public void keyReleased(KeyEvent e) {
-        //System.out.println("world key released");
-        player.keyReleased(e);
+    public void keyReleased(KeyEvent e) { player.keyReleased(e); }
+
+    private void step() {
+
+        player.move();
+
+        for(MovingObject mo : movingObjects)
+        {
+            mo.move();
+        }
+
+        generateObjects();
+
+        // TODO collision detection
+
+        repaint();
+    }
+
+    private void generateObjects() {
+
+        if(movingObjects.isEmpty()) {
+
+            movingObjects.add(generateMeteorite());
+            movingObjects.add(generateMeteorite());
+        }
+    }
+
+    private MovingObject generateMeteorite()
+    {
+
+        int meteoriteNumber = ThreadLocalRandom.current().nextInt(1, 4);
+
+        // TODO meteorite should be in aspect to images -> deformed
+
+        int imgWidth =  ThreadLocalRandom.current().nextInt(METEORITE_MIN_WIDTH, METORITE_MAX_WIDTH);
+        int imgHeight = ThreadLocalRandom.current().nextInt(METEORITE_MIN_HEIGHT, METORITE_MAX_HEIGHT);
+
+        int yStart = ThreadLocalRandom.current().nextInt(0, screenHeight);
+        int yEnd = ThreadLocalRandom.current().nextInt(0, screenHeight);
+
+        // dX is the screenWidth which is normed with screenWidth (= 1).
+        // Minus because it moves from right to left.
+        double dX = -1;
+        double dY = (double) Math.abs(yEnd - yStart) / screenHeight;
+
+        // moving from high 'y' to low 'y' -> dY must be negative
+        if(yEnd > yStart)
+            dY = -dY;
+
+        double velocity = 1;
+
+        System.out.println("generated meteorite with\nvelocity: "+velocity+"\nstarting at y: "+yStart+"\nending at y: "+yEnd+"\nwith dY: "+dY+"\n");
+
+        //  MovingObject(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int dX, int dY, int velocity)
+        return new MovingObject("meteorite"+meteoriteNumber+".png", imgWidth, imgHeight, screenWidth, yStart, dX, dY, velocity);
+    }
+
+    private void doDrawing(Graphics g) {
+
+        // TODO two player movement https://stackoverflow.com/questions/26828438/how-to-correctly-rotate-my-players-java
+        //System.out.println("doDrawing");
+
+        Graphics2D g2d = (Graphics2D) g.create();
+
+        // MOVING PLAYER
+        double imgW = player.getX() + player.getWidth(); //(player.getWidth() / 2);
+        double imgH = player.getY() + player.getHeight(); //(player.getHeight() / 2);
+
+        double transX = player.getX() - (player.getWidth() / 2);
+        double transY = player.getY() - (player.getHeight() / 2);
+
+        g2d.translate( transX, transY);
+        g2d.rotate(player.getRotation(), imgW, imgH);
+
+        //g2d.translate(player.getX() / 2, player.getY() / 2);
+
+        g2d.drawImage(player.getImage(), player.getX(), player.getY(), this);
+
+        g2d.dispose();
+
+        // MOVE OBJECTS
+        g2d = (Graphics2D) g.create();
+
+        for(MovingObject mo : movingObjects)
+        {
+            int midX = mo.getX() - (mo.getWidth() / 2);
+            int midY = mo.getY() - (mo.getHeight() / 2);
+
+            g2d.drawImage(mo.getImage(), midX, midY, this);
+        }
+
     }
 }

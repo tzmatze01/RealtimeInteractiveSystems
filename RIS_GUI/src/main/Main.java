@@ -25,6 +25,9 @@ import java.util.Scanner;
 
 public class Main extends JFrame { //extends JPanel {
 
+    private static int screenWidth = 1200;
+    private static int screenHeight = 800;
+
     public Main() {
 
         initUI();
@@ -32,13 +35,13 @@ public class Main extends JFrame { //extends JPanel {
 
     private void initUI() {
 
-        World world = new World();
+        World world = new World(screenWidth, screenHeight);
         world.setFocusable(true);
         world.addKeyListener(world);
 
         add(world);
 
-        setSize(600, 400);
+        setSize(screenWidth, screenHeight);
 
         setLocationRelativeTo(null);
         setResizable(false);
