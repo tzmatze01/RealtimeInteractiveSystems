@@ -1,5 +1,6 @@
 package main.game;
 
+import main.sprites.Beam;
 import main.sprites.MovingObject;
 import main.sprites.Player;
 
@@ -97,9 +98,73 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         generateObjects();
 
-        // TODO collision detection
+        collisionDetection();
+
+        // check if moving objects, projectiles and out of screen and 'delete' them
+        updateProjectiles();
+        updateMovingObjects();
 
         repaint();
+    }
+
+    private void updateProjectiles()
+    {
+        List<Beam> delBeams = new LinkedList<>();
+
+        // recognize which beams are out of screen
+        for(Beam b : player.getProjectiles())
+        {
+            if(b.getX() < -(b.getWidth() / 2) || b.getX() > (screenWidth + (b.getWidth() / 2)) ||
+                b.getY() < -(b.getHeight() / 2) || b.getY() > (screenHeight + (b.getHeight() / 2)))
+            {
+                delBeams.add(b);
+            }
+
+        }
+
+        // delete beams
+        for(Beam b : delBeams)
+        {
+            player.getProjectiles().remove(b);
+        }
+    }
+
+    private void updateMovingObjects()
+    {
+        List<MovingObject> delMovingObjects = new LinkedList<>();
+
+        /// recognize moving objects which are out of screen
+        for(MovingObject mo : movingObjects)
+        {
+            if(mo.getX() < -(mo.getWidth() / 2) || mo.getX() > (screenWidth + (mo.getWidth() / 2)) ||
+                mo.getY() < -(mo.getHeight() / 2) || mo.getY() > (screenHeight + (mo.getHeight() / 2)))
+            {
+                delMovingObjects.add(mo);
+            }
+        }
+
+        // delete moving objects
+        for(MovingObject mo : delMovingObjects)
+        {
+            movingObjects.remove(mo);
+        }
+    }
+
+    private void collisionDetection()
+    {
+        // TODO collision projectiles and movingObjects
+
+        for(MovingObject mo : movingObjects)
+        {
+            int moXStart = mo.getX() - (mo.getWidth() / 2);
+            int moXEnd = mo.getX() + (mo.getWidth() / 2);
+
+            int moYStart = mo.getY() - (mo.getHeight() / 2);
+            int moYEnd = mo.getY() + (mo.getHeight() / 2);
+
+            if(player.getX() >= moXStart && player.getX() < moXEnd && player.getY() >= moYStart && player.getY() < moYEnd)
+                System.out.println("collision");
+        }
     }
 
     private void generateObjects() {
@@ -149,7 +214,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
         double transX = player.getX() - (player.getWidth() / 2);
         double transY = player.getY() - (player.getHeight() / 2);
 
-        g2d.translate( transX, transY);
+        g2d.translate(transX, transY);
         g2d.rotate(player.getRotation(), imgW, imgH);
 
         //g2d.translate(player.getX() / 2, player.getY() / 2);
@@ -157,6 +222,14 @@ public class World extends JPanel implements KeyListener, ActionListener {
         g2d.drawImage(player.getImage(), player.getX(), player.getY(), this);
 
         g2d.dispose();
+
+        // MOVE PROJECTILES PLAYER
+        g2d = (Graphics2D) g.create();
+
+        for(Beam b : player.getProjectiles())
+        {
+            g2d.drawImage(b.getImage(), b.getX(), b.getY(), this);
+        }
 
         // MOVE OBJECTS
         g2d = (Graphics2D) g.create();
@@ -169,6 +242,27 @@ public class World extends JPanel implements KeyListener, ActionListener {
             g2d.drawImage(mo.getImage(), midX, midY, this);
         }
 
-        // TODO delete objects with xPos < 0
+
+
+        // For testing player and objects
+        g2d = (Graphics2D) g.create();
+        g2d.setColor(Color.GREEN);
+        g2d.drawOval(player.getX(), player.getY(), 10,10);
+
+        g2d.dispose();
+        g2d = (Graphics2D) g.create();
+        g2d.setColor(Color.RED);
+
+        for(MovingObject mo : movingObjects)
+        {
+            g2d.drawOval(mo.getX(), mo.getY(), 10, 10);
+        }
+        g2d.dispose();
+
+        // ----------------------------------------
+
+
+
+
     }
 }

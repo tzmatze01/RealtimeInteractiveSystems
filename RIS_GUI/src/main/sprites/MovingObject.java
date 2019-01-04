@@ -61,7 +61,7 @@ public class MovingObject {
         this.yPos = (m * this.xPos) + yPosEnd;
 
 
-        System.out.println("x: "+xPos+ " y: "+yPos+ "m: "+m+" velo: "+velocity);
+        //System.out.println("x: "+xPos+ " y: "+yPos+ "m: "+m+" velo: "+velocity);
     }
 
     public int getX()
@@ -88,4 +88,10 @@ public class MovingObject {
     {
         return this.image;
     }
+
+    // for collision detection
+    public Rectangle getBounds() {
+        return new Rectangle((int) xPos, (int) yPos, w, h);
+    }
+
 }

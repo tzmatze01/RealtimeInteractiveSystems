@@ -3,14 +3,16 @@ package main.sprites;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Player {
 
     private int dMovement;
     private int dRotation;
 
-    private int dx;
-    private int dy;
+    private double ddx;
+    private double ddy;
 
     // player pos on screen
     private int x = 20;
@@ -27,12 +29,20 @@ public class Player {
 
     private int velocity;
 
+
+    private List<Beam> projectiles;
+    private static int BEAM_WIDTH = 20;
+    private static int BEAM_HEIGHT = 8;
+
+
     public Player(int velocity) {
 
         this.rotation = 0;
         this.oldRotation = 0;
 
         this.velocity = velocity;
+
+        this.projectiles = new ArrayList<>();
 
         loadImage();
     }
@@ -52,8 +62,8 @@ public class Player {
 
         //System.out.println("rotation:"+rotation);
 
-        double ddx = Math.abs(Math.cos(rotation) * dMovement);
-        double ddy = Math.abs(Math.sin(rotation) * dMovement);
+        ddx = Math.abs(Math.cos(rotation) * dMovement);
+        ddy = Math.abs(Math.sin(rotation) * dMovement);
 
 
         if(rotation >= 0 && rotation < 90)
@@ -78,7 +88,6 @@ public class Player {
         }
 
 
-        // TODO geht nur mit geraden dRotation
         if(dRotation < 0 && rotation == 0)
         {
             rotation = 360;
@@ -98,7 +107,21 @@ public class Player {
 
         // TODO update winkel in quadrants
 
-        // TODO oben links ist 0,0 check degrees
+
+        for(Beam b : projectiles)
+        {
+            b.move();
+        }
+    }
+
+    private void shoot()
+    {
+        // TODO calc dx and dy for missle
+
+        double dx = 5;
+        double dy = 1;
+
+        projectiles.add(new Beam(BEAM_WIDTH, BEAM_HEIGHT, x+getWidth(), y, dx, dy, "beam.png"));
 
     }
 
@@ -140,23 +163,23 @@ public class Player {
             case KeyEvent.VK_W:
             case KeyEvent.VK_UP:
                 dMovement = velocity;
-                //dRotation = -2;
                 break;
             case KeyEvent.VK_S:
             case KeyEvent.VK_DOWN:
                 dMovement = -velocity;
-                //dRotation = 2;
                 break;
             case KeyEvent.VK_A:
             case KeyEvent.VK_LEFT:
                 dRotation = -2;
-                //dMovement = -2;
                 break;
             case KeyEvent.VK_D:
             case KeyEvent.VK_RIGHT :
                 dRotation = 2;
-                //dMovement = 2;
                 break;
+            case KeyEvent.VK_SPACE:
+                shoot();
+                break;
+
         }
     }
 
@@ -178,5 +201,15 @@ public class Player {
                 dRotation = 0;
                 break;
         }
+    }
+
+    public List<Beam> getProjectiles()
+    {
+        return this.projectiles;
+    }
+
+    // for collision detection
+    public Rectangle getBounds() {
+        return new Rectangle( x, y, w, h);
     }
 }
