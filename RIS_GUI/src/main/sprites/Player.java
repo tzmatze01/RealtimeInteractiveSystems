@@ -49,13 +49,16 @@ public class Player {
 
     private void loadImage() {
 
+        this.w = 80;
+        this.h = 40;
+
         ImageIcon ii = new ImageIcon("src/main/resources/player.png");
         image = ii.getImage();
 
-        image = image.getScaledInstance(80,40, 0);
+        image = image.getScaledInstance(w,h, 0);
 
-        w = image.getWidth(null);
-        h = image.getHeight(null);
+        //w = image.getWidth(null);
+        //h = image.getHeight(null);
     }
 
     public void move() {

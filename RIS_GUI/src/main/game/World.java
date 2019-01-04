@@ -208,16 +208,14 @@ public class World extends JPanel implements KeyListener, ActionListener {
         Graphics2D g2d = (Graphics2D) g.create();
 
         // MOVING PLAYER
-        double imgW = player.getX() + player.getWidth(); //(player.getWidth() / 2);
-        double imgH = player.getY() + player.getHeight(); //(player.getHeight() / 2);
+        double imgW = player.getX() - (player.getWidth() / 2);
+        double imgH = player.getY() - (player.getHeight() / 2);
 
-        double transX = player.getX() - (player.getWidth() / 2);
-        double transY = player.getY() - (player.getHeight() / 2);
-
+        double transX = -(player.getWidth() / 2);
+        double transY = -(player.getHeight() / 2);
+        
         g2d.translate(transX, transY);
         g2d.rotate(player.getRotation(), imgW, imgH);
-
-        //g2d.translate(player.getX() / 2, player.getY() / 2);
 
         g2d.drawImage(player.getImage(), player.getX(), player.getY(), this);
 
