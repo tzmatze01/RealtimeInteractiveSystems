@@ -7,6 +7,7 @@ import main.sprites.Player;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.AffineTransform;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -154,7 +155,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
     {
         // TODO collision projectiles and movingObjects
 
-        // TODO add hitbox of player to calculation 
+        // TODO add hitbox of player to calculation
 
         for(MovingObject mo : movingObjects)
         {
@@ -210,16 +211,16 @@ public class World extends JPanel implements KeyListener, ActionListener {
         Graphics2D g2d = (Graphics2D) g.create();
 
         // MOVING PLAYER
-        double imgW = player.getX() - (player.getWidth() / 2);
-        double imgH = player.getY() - (player.getHeight() / 2);
+        int imgW = player.getX() - (player.getWidth() / 2);
+        int imgH = player.getY() - (player.getHeight() / 2);
 
-        double transX = -(player.getWidth() / 2);
-        double transY = -(player.getHeight() / 2);
+        AffineTransform backup = g2d.getTransform(); // TODO w/ g2d.dispose() ? https://gamedev.stackexchange.com/questions/62196/rotate-image-around-a-specified-origin
+        AffineTransform trans = new AffineTransform();
 
-        //g2d.translate(transX, transY);
-        g2d.rotate(player.getRotation(), imgW, imgH);
+        trans.rotate(player.getRotation(), player.getX(), player.getY());
+        g2d.transform(trans);
 
-        g2d.drawImage(player.getImage(), player.getX(), player.getY(), this);
+        g2d.drawImage(player.getImage(), imgW, imgH, this);
 
         g2d.dispose();
 
@@ -253,6 +254,11 @@ public class World extends JPanel implements KeyListener, ActionListener {
         g2d.setColor(Color.GREEN);
         g2d.drawOval(player.getX(), player.getY(), 10,10);
 
+        AffineTransform backup = g2d.getTransform();
+        AffineTransform trans = new AffineTransform();
+
+        trans.rotate(player.getRotation(), player.getX(), player.getY());
+        g2d.transform(trans);
 
         int pX1 =  player.getX() - (player.getWidth() / 2);
         int pY1 = player.getY() - (player.getHeight() / 2);
@@ -265,7 +271,6 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         g2d.drawLine(pX1, pY1, pX2, pY1);
         g2d.drawLine(pX1, pY2, pX2, pY2);
-
 
 
         g2d.dispose();
@@ -291,8 +296,6 @@ public class World extends JPanel implements KeyListener, ActionListener {
         g2d.dispose();
 
         // ----------------------------------------
-
-
 
     }
 }

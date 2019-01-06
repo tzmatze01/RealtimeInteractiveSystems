@@ -124,7 +124,7 @@ public class Player {
         double dx = 5;
         double dy = 1;
 
-        projectiles.add(new Beam(BEAM_WIDTH, BEAM_HEIGHT, x+getWidth(), y, dx, dy, "beam.png"));
+        projectiles.add(new Beam(BEAM_WIDTH, BEAM_HEIGHT, x+(getWidth() / 2) , y, dx, dy, "beam.png"));
 
     }
 
