@@ -21,6 +21,7 @@ public class MovingObject {
     private double velocity; // errechnet sich aus w & h des objects
 
     private double m;
+    private int energy;
 
     public MovingObject(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPosStart, int yPosEnd, double m, double velocity)
     {
@@ -39,6 +40,7 @@ public class MovingObject {
         this.yPosStart = yPosStart;
         this.yPosEnd = yPosEnd;
 
+        this.energy = 100;
 
         loadImage();
 
@@ -87,6 +89,15 @@ public class MovingObject {
     public Image getImage()
     {
         return this.image;
+    }
+
+    public void reduceEnergy(int amount)
+    {
+        this.energy -= amount;
+    }
+
+    public int getEnergy() {
+        return energy;
     }
 
     // for collision detection

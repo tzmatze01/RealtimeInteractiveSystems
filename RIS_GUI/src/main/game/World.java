@@ -120,6 +120,10 @@ public class World extends JPanel implements KeyListener, ActionListener {
             {
                 delBeams.add(b);
             }
+            else if(b.isHitObject())
+            {
+                delBeams.add(b);
+            }
 
         }
 
@@ -142,6 +146,10 @@ public class World extends JPanel implements KeyListener, ActionListener {
             {
                 delMovingObjects.add(mo);
             }
+            else if(mo.getEnergy() <= 0)
+            {
+                delMovingObjects.add(mo);
+            }
         }
 
         // delete moving objects
@@ -155,7 +163,15 @@ public class World extends JPanel implements KeyListener, ActionListener {
     {
         // TODO collision projectiles and movingObjects
 
+
+
         // TODO add hitbox of player to calculation
+
+        int playerCornerX = player.getX() + (player.getWidth() / 2);
+        int playerCornerY = player.getY() + (player.getHeight() / 2);
+
+        //System.out.println("player center : " + player.getX() + " / " + player.getY());
+        //System.out.println("player corner : " + playerCornerX + " / " + playerCornerY);
 
         for(MovingObject mo : movingObjects)
         {
@@ -167,10 +183,23 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
             if(player.getX() >= moXStart && player.getX() < moXEnd && player.getY() >= moYStart && player.getY() < moYEnd)
                 System.out.println("collision");
+
+
+            for(Beam b : player.getProjectiles())
+            {
+                if(b.getX() >= moXStart && b.getX() < moXEnd && b.getY() >= moYStart && b.getY() < moYEnd)
+                {
+                    System.out.println("treffer");
+                    b.setHitObject(true);
+                    mo.reduceEnergy(b.getDamage());
+                }
+            }
         }
     }
 
     private void generateObjects() {
+
+        // TODO generate every X seconds ?
 
         if(movingObjects.isEmpty()) {
 
@@ -243,7 +272,6 @@ public class World extends JPanel implements KeyListener, ActionListener {
             g2d.drawImage(mo.getImage(), midX, midY, this);
         }
 
-
         drawHitboxes(g);
     }
 
@@ -272,6 +300,10 @@ public class World extends JPanel implements KeyListener, ActionListener {
         g2d.drawLine(pX1, pY1, pX2, pY1);
         g2d.drawLine(pX1, pY2, pX2, pY2);
 
+        //Point p = new Point(pX2, pY2);
+        //g2d.draw(p);
+
+        g2d.drawOval(pX2, pY2, 5,5);
 
         g2d.dispose();
         g2d = (Graphics2D) g.create();

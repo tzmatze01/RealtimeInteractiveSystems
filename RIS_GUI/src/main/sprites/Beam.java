@@ -18,6 +18,9 @@ public class Beam {
 
     private Image image;
 
+    private int damage;
+    private boolean hitObject;
+
 
     public Beam(int w, int h, int xPos, int yPos, double dx, double dy, String imgName)
     {
@@ -29,6 +32,9 @@ public class Beam {
 
         this.dx = dx;
         this.dy = dy;
+
+        this.damage = 10;
+        this.hitObject = false;
 
         loadImage(imgName);
     }
@@ -75,6 +81,18 @@ public class Beam {
     public int getWidth()
     {
         return this.w;
+    }
+
+    public boolean isHitObject() {
+        return hitObject;
+    }
+
+    public void setHitObject(boolean hitObject) {
+        this.hitObject = hitObject;
+    }
+
+    public int getDamage() {
+        return damage;
     }
 
     // for collision detection
