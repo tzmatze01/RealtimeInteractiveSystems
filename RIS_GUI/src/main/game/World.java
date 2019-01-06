@@ -154,6 +154,8 @@ public class World extends JPanel implements KeyListener, ActionListener {
     {
         // TODO collision projectiles and movingObjects
 
+        // TODO add hitbox of player to calculation 
+
         for(MovingObject mo : movingObjects)
         {
             int moXStart = mo.getX() - (mo.getWidth() / 2);
@@ -213,8 +215,8 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         double transX = -(player.getWidth() / 2);
         double transY = -(player.getHeight() / 2);
-        
-        g2d.translate(transX, transY);
+
+        //g2d.translate(transX, transY);
         g2d.rotate(player.getRotation(), imgW, imgH);
 
         g2d.drawImage(player.getImage(), player.getX(), player.getY(), this);
@@ -241,11 +243,30 @@ public class World extends JPanel implements KeyListener, ActionListener {
         }
 
 
+        drawHitboxes(g);
+    }
 
+    private void drawHitboxes(Graphics g)
+    {
         // For testing player and objects
-        g2d = (Graphics2D) g.create();
+        Graphics2D g2d = (Graphics2D) g.create();
         g2d.setColor(Color.GREEN);
         g2d.drawOval(player.getX(), player.getY(), 10,10);
+
+
+        int pX1 =  player.getX() - (player.getWidth() / 2);
+        int pY1 = player.getY() - (player.getHeight() / 2);
+
+        int pX2 =  player.getX() + (player.getWidth() / 2);
+        int pY2 = player.getY() + (player.getHeight() / 2);
+
+        g2d.drawLine(pX1, pY1, pX1, pY2);
+        g2d.drawLine(pX2, pY1, pX2, pY2);
+
+        g2d.drawLine(pX1, pY1, pX2, pY1);
+        g2d.drawLine(pX1, pY2, pX2, pY2);
+
+
 
         g2d.dispose();
         g2d = (Graphics2D) g.create();
@@ -254,11 +275,22 @@ public class World extends JPanel implements KeyListener, ActionListener {
         for(MovingObject mo : movingObjects)
         {
             g2d.drawOval(mo.getX(), mo.getY(), 10, 10);
+
+            int moX1 =  mo.getX() - (mo.getWidth() / 2);
+            int moY1 = mo.getY() - (mo.getHeight() / 2);
+
+            int moX2 =  mo.getX() + (mo.getWidth() / 2);
+            int moY2 = mo.getY() + (mo.getHeight() / 2);
+
+            g2d.drawLine(moX1, moY1, moX1, moY2);
+            g2d.drawLine(moX2, moY1, moX2, moY2);
+
+            g2d.drawLine(moX1, moY1, moX2, moY1);
+            g2d.drawLine(moX1, moY2, moX2, moY2);
         }
         g2d.dispose();
 
         // ----------------------------------------
-
 
 
 
