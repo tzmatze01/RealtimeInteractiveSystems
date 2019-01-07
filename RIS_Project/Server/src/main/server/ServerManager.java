@@ -35,9 +35,14 @@ public class ServerManager extends Manager {
             e.printStackTrace();
         }
 
+
+        ObjectInputStream ois = null;
+
+
         while(isAlive)
         {
             System.out.print("Waiting for mssgs...");
+
 
             try {
                 socket = serverSocket.accept();
@@ -46,8 +51,9 @@ public class ServerManager extends Manager {
                 e.printStackTrace();
             }
 
+
             // read the incoming messages
-            ObjectInputStream ois = null;
+            //ObjectInputStream ois = null;
             try
             {
                 ois = new ObjectInputStream(socket.getInputStream());

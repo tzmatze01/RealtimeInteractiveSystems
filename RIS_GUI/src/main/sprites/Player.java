@@ -3,8 +3,14 @@ package main.sprites;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import main.sprites.type.MovingObject;
+
 
 public class Player {
 
@@ -35,7 +41,15 @@ public class Player {
     private static int BEAM_HEIGHT = 8;
 
 
-    public Player(int velocity) {
+    private int lifePoints;
+
+    private MediaPlayer mp;
+
+
+    public Player(String imgFileName, int imageWidth, int imageHeight, int velocity) {
+
+        this.w = imageWidth;
+        this.h = imageHeight;
 
         this.rotation = 0;
         this.oldRotation = 0;
@@ -44,21 +58,24 @@ public class Player {
 
         this.projectiles = new ArrayList<>();
 
-        loadImage();
+        loadImage(imgFileName);
+        //loadSound(filename);
     }
 
-    private void loadImage() {
 
-        this.w = 80;
-        this.h = 40;
 
-        ImageIcon ii = new ImageIcon("src/main/resources/player.png");
+    private void loadImage(String imgFileName) {
+
+        ImageIcon ii = new ImageIcon("src/main/resources/img/"+imgFileName);
         image = ii.getImage();
 
         image = image.getScaledInstance(w,h, 0);
+    }
 
-        //w = image.getWidth(null);
-        //h = image.getHeight(null);
+    private void loadSound(String filename) {
+
+        Media sound = new Media(new File("src/main/resources/sound/"+filename).toURI().toString());
+        this.mp = new MediaPlayer(sound);
     }
 
     public void move() {
@@ -124,8 +141,10 @@ public class Player {
         double dx = 5;
         double dy = 1;
 
-        projectiles.add(new Beam(BEAM_WIDTH, BEAM_HEIGHT, x+(getWidth() / 2) , y, dx, dy, "beam.png"));
+        //    public Beam(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, double dx, double dy)
+        projectiles.add(new Beam("beam.png", BEAM_WIDTH, BEAM_HEIGHT, x+(getWidth() / 2) , y, dx, dy));
 
+        //this.mp.play();
     }
 
     public double getRotation()
@@ -156,6 +175,14 @@ public class Player {
     public Image getImage() {
 
         return image;
+    }
+
+    public int getLifePoints() {
+        return lifePoints;
+    }
+
+    public void setLifePoints(int lifePoints) {
+        this.lifePoints = lifePoints;
     }
 
     public void keyPressed(KeyEvent e) {

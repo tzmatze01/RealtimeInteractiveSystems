@@ -1,70 +1,60 @@
-package main.sprites;
+package main.sprites.type;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class MovingObject {
+public abstract class MovingObject {
 
-    private String imgFileName;
     private Image image;
 
     private int w;
     private int h;
 
     // moving object has two y Pos, which are randomly generated, to simulate a non straight moving object
-    private double xPos;
-    private double yPos;
+    protected double xPos;
+    protected double yPos;
 
-    private int yPosStart;
-    private int yPosEnd;
-
-    private double velocity; // errechnet sich aus w & h des objects
-
-    private double m;
     private int energy;
 
-    public MovingObject(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPosStart, int yPosEnd, double m, double velocity)
-    {
-        this.imgFileName = imgFileName;
+    //private int yPosStart;
+    //private int yPosEnd;
 
+    //private double velocity; // errechnet sich aus w & h des objects
+
+    //private double m;
+
+
+    public MovingObject(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy)
+    {
         this.w = imageWidth;
         this.h = imageHeight;
 
         // objects always start on right side of screen
         this.xPos = xPos;
-        this.yPos = yPosStart;
+        this.yPos = yPos;
 
-        this.m = m;
-        this.velocity = velocity;
+        //this.m = m;
+        //this.velocity = velocity;
 
-        this.yPosStart = yPosStart;
-        this.yPosEnd = yPosEnd;
+        //this.yPosStart = yPosStart;
+        //this.yPosEnd = yPosEnd;
 
-        this.energy = 100;
+        this.energy = energy;
 
-        loadImage();
-
-        // TODO rotate meterite
+        loadImage(imgFileName);
     }
 
-    private void loadImage() {
+    private void loadImage(String imgFileName) {
 
-        ImageIcon ii = new ImageIcon("src/main/resources/"+imgFileName);
+        ImageIcon ii = new ImageIcon("src/main/resources/img/"+imgFileName);
 
         image = ii.getImage();
 
         image = image.getScaledInstance(w,h, 0);
     }
 
-    public void move()
-    {
-        // move with size / accelartion
-        this.xPos -= velocity;
-        this.yPos = (m * this.xPos) + yPosEnd;
+    public void move() { }
 
-
-        //System.out.println("x: "+xPos+ " y: "+yPos+ "m: "+m+" velo: "+velocity);
-    }
 
     public int getX()
     {
@@ -91,8 +81,14 @@ public class MovingObject {
         return this.image;
     }
 
+    public void addEnergy(int amount)
+    {
+        this.energy += amount;
+    }
+
     public void reduceEnergy(int amount)
     {
+        System.out.println("energy: "+ energy+ " - " + amount);
         this.energy -= amount;
     }
 

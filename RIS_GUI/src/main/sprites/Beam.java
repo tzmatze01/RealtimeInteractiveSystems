@@ -2,85 +2,30 @@ package main.sprites;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 
-public class Beam {
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import main.sprites.type.MovingObject;
 
-    // player pos on screen
-    private double x;
-    private double y;
+public class Beam extends MovingObject {
 
     private double dx;
     private double dy;
 
-    // image sizes
-    private int w;
-    private int h;
-
-    private Image image;
-
-    private int damage;
     private boolean hitObject;
 
-
-    public Beam(int w, int h, int xPos, int yPos, double dx, double dy, String imgName)
+    //
+    //    public Meteorite(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPosStart, int yPosEnd, double m, double velocity, int energy)
+    public Beam(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, double dx, double dy)
     {
-        this.x = xPos;
-        this.y = yPos;
-
-        this.w = w;
-        this.h = h;
+        super(imgFileName, imageWidth, imageHeight, xPos, yPos, 10);
 
         this.dx = dx;
         this.dy = dy;
 
-        this.damage = 10;
         this.hitObject = false;
 
-        loadImage(imgName);
-    }
-
-
-    private void loadImage(String imgName) {
-
-        ImageIcon ii = new ImageIcon("src/main/resources/"+imgName);
-        image = ii.getImage();
-
-        image = image.getScaledInstance(w,h, 0);
-
-        w = image.getWidth(null);
-        h = image.getHeight(null);
-    }
-
-
-    public Image getImage() {
-
-        return image;
-    }
-
-    public void move()
-    {
-        x += dx;
-        //y += dy;
-    }
-
-    public int getX()
-    {
-        return (int) this.x;
-    }
-
-    public int getY()
-    {
-        return (int) this.y;
-    }
-
-    public int getHeight()
-    {
-        return this.h;
-    }
-
-    public int getWidth()
-    {
-        return this.w;
     }
 
     public boolean isHitObject() {
@@ -91,13 +36,19 @@ public class Beam {
         this.hitObject = hitObject;
     }
 
-    public int getDamage() {
-        return damage;
+    public void move()
+    {
+        // TODO
+
+        //
+        //    public Meteorite(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPosStart, int yPosEnd, double m, double velocity, int energy)
+
+        // move with size / accelartion
+        //this.xPos -= velocity;
+        //this.yPos = (m * this.xPos) + yPosEnd;
+
+        this.xPos += dx;
     }
 
-    // for collision detection
-    public Rectangle getBounds() {
-        return new Rectangle( getX(), getY(), w, h);
-    }
 
 }

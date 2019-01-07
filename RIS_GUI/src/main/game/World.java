@@ -1,13 +1,15 @@
 package main.game;
 
 import main.sprites.Beam;
-import main.sprites.MovingObject;
+import main.sprites.Meteorite;
+import main.sprites.type.MovingObject;
 import main.sprites.Player;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -27,12 +29,17 @@ public class World extends JPanel implements KeyListener, ActionListener {
     private static int PLAYER_VELOCITY = 3;
 
     private MovingObject mo;
-    private Player player;
+    //private Player player;
 
     private Timer timer;
     private final int DELAY = 10;
 
 
+    private int level;
+    private int[][] gamePlan;
+    private int maxLevel;
+
+    private List<Player> players;
     /*
     TODO
 
@@ -41,16 +48,22 @@ public class World extends JPanel implements KeyListener, ActionListener {
     level: definiert wieviele objekte generiert werden
      */
 
-    private int level;
     private List<MovingObject> movingObjects;
 
-    public World(int screenWidth, int screenHeight)
+    public World(int screenWidth, int screenHeight, int[][] gamePlan)
     {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
 
         this.level = 1;
-        this.movingObjects = new LinkedList<MovingObject>();
+        this.movingObjects = new LinkedList<>();
+
+        this.gamePlan = gamePlan;
+        this.level = 1;
+        this.maxLevel = gamePlan.length;
+
+        this.players = new ArrayList<>();
+
 
         initBoard();
     }
@@ -58,7 +71,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
     private void initBoard() {
         setBackground(Color.black);
 
-        player = new Player(PLAYER_VELOCITY);
+        players.add(new Player("player.png", 80, 40, PLAYER_VELOCITY));
 
         timer = new Timer(DELAY, this);
         timer.start();
@@ -83,32 +96,46 @@ public class World extends JPanel implements KeyListener, ActionListener {
     public void keyTyped(KeyEvent e) { }
 
     @Override
-    public void keyPressed(KeyEvent e) { player.keyPressed(e); }
+    public void keyPressed(KeyEvent e) {
+
+        // TODO check which player
+
+        for(Player player : players)
+            player.keyPressed(e);
+    }
 
     @Override
-    public void keyReleased(KeyEvent e) { player.keyReleased(e); }
+    public void keyReleased(KeyEvent e) {
+
+        // TODO check which player
+
+        for(Player player : players)
+            player.keyReleased(e);
+    }
 
     private void step() {
 
-        player.move();
+        for(Player player : players)
+            player.move();
 
         for(MovingObject mo : movingObjects)
-        {
             mo.move();
-        }
 
         generateObjects();
 
         collisionDetection();
 
         // check if moving objects, projectiles and out of screen and 'delete' them
-        updateProjectiles();
+        //updateProjectiles();
         updateMovingObjects();
+
+
 
         repaint();
     }
 
-    private void updateProjectiles()
+    /*
+    private void updateMovingObjects()
     {
         List<Beam> delBeams = new LinkedList<>();
 
@@ -133,6 +160,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
             player.getProjectiles().remove(b);
         }
     }
+    */
 
     private void updateMovingObjects()
     {
@@ -163,12 +191,10 @@ public class World extends JPanel implements KeyListener, ActionListener {
     {
         // TODO collision projectiles and movingObjects
 
-
-
         // TODO add hitbox of player to calculation
 
-        int playerCornerX = player.getX() + (player.getWidth() / 2);
-        int playerCornerY = player.getY() + (player.getHeight() / 2);
+        //int playerCornerX = player.getX() + (player.getWidth() / 2);
+        //int playerCornerY = player.getY() + (player.getHeight() / 2);
 
         //System.out.println("player center : " + player.getX() + " / " + player.getY());
         //System.out.println("player corner : " + playerCornerX + " / " + playerCornerY);
@@ -181,17 +207,22 @@ public class World extends JPanel implements KeyListener, ActionListener {
             int moYStart = mo.getY() - (mo.getHeight() / 2);
             int moYEnd = mo.getY() + (mo.getHeight() / 2);
 
-            if(player.getX() >= moXStart && player.getX() < moXEnd && player.getY() >= moYStart && player.getY() < moYEnd)
-                System.out.println("collision");
-
-
-            for(Beam b : player.getProjectiles())
+            for(Player player : players)
             {
-                if(b.getX() >= moXStart && b.getX() < moXEnd && b.getY() >= moYStart && b.getY() < moYEnd)
+                // check collision with player
+                if (player.getX() >= moXStart && player.getX() < moXEnd && player.getY() >= moYStart && player.getY() < moYEnd) {
+                    System.out.println("collision");
+
+                }
+
+                // check collision with any beam
+                for (Beam b : player.getProjectiles())
                 {
-                    System.out.println("treffer");
-                    b.setHitObject(true);
-                    mo.reduceEnergy(b.getDamage());
+                    if (b.getX() >= moXStart && b.getX() < moXEnd && b.getY() >= moYStart && b.getY() < moYEnd)
+                    {
+                        b.setHitObject(true);
+                        mo.reduceEnergy(b.getEnergy());
+                    }
                 }
             }
         }
@@ -200,6 +231,8 @@ public class World extends JPanel implements KeyListener, ActionListener {
     private void generateObjects() {
 
         // TODO generate every X seconds ?
+
+        // TODO generate with level number - enemies, collectables, meteorites
 
         if(movingObjects.isEmpty()) {
 
@@ -228,8 +261,8 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         //System.out.println("generated meteorite with\nvelocity: "+velocity+"\nstarting at y: "+yStart+"\nending at y: "+yEnd+"\nwith dY: "+dY+"\n");
 
-        //  public MovingObject(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPosStart, int yPosEnd, double m, double velocity)
-        return new MovingObject("meteorite"+meteoriteNumber+".png", imgWidth, imgHeight, screenWidth, yStart, yEnd, m, velocity);
+        return new Meteorite("meteorite"+meteoriteNumber+".png", imgWidth, imgHeight, screenWidth, yStart, yEnd, m, velocity, 100);
+        //return new Meteorite("debris.png", imgWidth, imgHeight, screenWidth, yStart, yEnd, m, velocity, 100);
     }
 
     private void doDrawing(Graphics g) {
@@ -237,30 +270,32 @@ public class World extends JPanel implements KeyListener, ActionListener {
         // TODO two player movement https://stackoverflow.com/questions/26828438/how-to-correctly-rotate-my-players-java
         //System.out.println("doDrawing");
 
-        Graphics2D g2d = (Graphics2D) g.create();
+        Graphics2D g2d = null;
 
-        // MOVING PLAYER
-        int imgW = player.getX() - (player.getWidth() / 2);
-        int imgH = player.getY() - (player.getHeight() / 2);
+        for(Player player : players) {
+            g2d = (Graphics2D) g.create();
 
-        AffineTransform backup = g2d.getTransform(); // TODO w/ g2d.dispose() ? https://gamedev.stackexchange.com/questions/62196/rotate-image-around-a-specified-origin
-        AffineTransform trans = new AffineTransform();
+            // MOVING PLAYER
+            int imgW = player.getX() - (player.getWidth() / 2);
+            int imgH = player.getY() - (player.getHeight() / 2);
 
-        trans.rotate(player.getRotation(), player.getX(), player.getY());
-        g2d.transform(trans);
+            AffineTransform backup = g2d.getTransform(); // TODO w/ g2d.dispose() ? https://gamedev.stackexchange.com/questions/62196/rotate-image-around-a-specified-origin
+            AffineTransform trans = new AffineTransform();
 
-        g2d.drawImage(player.getImage(), imgW, imgH, this);
+            trans.rotate(player.getRotation(), player.getX(), player.getY());
+            g2d.transform(trans);
 
-        g2d.dispose();
+            g2d.drawImage(player.getImage(), imgW, imgH, this);
 
-        // MOVE PROJECTILES PLAYER
-        g2d = (Graphics2D) g.create();
+            g2d.dispose();
 
-        for(Beam b : player.getProjectiles())
-        {
-            g2d.drawImage(b.getImage(), b.getX(), b.getY(), this);
+            // MOVE PROJECTILES PLAYER
+            g2d = (Graphics2D) g.create();
+
+            for (Beam b : player.getProjectiles()) {
+                g2d.drawImage(b.getImage(), b.getX(), b.getY(), this);
+            }
         }
-
         // MOVE OBJECTS
         g2d = (Graphics2D) g.create();
 
@@ -277,35 +312,42 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
     private void drawHitboxes(Graphics g)
     {
-        // For testing player and objects
-        Graphics2D g2d = (Graphics2D) g.create();
-        g2d.setColor(Color.GREEN);
-        g2d.drawOval(player.getX(), player.getY(), 10,10);
+        Graphics2D g2d = null;
 
-        AffineTransform backup = g2d.getTransform();
-        AffineTransform trans = new AffineTransform();
+        for(Player player : players) {
 
-        trans.rotate(player.getRotation(), player.getX(), player.getY());
-        g2d.transform(trans);
+            g2d = (Graphics2D) g.create();
 
-        int pX1 =  player.getX() - (player.getWidth() / 2);
-        int pY1 = player.getY() - (player.getHeight() / 2);
+            // For testing player and objects
+            g2d.setColor(Color.GREEN);
+            g2d.drawOval(player.getX(), player.getY(), 10, 10);
 
-        int pX2 =  player.getX() + (player.getWidth() / 2);
-        int pY2 = player.getY() + (player.getHeight() / 2);
+            AffineTransform backup = g2d.getTransform();
+            AffineTransform trans = new AffineTransform();
 
-        g2d.drawLine(pX1, pY1, pX1, pY2);
-        g2d.drawLine(pX2, pY1, pX2, pY2);
+            trans.rotate(player.getRotation(), player.getX(), player.getY());
+            g2d.transform(trans);
 
-        g2d.drawLine(pX1, pY1, pX2, pY1);
-        g2d.drawLine(pX1, pY2, pX2, pY2);
+            int pX1 = player.getX() - (player.getWidth() / 2);
+            int pY1 = player.getY() - (player.getHeight() / 2);
 
-        //Point p = new Point(pX2, pY2);
-        //g2d.draw(p);
+            int pX2 = player.getX() + (player.getWidth() / 2);
+            int pY2 = player.getY() + (player.getHeight() / 2);
 
-        g2d.drawOval(pX2, pY2, 5,5);
+            g2d.drawLine(pX1, pY1, pX1, pY2);
+            g2d.drawLine(pX2, pY1, pX2, pY2);
 
-        g2d.dispose();
+            g2d.drawLine(pX1, pY1, pX2, pY1);
+            g2d.drawLine(pX1, pY2, pX2, pY2);
+
+            //Point p = new Point(pX2, pY2);
+            //g2d.draw(p);
+
+            g2d.drawOval(pX2, pY2, 5, 5);
+
+            g2d.dispose();
+        }
+
         g2d = (Graphics2D) g.create();
         g2d.setColor(Color.RED);
 
