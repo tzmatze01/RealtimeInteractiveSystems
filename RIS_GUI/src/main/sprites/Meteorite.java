@@ -1,6 +1,7 @@
 package main.sprites;
 
 import main.sprites.type.MovingObject;
+import main.sprites.type.ObjectType;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,7 +35,7 @@ public class Meteorite extends MovingObject {
     private double m;
 
     public Meteorite(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPosStart, int yPosEnd, double m, double velocity, int energy) {
-        super(imgFileName, imageWidth, imageHeight, xPos, yPosStart, energy);
+        super(ObjectType.METEORITE, imgFileName, imageWidth, imageHeight, xPos, yPosStart, energy);
 
         this.yPosStart = yPosStart;
         this.yPosEnd = yPosEnd;

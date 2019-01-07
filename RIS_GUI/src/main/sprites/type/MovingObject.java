@@ -2,9 +2,11 @@ package main.sprites.type;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.ObjectOutputStream;
 
 public abstract class MovingObject {
 
+    private ObjectType type;
     private Image image;
 
     private int w;
@@ -16,6 +18,8 @@ public abstract class MovingObject {
 
     private int energy;
 
+    private boolean toDelete;
+
     //private int yPosStart;
     //private int yPosEnd;
 
@@ -24,8 +28,10 @@ public abstract class MovingObject {
     //private double m;
 
 
-    public MovingObject(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy)
+    public MovingObject(ObjectType type, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy)
     {
+        this.type = type;
+
         this.w = imageWidth;
         this.h = imageHeight;
 
@@ -40,6 +46,8 @@ public abstract class MovingObject {
         //this.yPosEnd = yPosEnd;
 
         this.energy = energy;
+
+        this.toDelete = false;
 
         loadImage(imgFileName);
     }
@@ -88,7 +96,7 @@ public abstract class MovingObject {
 
     public void reduceEnergy(int amount)
     {
-        System.out.println("energy: "+ energy+ " - " + amount);
+        //System.out.println("energy: "+ energy+ " - " + amount);
         this.energy -= amount;
     }
 
@@ -96,8 +104,25 @@ public abstract class MovingObject {
         return energy;
     }
 
+    public ObjectType getType() {
+        return type;
+    }
+
+    public boolean isToDelete() {
+        return toDelete;
+    }
+
+    public void setToDelete(boolean toDelete) {
+        this.toDelete = toDelete;
+    }
+
     // for collision detection
     public Rectangle getBounds() {
+
+        // TODO http://zetcode.com/tutorials/javagamestutorial/collision/
+
+        // TODO with intersects https://docs.oracle.com/javase/7/docs/api/java/awt/Polygon.html
+
         return new Rectangle((int) xPos, (int) yPos, w, h);
     }
 

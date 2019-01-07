@@ -6,13 +6,15 @@ import main.sprites.type.MovingObject;
 import main.sprites.Player;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static main.sprites.type.ObjectType.*;
 
 public class World extends JPanel implements KeyListener, ActionListener {
 
@@ -39,7 +41,9 @@ public class World extends JPanel implements KeyListener, ActionListener {
     private int[][] gamePlan;
     private int maxLevel;
 
-    private List<Player> players;
+    private Map<Integer, Player> players;
+    private List<MovingObject> allMovingObjects;
+
     /*
     TODO
 
@@ -62,7 +66,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
         this.level = 1;
         this.maxLevel = gamePlan.length;
 
-        this.players = new ArrayList<>();
+        this.players = new HashMap<>();
 
 
         initBoard();
@@ -71,7 +75,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
     private void initBoard() {
         setBackground(Color.black);
 
-        players.add(new Player("player.png", 80, 40, PLAYER_VELOCITY));
+        players.put(1, new Player(1,"player.png", 80, 40, 20,20,100, PLAYER_VELOCITY));
 
         timer = new Timer(DELAY, this);
         timer.start();
@@ -100,7 +104,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         // TODO check which player
 
-        for(Player player : players)
+        for(Player player : players.values())
             player.keyPressed(e);
     }
 
@@ -109,27 +113,32 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         // TODO check which player
 
-        for(Player player : players)
+        for(Player player : players.values())
             player.keyReleased(e);
     }
 
     private void step() {
 
-        for(Player player : players)
+        allMovingObjects = new ArrayList<>();
+
+        for(Player player : players.values())
+        {
             player.move();
+            allMovingObjects.addAll(player.getProjectiles());
+            allMovingObjects.add(player);
+        }
 
         for(MovingObject mo : movingObjects)
+        {
             mo.move();
+            allMovingObjects.add(mo);
+        }
 
         generateObjects();
 
-        collisionDetection();
+        collisionDetection(allMovingObjects);
 
-        // check if moving objects, projectiles and out of screen and 'delete' them
-        //updateProjectiles();
-        updateMovingObjects();
-
-
+        updateMovingObjects(allMovingObjects);
 
         repaint();
     }
@@ -162,19 +171,26 @@ public class World extends JPanel implements KeyListener, ActionListener {
     }
     */
 
-    private void updateMovingObjects()
+
+    // check if moving objects are out of screen and delete them
+    private void updateMovingObjects(List<MovingObject> allMovingObjects)
     {
+
         List<MovingObject> delMovingObjects = new LinkedList<>();
 
         /// recognize moving objects which are out of screen
-        for(MovingObject mo : movingObjects)
+        for(MovingObject mo : allMovingObjects)
         {
-            if(mo.getX() < -(mo.getWidth() / 2) || mo.getX() > (screenWidth + (mo.getWidth() / 2)) ||
-                mo.getY() < -(mo.getHeight() / 2) || mo.getY() > (screenHeight + (mo.getHeight() / 2)))
+            if(mo.getX() < -(mo.getWidth() / 2) || mo.getX() >= (screenWidth + (mo.getWidth() / 2)) ||
+                mo.getY() < -(mo.getHeight() / 2) || mo.getY() >= (screenHeight + (mo.getHeight() / 2)))
             {
                 delMovingObjects.add(mo);
             }
             else if(mo.getEnergy() <= 0)
+            {
+                delMovingObjects.add(mo);
+            }
+            else if(mo.isToDelete())
             {
                 delMovingObjects.add(mo);
             }
@@ -183,11 +199,61 @@ public class World extends JPanel implements KeyListener, ActionListener {
         // delete moving objects
         for(MovingObject mo : delMovingObjects)
         {
-            movingObjects.remove(mo);
+            if(mo.getType() == PLAYER_BEAM)
+            {
+                int playerID = ((Beam)mo).getPlayerID();
+                players.get(playerID).getProjectiles().remove(mo);
+            }
+            if(mo.getType() == METEORITE || mo.getType() == COLLECTABLE)
+                movingObjects.remove(mo);
+
+            // TODO player dies?
+            // TODO enemy & their beams
         }
     }
 
-    private void collisionDetection()
+    private boolean simpleCollisionDetection(MovingObject mo1, MovingObject mo2)
+    {
+        // MO which is more on the left -> xPos + mo.getWidth / 2
+        // vice versa for MO on right and yPos
+
+        boolean collidedX = false;
+
+        if(mo1.getX() < mo2.getX())
+        {
+            if((mo1.getX() + (mo1.getWidth() / 2)) > (mo2.getX() - (mo2.getWidth() / 2)))
+            {
+                collidedX = true;
+            }
+
+        }
+        else
+        {
+            if((mo2.getX() + (mo2.getWidth() / 2)) > (mo1.getX() - (mo1.getWidth() / 2)))
+            {
+                collidedX = true;
+            }
+        }
+
+        if(collidedX)
+        {
+            if(mo1.getY() < mo2.getY())
+            {
+                if((mo1.getY() + (mo1.getHeight() / 2)) > (mo2.getY() - (mo2.getHeight() / 2)))
+                    return true;
+            }
+            else
+            {
+                if((mo2.getY() + (mo2.getHeight() / 2)) > (mo1.getY() - (mo1.getHeight() / 2)))
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    private void collisionDetection(List<MovingObject> allMovingObjects)
     {
         // TODO collision projectiles and movingObjects
 
@@ -199,13 +265,79 @@ public class World extends JPanel implements KeyListener, ActionListener {
         //System.out.println("player center : " + player.getX() + " / " + player.getY());
         //System.out.println("player corner : " + playerCornerX + " / " + playerCornerY);
 
-        for(MovingObject mo : movingObjects)
-        {
+        List<MovingObject> moCollisionCheck = new ArrayList<>(allMovingObjects);
+        //List<MovingObject> moCollision = new ArrayList<>(); TODO myb for performance after each 'allMovingObjects' iteration
+
+        for(MovingObject mo : allMovingObjects) {
+
+            moCollisionCheck.remove(mo); // do not check collision with current mo
+
+            for (MovingObject collMO : moCollisionCheck) {
+
+                // perspective is: what dealt damage to me?
+                if(collMO.getType() != mo.getType())
+                {
+                    if (simpleCollisionDetection(collMO, mo))
+                    {
+                        // System.out.println("collision detected");
+
+                        // TODO advanced collision detection
+
+                        // TODO Playerbeam collides with player
+
+                        switch (mo.getType()) {
+                            case PLAYER_BEAM:
+                                if(collMO.getType() == METEORITE || collMO.getType() == ENEMY)
+                                {
+                                    // TODO check which players beam hit last for points
+                                    //  System.out.println("player beam hit meteorite 2 ");
+
+                                    collMO.reduceEnergy(mo.getEnergy());
+                                    mo.setToDelete(true);
+                                }
+                                break;
+
+                            case COLLECTABLE:
+                                if (collMO.getType() == PLAYER) {
+                                    collMO.setToDelete(true);
+                                }
+                                break;
+                            case PLAYER:
+                                if (collMO.getType() == METEORITE) {
+
+                                }
+                                if (collMO.getType() == ENEMY_BEAM) {
+                                    collMO.setToDelete(true);
+                                }
+
+                                mo.reduceEnergy(collMO.getEnergy());
+                                break;
+                            case ENEMY:
+                                // TODO check which players beam hit last for points
+                                if (collMO.getType() == PLAYER_BEAM) {
+                                    // TODO
+                                }
+                                break;
+
+                        }
+                    }
+                }
+            }
+
+
+        }
+
+
+            /*
             int moXStart = mo.getX() - (mo.getWidth() / 2);
             int moXEnd = mo.getX() + (mo.getWidth() / 2);
 
             int moYStart = mo.getY() - (mo.getHeight() / 2);
             int moYEnd = mo.getY() + (mo.getHeight() / 2);
+
+
+
+
 
             for(Player player : players)
             {
@@ -226,6 +358,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
                 }
             }
         }
+             */
     }
 
     private void generateObjects() {
@@ -272,7 +405,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         Graphics2D g2d = null;
 
-        for(Player player : players) {
+        for(Player player : players.values()) {
             g2d = (Graphics2D) g.create();
 
             // MOVING PLAYER
@@ -314,7 +447,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
     {
         Graphics2D g2d = null;
 
-        for(Player player : players) {
+        for(Player player : players.values()) {
 
             g2d = (Graphics2D) g.create();
 

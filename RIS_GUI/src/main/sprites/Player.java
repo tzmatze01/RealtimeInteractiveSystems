@@ -10,9 +10,13 @@ import java.util.List;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import main.sprites.type.MovingObject;
+import main.sprites.type.ObjectType;
 
 
-public class Player {
+public class Player extends MovingObject {
+
+    private int playerID;
+    private int gamePoints;
 
     private int dMovement;
     private int dRotation;
@@ -21,14 +25,14 @@ public class Player {
     private double ddy;
 
     // player pos on screen
-    private int x = 20;
-    private int y = 10;
+    //private int x = 20;
+    //private int y = 10;
 
     // image sizes
-    private int w;
-    private int h;
+    //private int w;
+    //private int h;
 
-    private Image image;
+    //private Image image;
 
     private int rotation;
     private int oldRotation;
@@ -41,15 +45,19 @@ public class Player {
     private static int BEAM_HEIGHT = 8;
 
 
-    private int lifePoints;
+    //private int lifePoints;
 
     private MediaPlayer mp;
 
 
-    public Player(String imgFileName, int imageWidth, int imageHeight, int velocity) {
+    public Player(int playerID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy, int velocity) {
+        super(ObjectType.PLAYER, imgFileName, imageWidth, imageHeight, xPos, yPos, energy);
 
-        this.w = imageWidth;
-        this.h = imageHeight;
+        this.playerID = playerID;
+        this.gamePoints = 0;
+
+        //this.w = imageWidth;
+        //this.h = imageHeight;
 
         this.rotation = 0;
         this.oldRotation = 0;
@@ -58,12 +66,13 @@ public class Player {
 
         this.projectiles = new ArrayList<>();
 
-        loadImage(imgFileName);
+        //loadImage(imgFileName);
         //loadSound(filename);
     }
 
 
 
+    /*
     private void loadImage(String imgFileName) {
 
         ImageIcon ii = new ImageIcon("src/main/resources/img/"+imgFileName);
@@ -71,6 +80,7 @@ public class Player {
 
         image = image.getScaledInstance(w,h, 0);
     }
+    */
 
     private void loadSound(String filename) {
 
@@ -88,23 +98,23 @@ public class Player {
 
         if(rotation >= 0 && rotation < 90)
         {
-            x += ddx;
-            y += ddy;
+            xPos += ddx;
+            yPos += ddy;
         }
         if(rotation >= 90 && rotation < 180)
         {
-            x -= ddx;
-            y += ddy;
+            xPos -= ddx;
+            yPos += ddy;
         }
         if(rotation >= 180 && rotation < 270)
         {
-            x -= ddx;
-            y -= ddy;
+            xPos -= ddx;
+            yPos -= ddy;
         }
         if(rotation >= 270 && rotation < 360)
         {
-            x += ddx;
-            y -= ddy;
+            xPos += ddx;
+            yPos -= ddy;
         }
 
 
@@ -117,8 +127,6 @@ public class Player {
         {
             rotation = 0;
         }
-
-
 
         rotation += dRotation;
 
@@ -141,8 +149,10 @@ public class Player {
         double dx = 5;
         double dy = 1;
 
-        //    public Beam(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, double dx, double dy)
-        projectiles.add(new Beam("beam.png", BEAM_WIDTH, BEAM_HEIGHT, x+(getWidth() / 2) , y, dx, dy));
+        int x = (int) xPos+(getWidth() / 2);
+        int y = (int) yPos;
+
+        projectiles.add(new Beam(playerID,"beam.png", BEAM_WIDTH, BEAM_HEIGHT,  x, y, dx, dy));
 
         //this.mp.play();
     }
@@ -152,6 +162,29 @@ public class Player {
         return Math.toRadians(this.rotation);
     }
 
+    public List<Beam> getProjectiles()
+    {
+        return this.projectiles;
+    }
+
+    public int getPlayerID() {
+        return playerID;
+    }
+
+    public int getGamePoints() {
+        return gamePoints;
+    }
+
+    public void reduceGamePoints(int amount)
+    {
+        this.gamePoints -= amount;
+    }
+
+    public void addGamePoints(int amount) {
+        this.gamePoints += amount;
+    }
+
+    /*
     public int getX() {
 
         return x;
@@ -184,6 +217,8 @@ public class Player {
     public void setLifePoints(int lifePoints) {
         this.lifePoints = lifePoints;
     }
+
+    */
 
     public void keyPressed(KeyEvent e) {
 
@@ -233,13 +268,10 @@ public class Player {
         }
     }
 
-    public List<Beam> getProjectiles()
-    {
-        return this.projectiles;
-    }
-
+    /*
     // for collision detection
     public Rectangle getBounds() {
         return new Rectangle( x, y, w, h);
     }
+    */
 }
