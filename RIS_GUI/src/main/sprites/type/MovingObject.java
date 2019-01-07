@@ -19,6 +19,7 @@ public abstract class MovingObject {
     private int energy;
 
     private boolean toDelete;
+    protected int gamePoints;
 
     //private int yPosStart;
     //private int yPosEnd;
@@ -28,7 +29,7 @@ public abstract class MovingObject {
     //private double m;
 
 
-    public MovingObject(ObjectType type, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy)
+    public MovingObject(ObjectType type, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy, int gamePoints)
     {
         this.type = type;
 
@@ -39,15 +40,11 @@ public abstract class MovingObject {
         this.xPos = xPos;
         this.yPos = yPos;
 
-        //this.m = m;
-        //this.velocity = velocity;
-
-        //this.yPosStart = yPosStart;
-        //this.yPosEnd = yPosEnd;
-
         this.energy = energy;
 
         this.toDelete = false;
+
+        this.gamePoints = gamePoints;
 
         loadImage(imgFileName);
     }
@@ -96,7 +93,6 @@ public abstract class MovingObject {
 
     public void reduceEnergy(int amount)
     {
-        //System.out.println("energy: "+ energy+ " - " + amount);
         this.energy -= amount;
     }
 
@@ -106,6 +102,10 @@ public abstract class MovingObject {
 
     public ObjectType getType() {
         return type;
+    }
+
+    public int getGamePoints() {
+        return gamePoints;
     }
 
     public boolean isToDelete() {

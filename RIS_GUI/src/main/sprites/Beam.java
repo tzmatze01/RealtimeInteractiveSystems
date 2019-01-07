@@ -21,7 +21,7 @@ public class Beam extends MovingObject {
     //    public Meteorite(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPosStart, int yPosEnd, double m, double velocity, int energy)
     public Beam(int playerID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, double dx, double dy)
     {
-        super(ObjectType.PLAYER_BEAM, imgFileName, imageWidth, imageHeight, xPos, yPos, 10);
+        super(ObjectType.PLAYER_BEAM, imgFileName, imageWidth, imageHeight, xPos, yPos, 10, 0);
 
         this.playerID = playerID;
 

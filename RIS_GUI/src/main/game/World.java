@@ -1,6 +1,7 @@
 package main.game;
 
 import main.sprites.Beam;
+import main.sprites.Collectable;
 import main.sprites.Meteorite;
 import main.sprites.type.MovingObject;
 import main.sprites.Player;
@@ -134,7 +135,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
             allMovingObjects.add(mo);
         }
 
-        generateObjects();
+        generateGameObjects();
 
         collisionDetection(allMovingObjects);
 
@@ -143,39 +144,10 @@ public class World extends JPanel implements KeyListener, ActionListener {
         repaint();
     }
 
-    /*
-    private void updateMovingObjects()
-    {
-        List<Beam> delBeams = new LinkedList<>();
-
-        // recognize which beams are out of screen
-        for(Beam b : player.getProjectiles())
-        {
-            if(b.getX() < -(b.getWidth() / 2) || b.getX() > (screenWidth + (b.getWidth() / 2)) ||
-                b.getY() < -(b.getHeight() / 2) || b.getY() > (screenHeight + (b.getHeight() / 2)))
-            {
-                delBeams.add(b);
-            }
-            else if(b.isHitObject())
-            {
-                delBeams.add(b);
-            }
-
-        }
-
-        // delete beams
-        for(Beam b : delBeams)
-        {
-            player.getProjectiles().remove(b);
-        }
-    }
-    */
-
 
     // check if moving objects are out of screen and delete them
     private void updateMovingObjects(List<MovingObject> allMovingObjects)
     {
-
         List<MovingObject> delMovingObjects = new LinkedList<>();
 
         /// recognize moving objects which are out of screen
@@ -183,17 +155,11 @@ public class World extends JPanel implements KeyListener, ActionListener {
         {
             if(mo.getX() < -(mo.getWidth() / 2) || mo.getX() >= (screenWidth + (mo.getWidth() / 2)) ||
                 mo.getY() < -(mo.getHeight() / 2) || mo.getY() >= (screenHeight + (mo.getHeight() / 2)))
-            {
                 delMovingObjects.add(mo);
-            }
             else if(mo.getEnergy() <= 0)
-            {
                 delMovingObjects.add(mo);
-            }
             else if(mo.isToDelete())
-            {
                 delMovingObjects.add(mo);
-            }
         }
 
         // delete moving objects
@@ -235,16 +201,12 @@ public class World extends JPanel implements KeyListener, ActionListener {
             }
         }
 
-        if(collidedX)
-        {
-            if(mo1.getY() < mo2.getY())
-            {
-                if((mo1.getY() + (mo1.getHeight() / 2)) > (mo2.getY() - (mo2.getHeight() / 2)))
+        if(collidedX) {
+            if (mo1.getY() < mo2.getY()) {
+                if ((mo1.getY() + (mo1.getHeight() / 2)) > (mo2.getY() - (mo2.getHeight() / 2)))
                     return true;
-            }
-            else
-            {
-                if((mo2.getY() + (mo2.getHeight() / 2)) > (mo1.getY() - (mo1.getHeight() / 2)))
+            } else {
+                if ((mo2.getY() + (mo2.getHeight() / 2)) > (mo1.getY() - (mo1.getHeight() / 2)))
                     return true;
             }
         }
@@ -252,19 +214,8 @@ public class World extends JPanel implements KeyListener, ActionListener {
         return false;
     }
 
-
     private void collisionDetection(List<MovingObject> allMovingObjects)
     {
-        // TODO collision projectiles and movingObjects
-
-        // TODO add hitbox of player to calculation
-
-        //int playerCornerX = player.getX() + (player.getWidth() / 2);
-        //int playerCornerY = player.getY() + (player.getHeight() / 2);
-
-        //System.out.println("player center : " + player.getX() + " / " + player.getY());
-        //System.out.println("player corner : " + playerCornerX + " / " + playerCornerY);
-
         List<MovingObject> moCollisionCheck = new ArrayList<>(allMovingObjects);
         //List<MovingObject> moCollision = new ArrayList<>(); TODO myb for performance after each 'allMovingObjects' iteration
 
@@ -277,10 +228,9 @@ public class World extends JPanel implements KeyListener, ActionListener {
                 // perspective is: what dealt damage to me?
                 if(collMO.getType() != mo.getType())
                 {
+
                     if (simpleCollisionDetection(collMO, mo))
                     {
-                        // System.out.println("collision detected");
-
                         // TODO advanced collision detection
 
                         // TODO Playerbeam collides with player
@@ -294,15 +244,28 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
                                     collMO.reduceEnergy(mo.getEnergy());
                                     mo.setToDelete(true);
+
+                                    if(collMO.getEnergy() <= 0)
+                                    {
+                                        int playerID = ((Beam)mo).getPlayerID();
+                                        players.get(playerID).addGamePoints(collMO.getGamePoints());
+                                    }
                                 }
                                 break;
-
+                            /*
                             case COLLECTABLE:
                                 if (collMO.getType() == PLAYER) {
                                     collMO.setToDelete(true);
                                 }
                                 break;
+                            */
                             case PLAYER:
+                                if (collMO.getType() == COLLECTABLE) {
+                                    collMO.setToDelete(true);
+
+                                    int playerID = ((Player)mo).getPlayerID();
+                                    players.get(playerID).addGamePoints(collMO.getGamePoints());
+                                }
                                 if (collMO.getType() == METEORITE) {
 
                                 }
@@ -323,45 +286,10 @@ public class World extends JPanel implements KeyListener, ActionListener {
                     }
                 }
             }
-
-
         }
-
-
-            /*
-            int moXStart = mo.getX() - (mo.getWidth() / 2);
-            int moXEnd = mo.getX() + (mo.getWidth() / 2);
-
-            int moYStart = mo.getY() - (mo.getHeight() / 2);
-            int moYEnd = mo.getY() + (mo.getHeight() / 2);
-
-
-
-
-
-            for(Player player : players)
-            {
-                // check collision with player
-                if (player.getX() >= moXStart && player.getX() < moXEnd && player.getY() >= moYStart && player.getY() < moYEnd) {
-                    System.out.println("collision");
-
-                }
-
-                // check collision with any beam
-                for (Beam b : player.getProjectiles())
-                {
-                    if (b.getX() >= moXStart && b.getX() < moXEnd && b.getY() >= moYStart && b.getY() < moYEnd)
-                    {
-                        b.setHitObject(true);
-                        mo.reduceEnergy(b.getEnergy());
-                    }
-                }
-            }
-        }
-             */
     }
 
-    private void generateObjects() {
+    private void generateGameObjects() {
 
         // TODO generate every X seconds ?
 
@@ -371,6 +299,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
             movingObjects.add(generateMeteorite());
             movingObjects.add(generateMeteorite());
+            movingObjects.add(generateCollectable());
         }
     }
 
@@ -390,12 +319,30 @@ public class World extends JPanel implements KeyListener, ActionListener {
         if(yEnd > yStart)
             m = -m;
 
-        double velocity = 1;
+        double velocity = 1; // TODO calc velocity due size
 
-        //System.out.println("generated meteorite with\nvelocity: "+velocity+"\nstarting at y: "+yStart+"\nending at y: "+yEnd+"\nwith dY: "+dY+"\n");
+        // TODO gamepoints
+        return new Meteorite("meteorite"+meteoriteNumber+".png", imgWidth, imgHeight, screenWidth, yStart, yEnd, m, velocity, 100, 10);
+    }
 
-        return new Meteorite("meteorite"+meteoriteNumber+".png", imgWidth, imgHeight, screenWidth, yStart, yEnd, m, velocity, 100);
-        //return new Meteorite("debris.png", imgWidth, imgHeight, screenWidth, yStart, yEnd, m, velocity, 100);
+    private Collectable generateCollectable() {
+
+        int collectableNumber = ThreadLocalRandom.current().nextInt(1, 3);
+
+        int yStart = ThreadLocalRandom.current().nextInt(0, screenHeight);
+        int yEnd = ThreadLocalRandom.current().nextInt(0, screenHeight);
+
+        double m = (double) Math.abs(yEnd - yStart) / screenHeight;
+
+        // moving from high 'y' to low 'y' -> gradient must be negative
+        if(yEnd > yStart)
+            m = -m;
+
+        double velocity = 3; // TODO calc velocity due size
+
+        int imgSize = 30;
+
+        return new Collectable("artifact"+collectableNumber+".png", imgSize, imgSize, screenWidth, yStart, yEnd, m, velocity, 10, 500);
     }
 
     private void doDrawing(Graphics g) {

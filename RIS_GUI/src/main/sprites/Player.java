@@ -16,7 +16,6 @@ import main.sprites.type.ObjectType;
 public class Player extends MovingObject {
 
     private int playerID;
-    private int gamePoints;
 
     private int dMovement;
     private int dRotation;
@@ -24,37 +23,22 @@ public class Player extends MovingObject {
     private double ddx;
     private double ddy;
 
-    // player pos on screen
-    //private int x = 20;
-    //private int y = 10;
-
-    // image sizes
-    //private int w;
-    //private int h;
-
-    //private Image image;
-
     private int rotation;
     private int oldRotation;
 
     private int velocity;
 
-
     private List<Beam> projectiles;
     private static int BEAM_WIDTH = 20;
     private static int BEAM_HEIGHT = 8;
-
-
-    //private int lifePoints;
 
     private MediaPlayer mp;
 
 
     public Player(int playerID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy, int velocity) {
-        super(ObjectType.PLAYER, imgFileName, imageWidth, imageHeight, xPos, yPos, energy);
+        super(ObjectType.PLAYER, imgFileName, imageWidth, imageHeight, xPos, yPos, energy, 0);
 
         this.playerID = playerID;
-        this.gamePoints = 0;
 
         //this.w = imageWidth;
         //this.h = imageHeight;
@@ -66,21 +50,8 @@ public class Player extends MovingObject {
 
         this.projectiles = new ArrayList<>();
 
-        //loadImage(imgFileName);
         //loadSound(filename);
     }
-
-
-
-    /*
-    private void loadImage(String imgFileName) {
-
-        ImageIcon ii = new ImageIcon("src/main/resources/img/"+imgFileName);
-        image = ii.getImage();
-
-        image = image.getScaledInstance(w,h, 0);
-    }
-    */
 
     private void loadSound(String filename) {
 
@@ -89,8 +60,6 @@ public class Player extends MovingObject {
     }
 
     public void move() {
-
-        //System.out.println("rotation:"+rotation);
 
         ddx = Math.abs(Math.cos(rotation) * dMovement);
         ddy = Math.abs(Math.sin(rotation) * dMovement);
@@ -131,8 +100,6 @@ public class Player extends MovingObject {
         rotation += dRotation;
 
 
-       // System.out.println("ddx: "+ddx+" ddy: "+ddy);
-
         // TODO update winkel in quadrants
 
 
@@ -171,54 +138,16 @@ public class Player extends MovingObject {
         return playerID;
     }
 
-    public int getGamePoints() {
-        return gamePoints;
-    }
-
     public void reduceGamePoints(int amount)
     {
-        this.gamePoints -= amount;
+        gamePoints -= amount;
     }
 
     public void addGamePoints(int amount) {
-        this.gamePoints += amount;
+        gamePoints += amount;
+
+        System.out.println("players points: "+gamePoints); 
     }
-
-    /*
-    public int getX() {
-
-        return x;
-    }
-
-    public int getY() {
-
-        return y;
-    }
-
-    public int getWidth() {
-
-        return w;
-    }
-
-    public int getHeight() {
-
-        return h;
-    }
-
-    public Image getImage() {
-
-        return image;
-    }
-
-    public int getLifePoints() {
-        return lifePoints;
-    }
-
-    public void setLifePoints(int lifePoints) {
-        this.lifePoints = lifePoints;
-    }
-
-    */
 
     public void keyPressed(KeyEvent e) {
 
@@ -267,11 +196,4 @@ public class Player extends MovingObject {
                 break;
         }
     }
-
-    /*
-    // for collision detection
-    public Rectangle getBounds() {
-        return new Rectangle( x, y, w, h);
-    }
-    */
 }
