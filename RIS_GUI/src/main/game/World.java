@@ -76,7 +76,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
     private void initBoard() {
         setBackground(Color.black);
 
-        players.put(1, new Player(1,"player2.png", 80, 40, 20,20,100, PLAYER_VELOCITY));
+        players.put(1, new Player(1,"player1", 80, 40, 20,20,100, PLAYER_VELOCITY));
 
         timer = new Timer(DELAY, this);
         timer.start();
@@ -319,7 +319,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
         double velocity = 1; // TODO calc velocity due size
 
         // TODO gamepoints
-        return new Meteorite("meteorite"+meteoriteNumber+".png", imgWidth, imgHeight, screenWidth, yStart, yEnd, m, velocity, 100, 10);
+        return new Meteorite("meteorite"+meteoriteNumber, imgWidth, imgHeight, screenWidth, yStart, yEnd, m, velocity, 100, 10);
     }
 
     private Collectable generateCollectable() {
@@ -339,7 +339,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         int imgSize = 30;
 
-        return new Collectable("artifact"+collectableNumber+".png", imgSize, imgSize, screenWidth, yStart, yEnd, m, velocity, 10, 500);
+        return new Collectable("artifact"+collectableNumber, imgSize, imgSize, screenWidth, yStart, yEnd, m, velocity, 10, 500);
     }
 
     private void doDrawing(Graphics g) {

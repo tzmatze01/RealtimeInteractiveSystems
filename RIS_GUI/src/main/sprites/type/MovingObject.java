@@ -1,16 +1,29 @@
 package main.sprites.type;
 
+import javafx.scene.image.PixelFormat;
+import main.sprites.Player;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.io.ObjectOutputStream;
+import java.awt.image.ImageObserver;
+import java.awt.image.PixelGrabber;
+import java.io.File;
+import java.io.IOException;
+import java.nio.Buffer;
 import java.util.HashSet;
 import java.util.Set;
+
+import static com.sun.org.apache.xalan.internal.lib.ExsltStrings.split;
 
 public abstract class MovingObject {
 
     private ObjectType type;
     private Image image;
+    private Image hb_image;
 
     private int w;
     private int h;
@@ -45,15 +58,23 @@ public abstract class MovingObject {
         this.gamePoints = gamePoints;
 
         loadImage(imgFileName);
+
+        getRelevantPixels();
     }
 
-    private void loadImage(String imgFileName) {
+    private void loadImage(String imgFileName)
+    {
+        String hitboxFileName = imgFileName + ".jpg";
 
-        ImageIcon ii = new ImageIcon("src/main/resources/img/"+imgFileName);
+        // players share same hitbox
+        if(imgFileName.contains("player"))
+            hitboxFileName = "player.jpg";
 
-        image = ii.getImage();
+        ImageIcon ii = new ImageIcon("src/main/resources/img/display/"+imgFileName+".png");
+        ImageIcon hb_ii = new ImageIcon("src/main/resources/img/hitbox/"+hitboxFileName);
 
-        image = image.getScaledInstance(w,h, 0);
+        image = ii.getImage().getScaledInstance(w, h, 0);
+        hb_image = hb_ii.getImage().getScaledInstance(w, h, 0);
     }
 
     public void move() { }
@@ -125,19 +146,40 @@ public abstract class MovingObject {
     }
 
 
-    private void getRelevantPixels(BufferedImage image)
+    private void getRelevantPixels()
     {
-        relevantPoints = new HashSet<>();
+        int[] pixels = new int[w * h];
 
-        for(int height = 0; height < h; ++height)
-        {
-            for(int width = 0; width < w; ++width)
-            {
-                
-            }
+        PixelGrabber pg = new PixelGrabber(hb_image, 0, 0, w, h, pixels, 0, w);
+        try {
+            pg.grabPixels();
+        } catch (InterruptedException e) {
+            throw new IllegalStateException("Error: Interrupted Waiting for Pixels");
+        }
+        if ((pg.getStatus() & ImageObserver.ABORT) != 0) {
+            throw new IllegalStateException("Error: Image Fetch Aborted");
         }
 
+        relevantPoints = new HashSet<>();
 
+        for(int height = 0; height < h; height++)
+        {
+            for(int width = 0; width < w; width++)
+            {
+                int pos = (height * w) + width;
+
+                int blue = pixels[pos] & 0xff;
+                int green = (pixels[pos] & 0xff00) >> 8;
+                int red = (pixels[pos] & 0xff0000) >> 16;
+                //int alpha = (pixels[pos] & 0x000000FF) >> 24;
+
+                //if pixel is white - out of hitbox
+                if (blue == 0 && green == 0 && red == 0)
+                {
+                    relevantPoints.add(new Point(width, height));
+                }
+
+            }
+        }
     }
-
 }

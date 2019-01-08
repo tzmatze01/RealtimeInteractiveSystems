@@ -147,7 +147,7 @@ public class Player extends MovingObject {
         }
 
 
-        projectiles.add(new Beam(playerID,"beam.png", BEAM_WIDTH, BEAM_HEIGHT,  x, y, dx, dy, 5));
+        projectiles.add(new Beam(playerID,"beam", BEAM_WIDTH, BEAM_HEIGHT,  x, y, dx, dy, 5));
 
         //this.mp.play();
     }
