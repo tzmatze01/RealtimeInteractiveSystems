@@ -40,9 +40,6 @@ public class Player extends MovingObject {
 
         this.playerID = playerID;
 
-        //this.w = imageWidth;
-        //this.h = imageHeight;
-
         this.rotation = 0;
         this.oldRotation = 0;
 
@@ -61,29 +58,31 @@ public class Player extends MovingObject {
 
     public void move() {
 
-        ddx = Math.abs(Math.cos(rotation) * dMovement);
-        ddy = Math.abs(Math.sin(rotation) * dMovement);
+        ddx = Math.abs(Math.cos(Math.toRadians(rotation)));
+        ddy = Math.abs(Math.sin(Math.toRadians(rotation)));
 
+        double xMovement = ddx * dMovement;
+        double yMovement = ddy * dMovement;
 
         if(rotation >= 0 && rotation < 90)
         {
-            xPos += ddx;
-            yPos += ddy;
+            xPos += xMovement;
+            yPos += yMovement;
         }
         if(rotation >= 90 && rotation < 180)
         {
-            xPos -= ddx;
-            yPos += ddy;
+            xPos -= xMovement;
+            yPos += yMovement;
         }
         if(rotation >= 180 && rotation < 270)
         {
-            xPos -= ddx;
-            yPos -= ddy;
+            xPos -= xMovement;
+            yPos -= yMovement;
         }
         if(rotation >= 270 && rotation < 360)
         {
-            xPos += ddx;
-            yPos -= ddy;
+            xPos += xMovement;
+            yPos -= yMovement;
         }
 
 
@@ -100,9 +99,6 @@ public class Player extends MovingObject {
         rotation += dRotation;
 
 
-        // TODO update winkel in quadrants
-
-
         for(Beam b : projectiles)
         {
             b.move();
@@ -111,15 +107,47 @@ public class Player extends MovingObject {
 
     private void shoot()
     {
-        // TODO calc dx and dy for missle
+        double dx = 0;
+        double dy = 0;
 
-        double dx = 5;
-        double dy = 1;
+        int x = 0;
+        int y = 0;
 
-        int x = (int) xPos+(getWidth() / 2);
-        int y = (int) yPos;
+        if(rotation >= 0 && rotation < 90)
+        {
+            dx += ddx;
+            dy += ddy;
 
-        projectiles.add(new Beam(playerID,"beam.png", BEAM_WIDTH, BEAM_HEIGHT,  x, y, dx, dy));
+            x = (int) xPos+(getWidth() / 2);
+            y = (int) yPos;
+        }
+        if(rotation >= 90 && rotation < 180)
+        {
+            dx -= ddx;
+            dy += ddy;
+
+            x = (int) xPos;
+            y = (int) yPos+(getWidth() / 2);
+        }
+        if(rotation >= 180 && rotation < 270)
+        {
+            dx -= ddx;
+            dy -= ddy;
+
+            x =  (int) xPos - (getWidth() / 2);
+            y =  (int) yPos;
+        }
+        if(rotation >= 270 && rotation < 360)
+        {
+            dx += ddx;
+            dy -= ddy;
+
+            x =  (int) xPos;
+            y = (int) yPos - (getWidth() / 2);
+        }
+
+
+        projectiles.add(new Beam(playerID,"beam.png", BEAM_WIDTH, BEAM_HEIGHT,  x, y, dx, dy, 5));
 
         //this.mp.play();
     }
@@ -146,7 +174,7 @@ public class Player extends MovingObject {
     public void addGamePoints(int amount) {
         gamePoints += amount;
 
-        System.out.println("players points: "+gamePoints); 
+        System.out.println("players points: "+gamePoints);
     }
 
     public void keyPressed(KeyEvent e) {

@@ -225,7 +225,6 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
             for (MovingObject collMO : moCollisionCheck) {
 
-                // perspective is: what dealt damage to me?
                 if(collMO.getType() != mo.getType())
                 {
 
@@ -239,7 +238,6 @@ public class World extends JPanel implements KeyListener, ActionListener {
                             case PLAYER_BEAM:
                                 if(collMO.getType() == METEORITE || collMO.getType() == ENEMY)
                                 {
-                                    // TODO check which players beam hit last for points
                                     //  System.out.println("player beam hit meteorite 2 ");
 
                                     collMO.reduceEnergy(mo.getEnergy());
@@ -252,13 +250,6 @@ public class World extends JPanel implements KeyListener, ActionListener {
                                     }
                                 }
                                 break;
-                            /*
-                            case COLLECTABLE:
-                                if (collMO.getType() == PLAYER) {
-                                    collMO.setToDelete(true);
-                                }
-                                break;
-                            */
                             case PLAYER:
                                 if (collMO.getType() == COLLECTABLE) {
                                     collMO.setToDelete(true);
@@ -276,9 +267,15 @@ public class World extends JPanel implements KeyListener, ActionListener {
                                 mo.reduceEnergy(collMO.getEnergy());
                                 break;
                             case ENEMY:
-                                // TODO check which players beam hit last for points
                                 if (collMO.getType() == PLAYER_BEAM) {
-                                    // TODO
+
+                                    mo.reduceEnergy(collMO.getEnergy());
+
+                                    if(mo.getEnergy() <= 0)
+                                    {
+                                        int playerID = ((Beam) collMO).getPlayerID();
+                                        players.get(playerID).addGamePoints(collMO.getGamePoints());
+                                    }
                                 }
                                 break;
 

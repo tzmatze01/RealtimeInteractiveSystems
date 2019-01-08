@@ -16,10 +16,10 @@ public class Beam extends MovingObject {
     private double dx;
     private double dy;
 
+    private double velocity;
 
-    //
-    //    public Meteorite(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPosStart, int yPosEnd, double m, double velocity, int energy)
-    public Beam(int playerID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, double dx, double dy)
+
+    public Beam(int playerID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, double dx, double dy, double velocity)
     {
         super(ObjectType.PLAYER_BEAM, imgFileName, imageWidth, imageHeight, xPos, yPos, 10, 0);
 
@@ -28,6 +28,7 @@ public class Beam extends MovingObject {
         this.dx = dx;
         this.dy = dy;
 
+        this.velocity = velocity;
     }
 
 
@@ -42,7 +43,8 @@ public class Beam extends MovingObject {
         //this.xPos -= velocity;
         //this.yPos = (m * this.xPos) + yPosEnd;
 
-        this.xPos += dx;
+        this.xPos += dx * velocity;
+        this.yPos += dy * velocity;
     }
 
 

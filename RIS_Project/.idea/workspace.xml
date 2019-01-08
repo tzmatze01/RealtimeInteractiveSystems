@@ -2,18 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3946d730-20f7-46cc-ac97-15fbd3a6e037" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/../RIS_GUI/out/production/RIS_GUI/main/resources/img/artifact1.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/../RIS_GUI/out/production/RIS_GUI/main/resources/img/artifact2.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/resources/img/artifact1.png" />
-      <change beforePath="" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/resources/img/artifact2.png" />
       <change beforePath="$PROJECT_DIR$/../RIS_GUI/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../RIS_GUI/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/../RIS_GUI/src/main/game/World.java" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/game/World.java" />
       <change beforePath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Beam.java" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Beam.java" />
-      <change beforePath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Collectable.java" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Collectable.java" />
-      <change beforePath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Meteorite.java" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Meteorite.java" />
       <change beforePath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Player.java" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Player.java" />
       <change beforePath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/type/MovingObject.java" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/type/MovingObject.java" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
