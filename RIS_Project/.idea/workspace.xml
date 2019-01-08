@@ -4,8 +4,6 @@
     <list default="true" id="3946d730-20f7-46cc-ac97-15fbd3a6e037" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/../RIS_GUI/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../RIS_GUI/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/../RIS_GUI/src/main/game/World.java" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/game/World.java" />
-      <change beforePath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Beam.java" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Beam.java" />
-      <change beforePath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Player.java" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Player.java" />
       <change beforePath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/type/MovingObject.java" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/type/MovingObject.java" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />

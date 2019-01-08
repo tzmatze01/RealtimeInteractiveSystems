@@ -117,13 +117,19 @@ public abstract class MovingObject {
     }
 
     // for collision detection
-    public Rectangle getBounds() {
+    public Rectangle getRectangleBounds() {
 
         // TODO http://zetcode.com/tutorials/javagamestutorial/collision/
 
         // TODO with intersects https://docs.oracle.com/javase/7/docs/api/java/awt/Polygon.html
 
-        return new Rectangle((int) xPos, (int) yPos, w, h);
+        Rectangle rect = new Rectangle( 1,1,1,1);
+        return new Rectangle((int) xPos - getWidth() / 2, (int) yPos - getHeight() / 2, w, h);
+    }
+
+    public Polygon getPolygonBounds() {
+
+        return null;
     }
 
 }

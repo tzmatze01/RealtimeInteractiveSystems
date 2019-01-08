@@ -384,69 +384,30 @@ public class World extends JPanel implements KeyListener, ActionListener {
             g2d.drawImage(mo.getImage(), midX, midY, this);
         }
 
+
         drawHitboxes(g);
     }
 
     private void drawHitboxes(Graphics g)
     {
-        Graphics2D g2d = null;
+        Graphics2D g2d = (Graphics2D) g.create();
+        g2d.setColor(Color.GREEN);
 
-        for(Player player : players.values()) {
-
-            g2d = (Graphics2D) g.create();
-
-            // For testing player and objects
-            g2d.setColor(Color.GREEN);
-            g2d.drawOval(player.getX(), player.getY(), 10, 10);
-
-            AffineTransform backup = g2d.getTransform();
-            AffineTransform trans = new AffineTransform();
-
-            trans.rotate(player.getRotation(), player.getX(), player.getY());
-            g2d.transform(trans);
-
-            int pX1 = player.getX() - (player.getWidth() / 2);
-            int pY1 = player.getY() - (player.getHeight() / 2);
-
-            int pX2 = player.getX() + (player.getWidth() / 2);
-            int pY2 = player.getY() + (player.getHeight() / 2);
-
-            g2d.drawLine(pX1, pY1, pX1, pY2);
-            g2d.drawLine(pX2, pY1, pX2, pY2);
-
-            g2d.drawLine(pX1, pY1, pX2, pY1);
-            g2d.drawLine(pX1, pY2, pX2, pY2);
-
-            //Point p = new Point(pX2, pY2);
-            //g2d.draw(p);
-
-            g2d.drawOval(pX2, pY2, 5, 5);
-
-            g2d.dispose();
+        for(Player player : players.values())
+        {
+            g2d.rotate(player.getRotation(), player.getX(), player.getY());
+            g2d.draw(player.getRectangleBounds());
         }
 
+        g2d.dispose();
         g2d = (Graphics2D) g.create();
         g2d.setColor(Color.RED);
 
         for(MovingObject mo : movingObjects)
         {
-            g2d.drawOval(mo.getX(), mo.getY(), 10, 10);
-
-            int moX1 =  mo.getX() - (mo.getWidth() / 2);
-            int moY1 = mo.getY() - (mo.getHeight() / 2);
-
-            int moX2 =  mo.getX() + (mo.getWidth() / 2);
-            int moY2 = mo.getY() + (mo.getHeight() / 2);
-
-            g2d.drawLine(moX1, moY1, moX1, moY2);
-            g2d.drawLine(moX2, moY1, moX2, moY2);
-
-            g2d.drawLine(moX1, moY1, moX2, moY1);
-            g2d.drawLine(moX1, moY2, moX2, moY2);
+            g2d.draw(mo.getRectangleBounds());
         }
+
         g2d.dispose();
-
-        // ----------------------------------------
-
     }
 }
