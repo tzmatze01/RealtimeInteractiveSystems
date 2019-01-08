@@ -19,9 +19,9 @@ public class Beam extends MovingObject {
     private double velocity;
 
 
-    public Beam(int playerID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, double dx, double dy, double velocity)
+    public Beam(ObjectType type, int playerID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, double dx, double dy, double velocity)
     {
-        super(ObjectType.PLAYER_BEAM, imgFileName, imageWidth, imageHeight, xPos, yPos, 10, 0);
+        super(type, imgFileName, imageWidth, imageHeight, xPos, yPos, 10, 0);
 
         this.playerID = playerID;
 
