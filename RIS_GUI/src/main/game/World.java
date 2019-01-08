@@ -76,7 +76,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
     private void initBoard() {
         setBackground(Color.black);
 
-        players.put(1, new Player(1,"player.png", 80, 40, 20,20,100, PLAYER_VELOCITY));
+        players.put(1, new Player(1,"player2.png", 80, 40, 20,20,100, PLAYER_VELOCITY));
 
         timer = new Timer(DELAY, this);
         timer.start();

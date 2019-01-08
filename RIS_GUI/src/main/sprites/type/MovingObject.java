@@ -2,7 +2,10 @@ package main.sprites.type;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.ObjectOutputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class MovingObject {
 
@@ -21,12 +24,7 @@ public abstract class MovingObject {
     private boolean toDelete;
     protected int gamePoints;
 
-    //private int yPosStart;
-    //private int yPosEnd;
-
-    //private double velocity; // errechnet sich aus w & h des objects
-
-    //private double m;
+    private Set<Point> relevantPoints;
 
 
     public MovingObject(ObjectType type, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy, int gamePoints)
@@ -123,13 +121,23 @@ public abstract class MovingObject {
 
         // TODO with intersects https://docs.oracle.com/javase/7/docs/api/java/awt/Polygon.html
 
-        Rectangle rect = new Rectangle( 1,1,1,1);
         return new Rectangle((int) xPos - getWidth() / 2, (int) yPos - getHeight() / 2, w, h);
     }
 
-    public Polygon getPolygonBounds() {
 
-        return null;
+    private void getRelevantPixels(BufferedImage image)
+    {
+        relevantPoints = new HashSet<>();
+
+        for(int height = 0; height < h; ++height)
+        {
+            for(int width = 0; width < w; ++width)
+            {
+                
+            }
+        }
+
+
     }
 
 }
