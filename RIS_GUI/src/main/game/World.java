@@ -129,6 +129,15 @@ public class World extends JPanel implements KeyListener, ActionListener {
         for(MovingObject mo : movingObjects)
         {
             mo.move();
+
+            // update player pos in enemy
+            if(mo.getType() == ENEMY)
+            {
+                int playerID = ((Enemy)mo).getFocusPlayer();
+                Player tmpPlayer = players.get(playerID);
+                ((Enemy)mo).setFocusPlayerPos(tmpPlayer.getX(), tmpPlayer.getY());
+            }
+
             allMovingObjects.add(mo);
         }
 
@@ -270,7 +279,6 @@ public class World extends JPanel implements KeyListener, ActionListener {
                                     if(mo.detectCollision(collMO.getHitboxPoints()))
                                     {
                                         collMO.setToDelete(true);
-
                                     }
                                 }
 
@@ -329,7 +337,8 @@ public class World extends JPanel implements KeyListener, ActionListener {
         double velocity = 1; // TODO calc velocity due size
 
         // TODO gamepoints
-        return new Meteorite("meteorite"+meteoriteNumber, imgWidth, imgHeight, screenWidth, yStart, yEnd, m, velocity, 100, 10);
+
+        return new Meteorite("meteorite"+meteoriteNumber, imgWidth, imgHeight, screenWidth + (imgWidth / 2), yStart, yEnd, m, velocity, 100, 10);
     }
 
     private Collectable generateCollectable() {
@@ -349,7 +358,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         int imgSize = 30;
 
-        return new Collectable("artifact"+collectableNumber, imgSize, imgSize, screenWidth, yStart, yEnd, m, velocity, 10, 500);
+        return new Collectable("artifact"+collectableNumber, imgSize, imgSize, screenWidth + (imgSize / 2), yStart, yEnd, m, velocity, 10, 500);
     }
 
     private Enemy generateEnemy() {
