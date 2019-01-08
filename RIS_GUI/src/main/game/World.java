@@ -1,10 +1,7 @@
 package main.game;
 
-import main.sprites.Beam;
-import main.sprites.Collectable;
-import main.sprites.Meteorite;
+import main.sprites.*;
 import main.sprites.type.MovingObject;
-import main.sprites.Player;
 
 import javax.swing.*;
 import javax.swing.Timer;
@@ -354,6 +351,17 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         return new Collectable("artifact"+collectableNumber, imgSize, imgSize, screenWidth, yStart, yEnd, m, velocity, 10, 500);
     }
+
+    private Enemy generateEnemy() {
+
+        int focusPlayer = ThreadLocalRandom.current().nextInt(1, players.size()+1);
+        int yStart = ThreadLocalRandom.current().nextInt(0, screenHeight);
+
+        int imgSize = 60;
+
+        return new Enemy("enemy", imgSize,imgSize, screenWidth + (imgSize / 2), yStart, 100, 300, 5, focusPlayer);
+    }
+
 
     private void doDrawing(Graphics g) {
 

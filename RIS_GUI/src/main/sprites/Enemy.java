@@ -37,7 +37,7 @@ public class Enemy extends MovingObject {
         double dy = 0;
 
 
-        //projectiles.add(new Beam(0, ObjectType.ENEMY_BEAM,"beam.png", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 5));
+        projectiles.add(new Beam(ObjectType.ENEMY_BEAM, 0,"beam.png", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 5));
 
         //this.mp.play();
     }
