@@ -1,19 +1,9 @@
 package main.sprites.type;
 
-import javafx.scene.image.PixelFormat;
-import main.sprites.Player;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.awt.image.PixelGrabber;
-import java.io.File;
-import java.io.IOException;
-import java.nio.Buffer;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,7 +18,6 @@ public abstract class MovingObject {
     private int w;
     private int h;
 
-    // moving object has two y Pos, which are randomly generated, to simulate a non straight moving object
     protected double xPos;
     protected double yPos;
 
@@ -59,7 +48,7 @@ public abstract class MovingObject {
 
         loadImage(imgFileName);
 
-        getRelevantPixels();
+        calcRelevantPixels();
     }
 
     private void loadImage(String imgFileName)
@@ -146,7 +135,7 @@ public abstract class MovingObject {
     }
 
 
-    private void getRelevantPixels()
+    private void calcRelevantPixels()
     {
         int[] pixels = new int[w * h];
 
@@ -160,6 +149,10 @@ public abstract class MovingObject {
             throw new IllegalStateException("Error: Image Fetch Aborted");
         }
 
+        // check if last pixel was black, or end of row, to only store 'outline' pixels
+        boolean lastPixelBlack = false;
+        boolean currentPixelBlack = false;
+
         relevantPoints = new HashSet<>();
 
         for(int height = 0; height < h; height++)
@@ -168,18 +161,77 @@ public abstract class MovingObject {
             {
                 int pos = (height * w) + width;
 
-                int blue = pixels[pos] & 0xff;
-                int green = (pixels[pos] & 0xff00) >> 8;
-                int red = (pixels[pos] & 0xff0000) >> 16;
-                //int alpha = (pixels[pos] & 0x000000FF) >> 24;
-
-                //if pixel is white - out of hitbox
-                if (blue == 0 && green == 0 && red == 0)
+                //if pixel is black -> in hitbox
+                if (!pixelIsWhite(pixels, pos))
                 {
-                    relevantPoints.add(new Point(width, height));
-                }
+                    currentPixelBlack = true;
 
+                    // if pixel in row to top or bottom is white -> add pixel
+                    if(pixelIsWhite(pixels, pos - w) || pixelIsWhite(pixels, pos + w))
+                        relevantPoints.add(new Point(width, height));
+                    // first or last black pixel in row
+                    else if(width == 0 || width == (w - 1))
+                        relevantPoints.add(new Point(width, height));
+                    if(!lastPixelBlack)
+                        relevantPoints.add(new Point(width, height));
+                }
+                else
+                    currentPixelBlack = false;
+
+                lastPixelBlack = currentPixelBlack;
             }
         }
     }
+
+    // white is better, because some pixels might be grey-ish
+    private boolean pixelIsWhite(int[] pixels, int pos)
+    {
+        if(pos < 0 || pos > pixels.length)
+            return true;
+
+        int blue = pixels[pos] & 0xff;
+        int green = (pixels[pos] & 0xff00) >> 8;
+        int red = (pixels[pos] & 0xff0000) >> 16;
+        //int alpha = (pixels[pos] & 0x000000FF) >> 24;
+
+        if(blue == 255 && green == 255 && red == 255)
+            return true;
+
+        return false;
+    }
+
+    public Set<Point> getHitboxPoints() {
+
+        // TODO rotation for player
+
+        // add current position to points
+        Set<Point> hitboxPoints = new HashSet<>();
+
+        for(Point p : relevantPoints)
+        {
+            int currX = (int)(p.x + xPos - (getWidth() / 2));
+            int currY = (int)(p.y + yPos - (getHeight() / 2));
+
+            hitboxPoints.add(new Point(currX, currY));
+        }
+
+        return hitboxPoints;
+    }
+
+    public boolean detectCollision(Set<Point> otherHitboxPoints)
+    {
+        for(Point ownHitboxPoint : getHitboxPoints())
+        {
+            for(Point otherHitboxPoint : otherHitboxPoints)
+            {
+                if(ownHitboxPoint.x == otherHitboxPoint.x && ownHitboxPoint.y == otherHitboxPoint.y)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
 }

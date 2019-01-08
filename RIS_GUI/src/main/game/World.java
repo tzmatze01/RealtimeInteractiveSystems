@@ -156,9 +156,9 @@ public class World extends JPanel implements KeyListener, ActionListener {
             if(mo.getX() < -(mo.getWidth() / 2) || mo.getX() >= (screenWidth + (mo.getWidth() / 2)) ||
                 mo.getY() < -(mo.getHeight() / 2) || mo.getY() >= (screenHeight + (mo.getHeight() / 2)))
                 delMovingObjects.add(mo);
-            else if(mo.getEnergy() <= 0)
+            if(mo.getEnergy() <= 0)
                 delMovingObjects.add(mo);
-            else if(mo.isToDelete())
+            if(mo.isToDelete())
                 delMovingObjects.add(mo);
         }
 
@@ -173,7 +173,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
             if(mo.getType() == METEORITE || mo.getType() == COLLECTABLE)
                 movingObjects.remove(mo);
 
-            // TODO player dies?
+            // TODO player dies? - display tomb
             // TODO enemy & their beams
         }
     }
@@ -230,23 +230,27 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
                     if (simpleCollisionDetection(collMO, mo))
                     {
-                        // TODO advanced collision detection
-
                         // TODO Playerbeam collides with player
 
                         switch (mo.getType()) {
                             case PLAYER_BEAM:
                                 if(collMO.getType() == METEORITE || collMO.getType() == ENEMY)
                                 {
-                                    //  System.out.println("player beam hit meteorite 2 ");
+                                    System.out.println("hit outer hitbox");
 
-                                    collMO.reduceEnergy(mo.getEnergy());
-                                    mo.setToDelete(true);
 
-                                    if(collMO.getEnergy() <= 0)
+                                    if(mo.detectCollision(collMO.getHitboxPoints()))
                                     {
-                                        int playerID = ((Beam)mo).getPlayerID();
-                                        players.get(playerID).addGamePoints(collMO.getGamePoints());
+                                        System.out.println("hit inner hitbox");
+
+                                        collMO.reduceEnergy(mo.getEnergy());
+                                        mo.setToDelete(true);
+
+                                        if(collMO.getEnergy() <= 0)
+                                        {
+                                            int playerID = ((Beam)mo).getPlayerID();
+                                            players.get(playerID).addGamePoints(collMO.getGamePoints());
+                                        }
                                     }
                                 }
                                 break;
@@ -259,9 +263,18 @@ public class World extends JPanel implements KeyListener, ActionListener {
                                 }
                                 if (collMO.getType() == METEORITE) {
 
+                                    if(mo.detectCollision(collMO.getHitboxPoints()))
+                                    {
+                                        // TODO 
+                                    }
                                 }
                                 if (collMO.getType() == ENEMY_BEAM) {
-                                    collMO.setToDelete(true);
+
+                                    if(mo.detectCollision(collMO.getHitboxPoints()))
+                                    {
+                                        collMO.setToDelete(true);
+
+                                    }
                                 }
 
                                 mo.reduceEnergy(collMO.getEnergy());
@@ -397,6 +410,8 @@ public class World extends JPanel implements KeyListener, ActionListener {
         {
             g2d.rotate(player.getRotation(), player.getX(), player.getY());
             g2d.draw(player.getRectangleBounds());
+
+
         }
 
         g2d.dispose();
@@ -406,6 +421,9 @@ public class World extends JPanel implements KeyListener, ActionListener {
         for(MovingObject mo : movingObjects)
         {
             g2d.draw(mo.getRectangleBounds());
+
+            for(Point p : mo.getHitboxPoints())
+                g2d.drawOval(p.x, p.y, 1,1);
         }
 
         g2d.dispose();
