@@ -141,7 +141,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
             Player tmpPlayer = players.get(playerID);
             enemy.setFocusPlayerPos(tmpPlayer.getX(), tmpPlayer.getY());
 
-            allMovingObjects.add(enemy); 
+            allMovingObjects.add(enemy);
         }
 
         generateGameObjects();
@@ -179,7 +179,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
                 int playerID = ((Beam)mo).getPlayerID();
                 players.get(playerID).getProjectiles().remove(mo);
             }
-            if(mo.getType() == METEORITE || mo.getType() == COLLECTABLE)
+            if(mo.getType() == METEORITE || mo.getType() == COLLECTABLE || mo.getType() == ENEMY)
                 movingObjects.remove(mo);
 
             // TODO player dies? - display tomb
@@ -259,6 +259,8 @@ public class World extends JPanel implements KeyListener, ActionListener {
                                         {
                                             int playerID = ((Beam)mo).getPlayerID();
                                             players.get(playerID).addGamePoints(collMO.getGamePoints());
+
+                                            collMO.setToDelete(true);
                                         }
                                     }
                                 }
@@ -287,6 +289,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
                                 mo.reduceEnergy(collMO.getEnergy());
                                 break;
+                                /*
                             case ENEMY:
                                 if (collMO.getType() == PLAYER_BEAM) {
 
@@ -299,6 +302,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
                                     }
                                 }
                                 break;
+                                */
 
                         }
                     }
@@ -318,6 +322,8 @@ public class World extends JPanel implements KeyListener, ActionListener {
             movingObjects.add(generateMeteorite());
             movingObjects.add(generateMeteorite());
             movingObjects.add(generateCollectable());
+
+            movingObjects.add(generateEnemy());
         }
     }
 
