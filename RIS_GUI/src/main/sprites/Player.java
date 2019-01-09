@@ -69,17 +69,17 @@ public class Player extends MovingObject {
             xPos += xMovement;
             yPos += yMovement;
         }
-        if(rotation >= 90 && rotation < 180)
+        else if(rotation >= 90 && rotation < 180)
         {
             xPos -= xMovement;
             yPos += yMovement;
         }
-        if(rotation >= 180 && rotation < 270)
+        else if(rotation >= 180 && rotation < 270)
         {
             xPos -= xMovement;
             yPos -= yMovement;
         }
-        if(rotation >= 270 && rotation < 360)
+        else if(rotation >= 270 && rotation < 360)
         {
             xPos += xMovement;
             yPos -= yMovement;
@@ -90,8 +90,7 @@ public class Player extends MovingObject {
         {
             rotation = 360;
         }
-
-        if(dRotation > 0 && rotation == 360)
+        else if(dRotation > 0 && rotation == 360)
         {
             rotation = 0;
         }
@@ -121,7 +120,7 @@ public class Player extends MovingObject {
             x = (int) xPos+(getWidth() / 2);
             y = (int) yPos;
         }
-        if(rotation >= 90 && rotation < 180)
+        else if(rotation >= 90 && rotation < 180)
         {
             dx -= ddx;
             dy += ddy;
@@ -129,7 +128,7 @@ public class Player extends MovingObject {
             x = (int) xPos;
             y = (int) yPos+(getWidth() / 2);
         }
-        if(rotation >= 180 && rotation < 270)
+        else if(rotation >= 180 && rotation < 270)
         {
             dx -= ddx;
             dy -= ddy;
@@ -137,7 +136,7 @@ public class Player extends MovingObject {
             x =  (int) xPos - (getWidth() / 2);
             y =  (int) yPos;
         }
-        if(rotation >= 270 && rotation < 360)
+        else if(rotation >= 270 && rotation < 360)
         {
             dx += ddx;
             dy -= ddy;

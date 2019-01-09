@@ -23,6 +23,7 @@ public class Enemy extends MovingObject {
 
     // TODO list of vector with weights for movement direction ?
 
+
     public Enemy(int enemyID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy, int gamePoints, int velocity, int focusPlayer) {
         super(ObjectType.ENEMY, imgFileName, imageWidth, imageHeight, xPos, yPos, energy, gamePoints);
 
@@ -39,10 +40,47 @@ public class Enemy extends MovingObject {
 
     public void move() {
 
+        // TODO set min dist to player
 
+        double deltaX = Math.abs(playerPos.x - getX());
+        double deltaY = Math.abs(playerPos.y - getY());
+
+        double hyp = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+
+        //double angle = Math.abs(Math.tan(deltaX / deltaY));
+
+        double angle = Math.asin(deltaY / hyp); 
+
+        //System.out.println("angle to before: "+angle);
         // get random player pos and move in this direction
         this.xPos -= 1;
 
+        //ddx = Math.abs(Math.cos(Math.toRadians(rotation)));
+        //ddy = Math.abs(Math.sin(Math.toRadians(rotation)));
+
+        //double xMovement = ddx * dMovement;
+        //double yMovement = ddy * dMovement;
+
+        // check which quadrant - pos player to enemy
+
+        if(playerPos.y <= getY() && playerPos.x >= getX())
+        {
+
+        }
+        else if(playerPos.y >= getY() && playerPos.x >= getX())
+        {
+            angle += 90;
+        }
+        else if(playerPos.y > getY() && playerPos.x < getX())
+        {
+            angle += 180;
+        }
+        else if(playerPos.y < getY() && playerPos.x < getX())
+        {
+            angle += 270;
+        }
+
+        System.out.println("angle to player: "+angle);
 
         // shoot();
     }
