@@ -195,7 +195,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
             {
                 int playerID = ((Player)mo).getPlayerID();
                 Player tmpPlayer = players.get(playerID);
-                players.remove(playerID); 
+                players.remove(playerID);
             }
 
             // TODO player dies? - display tomb
@@ -484,11 +484,18 @@ public class World extends JPanel implements KeyListener, ActionListener {
                 g2d.drawOval(p.x, p.y, 1,1);
         }
 
+
         g2d.dispose();
-
         g2d = (Graphics2D) g.create();
+        g2d.setColor(Color.BLUE);
 
-        //for()
+        for(Enemy enemy : enemies.values())
+        {
+            g2d.draw(enemy.getRectangleBounds());
+            g2d.draw(enemy.scanNeighborhood());
 
+            for(Point p : enemy.getHitboxPoints())
+                g2d.drawOval(p.x, p.y, 1, 1);
+        }
     }
 }

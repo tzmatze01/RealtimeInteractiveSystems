@@ -35,6 +35,7 @@ public class Main extends JFrame { //extends JPanel {
 
     private void initUI() {
 
+        // TODO level == N meteoriotes on screen
         // gameplan consist of lenght -> num level, rows (N) -> meteorites, collectables, enemies
         int[][] gamePlan = {{10,0,0}, {15,3,0}, {20,5,1}, {25,5,3}};
 
