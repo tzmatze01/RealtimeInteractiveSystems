@@ -136,6 +136,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         for(Enemy enemy : enemies.values())
         {
+            enemy.move();
 
             int playerID = enemy.getFocusPlayer();
             Player tmpPlayer = players.get(playerID);
@@ -323,7 +324,8 @@ public class World extends JPanel implements KeyListener, ActionListener {
             movingObjects.add(generateMeteorite());
             movingObjects.add(generateCollectable());
 
-            movingObjects.add(generateEnemy());
+            Enemy enemy = generateEnemy();
+            enemies.put(enemy.getEnemyID(), enemy);
         }
     }
 
@@ -377,7 +379,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         int imgSize = 60;
 
-        return new Enemy("enemy", imgSize,imgSize, screenWidth + (imgSize / 2), yStart, 100, 300, 5, focusPlayer);
+        return new Enemy(enemies.size(),"enemy", imgSize,imgSize, screenWidth + (imgSize / 2), yStart, 100, 300, 5, focusPlayer);
     }
 
 
@@ -405,16 +407,31 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
             g2d.dispose();
 
-            // MOVE PROJECTILES PLAYER
+            // DRAW PROJECTILES PLAYER
             g2d = (Graphics2D) g.create();
 
             for (Beam b : player.getProjectiles()) {
                 g2d.drawImage(b.getImage(), b.getX(), b.getY(), this);
             }
         }
+
+        // MOVE ENEMIES
+        g2d = (Graphics2D) g.create();
+        for(Enemy enemy : enemies.values())
+        {
+            int imgW = enemy.getX() - (enemy.getWidth() / 2);
+            int imgH = enemy.getY() - (enemy.getHeight() / 2);
+
+            g2d.drawImage(enemy.getImage(), imgW, imgH, this);
+
+            // DRAW PROJECTILES ENEMY
+            for (Beam b : enemy.getProjectiles()) {
+                g2d.drawImage(b.getImage(), b.getX(), b.getY(), this);
+            }
+        }
+
         // MOVE OBJECTS
         g2d = (Graphics2D) g.create();
-
         for(MovingObject mo : movingObjects)
         {
             int midX = mo.getX() - (mo.getWidth() / 2);
@@ -453,5 +470,10 @@ public class World extends JPanel implements KeyListener, ActionListener {
         }
 
         g2d.dispose();
+
+        g2d = (Graphics2D) g.create();
+
+        //for()
+
     }
 }

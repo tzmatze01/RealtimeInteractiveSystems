@@ -9,6 +9,9 @@ import java.util.List;
 
 public class Enemy extends MovingObject {
 
+
+    private int enemyID;
+
     private int velocity;
     private int focusPlayer;
 
@@ -20,8 +23,10 @@ public class Enemy extends MovingObject {
 
     // TODO list of vector with weights for movement direction ?
 
-    public Enemy(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy, int gamePoints, int velocity, int focusPlayer) {
+    public Enemy(int enemyID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy, int gamePoints, int velocity, int focusPlayer) {
         super(ObjectType.ENEMY, imgFileName, imageWidth, imageHeight, xPos, yPos, energy, gamePoints);
+
+        this.enemyID = enemyID;
 
         this.velocity = velocity;
         this.focusPlayer = focusPlayer;
@@ -64,6 +69,15 @@ public class Enemy extends MovingObject {
     public void setNeighborhoodMO(ArrayList<MovingObject> nmo)
     {
 
+    }
+
+    public int getEnemyID() {
+        return enemyID;
+    }
+
+    public List<Beam> getProjectiles()
+    {
+        return this.projectiles;
     }
 
     // rectangle for detection of meteorites
