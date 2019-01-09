@@ -180,8 +180,23 @@ public class World extends JPanel implements KeyListener, ActionListener {
                 int playerID = ((Beam)mo).getPlayerID();
                 players.get(playerID).getProjectiles().remove(mo);
             }
-            if(mo.getType() == METEORITE || mo.getType() == COLLECTABLE || mo.getType() == ENEMY)
+            else if(mo.getType() == ENEMY_BEAM)
+            {
+
+            }
+            else if(mo.getType() == METEORITE || mo.getType() == COLLECTABLE)
                 movingObjects.remove(mo);
+            else if(mo.getType() == ENEMY)
+            {
+                int enemyID = ((Enemy)mo).getEnemyID();
+                enemies.remove(enemyID);
+            }
+            else if(mo.getType() == PLAYER)
+            {
+                int playerID = ((Player)mo).getPlayerID();
+                Player tmpPlayer = players.get(playerID);
+                players.remove(playerID); 
+            }
 
             // TODO player dies? - display tomb
             // TODO enemy & their beams
