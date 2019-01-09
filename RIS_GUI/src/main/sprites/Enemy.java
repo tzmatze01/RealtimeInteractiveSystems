@@ -49,9 +49,10 @@ public class Enemy extends MovingObject {
 
         //double angle = Math.abs(Math.tan(deltaX / deltaY));
 
-        double angle = Math.asin(deltaY / hyp); 
+        //double angle = Math.sin(deltaY / hyp);
+        double angle = +Math.toDegrees(Math.asin(deltaY / hyp));
 
-        //System.out.println("angle to before: "+angle);
+        //System.out.println("angle to before: "+Math.toDegrees(angle));
         // get random player pos and move in this direction
         this.xPos -= 1;
 
@@ -65,7 +66,7 @@ public class Enemy extends MovingObject {
 
         if(playerPos.y <= getY() && playerPos.x >= getX())
         {
-
+            angle = Math.abs(angle - 90);
         }
         else if(playerPos.y >= getY() && playerPos.x >= getX())
         {
@@ -73,14 +74,14 @@ public class Enemy extends MovingObject {
         }
         else if(playerPos.y > getY() && playerPos.x < getX())
         {
-            angle += 180;
+            angle = Math.abs(angle - 90) + 180;
         }
         else if(playerPos.y < getY() && playerPos.x < getX())
         {
             angle += 270;
         }
 
-        System.out.println("angle to player: "+angle);
+        //System.out.println("angle to player: "+angle);
 
         // shoot();
     }
