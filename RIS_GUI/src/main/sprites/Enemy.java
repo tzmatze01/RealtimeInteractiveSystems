@@ -57,7 +57,7 @@ public class Enemy extends MovingObject {
 
         //System.out.println("angle to before: "+Math.toDegrees(angle));
         // get random player pos and move in this direction
-        this.xPos -= 1;
+        //this.xPos -= 1;
 
         //ddx = Math.abs(Math.cos(Math.toRadians(rotation)));
         //ddy = Math.abs(Math.sin(Math.toRadians(rotation)));
@@ -75,8 +75,8 @@ public class Enemy extends MovingObject {
         {
             angle = Math.abs(angle - 90);
 
-            ddx = Math.abs(Math.cos(Math.toRadians(angle)));
-            ddy = Math.abs(Math.sin(Math.toRadians(angle)));
+            ddx = Math.abs(Math.sin(Math.toRadians(angle)));
+            ddy = Math.abs(Math.cos(Math.toRadians(angle)));
 
             xPos += ddx * velocity;
             yPos -= ddy * velocity;
@@ -87,8 +87,8 @@ public class Enemy extends MovingObject {
         {
             angle += 90;
 
-            ddx = Math.abs(Math.cos(Math.toRadians(angle)));
-            ddy = Math.abs(Math.sin(Math.toRadians(angle)));
+            ddx = Math.abs(Math.sin(Math.toRadians(angle)));
+            ddy = Math.abs(Math.cos(Math.toRadians(angle)));
 
             xPos += ddx * velocity;
             yPos += ddy * velocity;
@@ -99,8 +99,8 @@ public class Enemy extends MovingObject {
         {
             angle = Math.abs(angle - 90) + 180;
 
-            ddx = Math.abs(Math.cos(Math.toRadians(angle)));
-            ddy = Math.abs(Math.sin(Math.toRadians(angle)));
+            ddx = Math.abs(Math.sin(Math.toRadians(angle)));
+            ddy = Math.abs(Math.cos(Math.toRadians(angle)));
 
             xPos -= ddx * velocity;
             yPos += ddy * velocity;
@@ -111,8 +111,8 @@ public class Enemy extends MovingObject {
         {
             angle += 270;
 
-            ddx = Math.abs(Math.cos(Math.toRadians(angle)));
-            ddy = Math.abs(Math.sin(Math.toRadians(angle)));
+            ddx = Math.abs(Math.sin(Math.toRadians(angle)));
+            ddy = Math.abs(Math.cos(Math.toRadians(angle)));
 
             xPos -= ddx * velocity;
             yPos -= ddy * velocity;
@@ -122,7 +122,7 @@ public class Enemy extends MovingObject {
 
 
         //System.out.println("velocity: "+velocity);
-        System.out.println("ddx: "+ddx*velocity+ " ddy: "+ddy*velocity);
+        //System.out.println("ddx: "+ddx*velocity+ " ddy: "+ddy*velocity);
         this.rotation = (int) angle - 180;
         //System.out.println("angle to player: "+angle);
 

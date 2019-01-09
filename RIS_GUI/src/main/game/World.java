@@ -394,7 +394,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         int imgSize = 60;
 
-        return new Enemy(enemies.size(),"enemy", imgSize,imgSize, screenWidth + (imgSize / 2), yStart, 100, 300, 1, focusPlayer);
+        return new Enemy(enemies.size(),"enemy", imgSize,imgSize, screenWidth + (imgSize / 2), yStart, 100, 300, 2, focusPlayer);
     }
 
 
