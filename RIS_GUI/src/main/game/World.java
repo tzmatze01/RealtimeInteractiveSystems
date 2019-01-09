@@ -394,7 +394,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         int imgSize = 60;
 
-        return new Enemy(enemies.size(),"enemy", imgSize,imgSize, screenWidth + (imgSize / 2), yStart, 100, 300, 5, focusPlayer);
+        return new Enemy(enemies.size(),"enemy", imgSize,imgSize, screenWidth + (imgSize / 2), yStart, 100, 300, 1, focusPlayer);
     }
 
 
@@ -431,11 +431,19 @@ public class World extends JPanel implements KeyListener, ActionListener {
         }
 
         // MOVE ENEMIES
-        g2d = (Graphics2D) g.create();
         for(Enemy enemy : enemies.values())
         {
+            g2d = (Graphics2D) g.create();
+
             int imgW = enemy.getX() - (enemy.getWidth() / 2);
             int imgH = enemy.getY() - (enemy.getHeight() / 2);
+
+            /*
+            AffineTransform trans = new AffineTransform();
+
+            trans.rotate(enemy.getRotation(), enemy.getX(), enemy.getY());
+            g2d.transform(trans);
+            */
 
             g2d.drawImage(enemy.getImage(), imgW, imgH, this);
 
@@ -443,6 +451,8 @@ public class World extends JPanel implements KeyListener, ActionListener {
             for (Beam b : enemy.getProjectiles()) {
                 g2d.drawImage(b.getImage(), b.getX(), b.getY(), this);
             }
+
+            g2d.dispose();
         }
 
         // MOVE OBJECTS
@@ -456,7 +466,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
         }
 
 
-        drawHitboxes(g);
+        //drawHitboxes(g);
     }
 
     private void drawHitboxes(Graphics g)
