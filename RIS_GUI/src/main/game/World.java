@@ -40,6 +40,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
     private int maxLevel;
 
     private Map<Integer, Player> players;
+    private Map<Integer, Enemy> enemies;
     private List<MovingObject> allMovingObjects;
 
     /*
@@ -65,7 +66,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
         this.maxLevel = gamePlan.length;
 
         this.players = new HashMap<>();
-
+        this.enemies = new HashMap<>();
 
         initBoard();
     }
@@ -130,15 +131,17 @@ public class World extends JPanel implements KeyListener, ActionListener {
         {
             mo.move();
 
-            // update player pos in enemy
-            if(mo.getType() == ENEMY)
-            {
-                int playerID = ((Enemy)mo).getFocusPlayer();
-                Player tmpPlayer = players.get(playerID);
-                ((Enemy)mo).setFocusPlayerPos(tmpPlayer.getX(), tmpPlayer.getY());
-            }
-
             allMovingObjects.add(mo);
+        }
+
+        for(Enemy enemy : enemies.values())
+        {
+
+            int playerID = enemy.getFocusPlayer();
+            Player tmpPlayer = players.get(playerID);
+            enemy.setFocusPlayerPos(tmpPlayer.getX(), tmpPlayer.getY());
+
+            allMovingObjects.add(enemy); 
         }
 
         generateGameObjects();

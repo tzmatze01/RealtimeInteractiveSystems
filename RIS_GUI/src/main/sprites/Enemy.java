@@ -36,7 +36,10 @@ public class Enemy extends MovingObject {
 
 
         // get random player pos and move in this direction
+        this.xPos -= 1;
 
+
+        // shoot();
     }
 
     private void shoot()
