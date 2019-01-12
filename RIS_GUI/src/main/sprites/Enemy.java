@@ -26,6 +26,9 @@ public class Enemy extends MovingObject {
     private long shootingDurationInMS;
     private long nextShootTime;
 
+    private double ddx = 0;
+    private double ddy = 0;
+
     public Enemy(int enemyID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy, int gamePoints, double velocity, int focusPlayer, int shootingDurationInMS) {
         super(ObjectType.ENEMY, imgFileName, imageWidth, imageHeight, xPos, yPos, energy, gamePoints);
 
@@ -71,8 +74,7 @@ public class Enemy extends MovingObject {
         // check which quadrant - pos player to enemy
 
 
-        double ddx = 0;
-        double ddy = 0;
+
 
         if(playerPos.y <= getY() && playerPos.x >= getX())
         {
@@ -138,11 +140,51 @@ public class Enemy extends MovingObject {
 
     private void shoot()
     {
+        // TODO shoot faster when player is closer
         this.nextShootTime = System.currentTimeMillis() + shootingDurationInMS;
-        System.out.println("enemy "+getEnemyID()+" shoots!");
 
-        double dx = -1;
+
+        double dx = 0;
         double dy = 0;
+
+        int x = 0;
+        int y = 0;
+
+        if(rotation >= 0 && rotation < 90)
+        {
+            dx += ddx;
+            dy += ddy;
+
+            x = (int) xPos+(getWidth() / 2);
+            y = (int) yPos;
+        }
+        else if(rotation >= 90 && rotation < 180)
+        {
+            dx -= ddx;
+            dy += ddy;
+
+            x = (int) xPos;
+            y = (int) yPos+(getWidth() / 2);
+        }
+        else if(rotation >= 180 && rotation < 270)
+        {
+            dx -= ddx;
+            dy -= ddy;
+
+            x =  (int) xPos - (getWidth() / 2);
+            y =  (int) yPos;
+        }
+        else if(rotation >= 270 && rotation < 360)
+        {
+            dx += ddx;
+            dy -= ddy;
+
+            x =  (int) xPos;
+            y = (int) yPos - (getWidth() / 2);
+        }
+
+
+        System.out.println("enemy "+getEnemyID()+" shoots to "+dx+" : "+dy);
 
 
         //projectiles.add(new Beam(ObjectType.ENEMY_BEAM, getEnemyID(),"beam.png", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 5));

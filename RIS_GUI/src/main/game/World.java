@@ -261,28 +261,27 @@ public class World extends JPanel implements KeyListener, ActionListener {
                                     int playerID = ((Player)mo).getPlayerID();
                                     players.get(playerID).addGamePoints(collMO.getGamePoints());
 
-                                    // needs break, because collectable should not reduce energy
-                                    break;
                                 }
-                                /*
                                 if (collMO.getType() == METEORITE) {
 
                                     if(mo.detectCollision(collMO.getHitboxPoints()))
                                     {
-                                        // TODO 
+                                        int playerEnergy = mo.getEnergy();
+                                        int meteoriteEnergy = collMO.getEnergy();
+
+                                        mo.reduceEnergy(meteoriteEnergy);
+                                        collMO.reduceEnergy(playerEnergy);
                                     }
                                 }
-                                */
                                 if (collMO.getType() == ENEMY_BEAM) {
 
                                     if(mo.detectCollision(collMO.getHitboxPoints()))
                                     {
                                         collMO.setToDelete(true);
+                                        mo.reduceEnergy(collMO.getEnergy());
                                     }
                                 }
 
-                                // for every other object just get energy and substract from player
-                                mo.reduceEnergy(collMO.getEnergy());
                                 break;
                                 /*
                             case ENEMY:
@@ -385,6 +384,18 @@ public class World extends JPanel implements KeyListener, ActionListener {
         Graphics2D g2d = null;
 
         for(Player player : players.values()) {
+
+            // DRAW PROJECTILES PLAYER
+            g2d = (Graphics2D) g.create();
+
+            for (Beam b : player.getProjectiles()) {
+
+                int beamImgW = b.getX() - (b.getWidth() / 2);
+                int beamImgH = b.getY() - (b.getHeight() / 2);
+
+                g2d.drawImage(b.getImage(), beamImgW, beamImgH, this);
+            }
+
             g2d = (Graphics2D) g.create();
 
             // MOVING PLAYER
@@ -399,23 +410,23 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
             g2d.drawImage(player.getImage(), imgW, imgH, this);
 
-            //g2d.dispose();
+        }
 
-            // DRAW PROJECTILES PLAYER
+        // MOVE ENEMIES
+        for(Enemy enemy : enemies.values())
+        {
             g2d = (Graphics2D) g.create();
 
-            for (Beam b : player.getProjectiles()) {
+            // DRAW PROJECTILES ENEMY
+            for (Beam b : enemy.getProjectiles()) {
+
 
                 int beamImgW = b.getX() - (b.getWidth() / 2);
                 int beamImgH = b.getY() - (b.getHeight() / 2);
 
                 g2d.drawImage(b.getImage(), beamImgW, beamImgH, this);
             }
-        }
 
-        // MOVE ENEMIES
-        for(Enemy enemy : enemies.values())
-        {
             g2d = (Graphics2D) g.create();
 
             int imgW = enemy.getX() - (enemy.getWidth() / 2);
@@ -433,18 +444,6 @@ public class World extends JPanel implements KeyListener, ActionListener {
             g2d.drawImage(enemy.getImage(), imgW, imgH, this);
 
             //g2d.transform(backup);
-
-            // DRAW PROJECTILES ENEMY
-            for (Beam b : enemy.getProjectiles()) {
-
-
-                int beamImgW = b.getX() - (b.getWidth() / 2);
-                int beamImgH = b.getY() - (b.getHeight() / 2);
-
-                g2d.drawImage(b.getImage(), beamImgW, beamImgH, this);
-            }
-
-            g2d.dispose();
         }
 
         // MOVE OBJECTS
@@ -457,9 +456,10 @@ public class World extends JPanel implements KeyListener, ActionListener {
             g2d.drawImage(mo.getImage(), midX, midY, this);
         }
 
-
         drawHitboxes(g);
     }
+
+
 
     private void drawHitboxes(Graphics g)
     {
