@@ -4,7 +4,7 @@
     <list default="true" id="3946d730-20f7-46cc-ac97-15fbd3a6e037" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/../RIS_GUI/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../RIS_GUI/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/../RIS_GUI/src/main/game/World.java" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/game/World.java" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Enemy.java" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Enemy.java" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -622,12 +622,12 @@
       <workItem from="1542991257838" duration="25000" />
       <workItem from="1546820166450" duration="3938000" />
       <workItem from="1546893622214" duration="598000" />
-      <workItem from="1547301608629" duration="2251000" />
+      <workItem from="1547301608629" duration="2447000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="47643000" />
+    <option name="totallyTimeSpent" value="47839000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">

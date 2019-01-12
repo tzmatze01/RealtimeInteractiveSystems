@@ -203,42 +203,6 @@ public class World extends JPanel implements KeyListener, ActionListener {
         }
     }
 
-    private boolean simpleCollisionDetection(MovingObject mo1, MovingObject mo2)
-    {
-        // MO which is more on the left -> xPos + mo.getWidth / 2
-        // vice versa for MO on right and yPos
-
-        boolean collidedX = false;
-
-        if(mo1.getX() < mo2.getX())
-        {
-            if((mo1.getX() + (mo1.getWidth() / 2)) > (mo2.getX() - (mo2.getWidth() / 2)))
-            {
-                collidedX = true;
-            }
-
-        }
-        else
-        {
-            if((mo2.getX() + (mo2.getWidth() / 2)) > (mo1.getX() - (mo1.getWidth() / 2)))
-            {
-                collidedX = true;
-            }
-        }
-
-        if(collidedX) {
-            if (mo1.getY() < mo2.getY()) {
-                if ((mo1.getY() + (mo1.getHeight() / 2)) > (mo2.getY() - (mo2.getHeight() / 2)))
-                    return true;
-            } else {
-                if ((mo2.getY() + (mo2.getHeight() / 2)) > (mo1.getY() - (mo1.getHeight() / 2)))
-                    return true;
-            }
-        }
-
-        return false;
-    }
-
     private void collisionDetection(List<MovingObject> allMovingObjects)
     {
         List<MovingObject> moCollisionCheck = new ArrayList<>(allMovingObjects);
@@ -254,7 +218,6 @@ public class World extends JPanel implements KeyListener, ActionListener {
                 {
 
                     if(collMO.getRectangleBounds().intersects(mo.getRectangleBounds()))
-                    //if (simpleCollisionDetection(collMO, mo))
                     {
                         // TODO Playerbeam collides with player
 
@@ -398,7 +361,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         int imgSize = 60;
 
-        return new Enemy(enemies.size(),"enemy", imgSize,imgSize, screenWidth + (imgSize / 2), yStart, 100, 300, 2, focusPlayer);
+        return new Enemy(enemies.size(),"enemy", imgSize,imgSize, screenWidth + (imgSize / 2), yStart, 100, 300, 1.5, focusPlayer, 2000);
     }
 
 

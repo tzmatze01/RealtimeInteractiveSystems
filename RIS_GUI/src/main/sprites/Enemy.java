@@ -12,7 +12,7 @@ public class Enemy extends MovingObject {
 
     private int enemyID;
 
-    private int velocity;
+    private double velocity;
     private int rotation;
     private int focusPlayer;
 
@@ -23,9 +23,10 @@ public class Enemy extends MovingObject {
     private static int BEAM_HEIGHT = 8;
 
     // TODO list of vector with weights for movement direction ?
+    private long shootingDurationInMS;
+    private long nextShootTime;
 
-
-    public Enemy(int enemyID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy, int gamePoints, int velocity, int focusPlayer) {
+    public Enemy(int enemyID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy, int gamePoints, double velocity, int focusPlayer, int shootingDurationInMS) {
         super(ObjectType.ENEMY, imgFileName, imageWidth, imageHeight, xPos, yPos, energy, gamePoints);
 
         this.enemyID = enemyID;
@@ -36,6 +37,8 @@ public class Enemy extends MovingObject {
         this.playerPos = new Point(0, 0);
 
         this.rotation = 0;
+        this.shootingDurationInMS = shootingDurationInMS;
+        this.nextShootTime = System.currentTimeMillis() + shootingDurationInMS;
 
         this.projectiles = new ArrayList<>();
     }
@@ -126,16 +129,20 @@ public class Enemy extends MovingObject {
         this.rotation = (int) angle - 180;
         //System.out.println("angle to player: "+angle);
 
-        // shoot();
+        if(System.currentTimeMillis() >= nextShootTime)
+            shoot();
     }
 
     private void shoot()
     {
+        this.nextShootTime = System.currentTimeMillis() + shootingDurationInMS;
+        System.out.println("enemy "+getEnemyID()+" shoots!");
+
         double dx = -1;
         double dy = 0;
 
 
-        projectiles.add(new Beam(ObjectType.ENEMY_BEAM, 0,"beam.png", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 5));
+        //projectiles.add(new Beam(ObjectType.ENEMY_BEAM, 0,"beam.png", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 5));
     }
 
     public int getFocusPlayer() {
