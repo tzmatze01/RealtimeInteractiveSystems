@@ -235,12 +235,11 @@ public class World extends JPanel implements KeyListener, ActionListener {
                             case PLAYER_BEAM:
                                 if(collMO.getType() == METEORITE || collMO.getType() == ENEMY)
                                 {
-                                    System.out.println("hit outer hitbox");
-
+                                    //System.out.println("hit outer hitbox");
 
                                     if(mo.detectCollision(collMO.getHitboxPoints()))
                                     {
-                                        System.out.println("hit inner hitbox");
+                                        //System.out.println("hit inner hitbox");
 
                                         collMO.reduceEnergy(mo.getEnergy());
                                         mo.setToDelete(true);
@@ -400,13 +399,17 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
             g2d.drawImage(player.getImage(), imgW, imgH, this);
 
-            g2d.dispose();
+            //g2d.dispose();
 
             // DRAW PROJECTILES PLAYER
             g2d = (Graphics2D) g.create();
 
             for (Beam b : player.getProjectiles()) {
-                g2d.drawImage(b.getImage(), b.getX(), b.getY(), this);
+
+                int beamImgW = b.getX() - (b.getWidth() / 2);
+                int beamImgH = b.getY() - (b.getHeight() / 2);
+
+                g2d.drawImage(b.getImage(), beamImgW, beamImgH, this);
             }
         }
 
@@ -421,7 +424,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
             AffineTransform backup = g2d.getTransform();
             AffineTransform trans = new AffineTransform();
 
-            trans.rotate(0, enemy.getX(), enemy.getY());
+            //trans.rotate(0, enemy.getX(), enemy.getY());
             trans.rotate(enemy.getRotation(), enemy.getX(), enemy.getY());
             g2d.transform(trans);
 
@@ -429,9 +432,16 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
             g2d.drawImage(enemy.getImage(), imgW, imgH, this);
 
+            //g2d.transform(backup);
+
             // DRAW PROJECTILES ENEMY
             for (Beam b : enemy.getProjectiles()) {
-                g2d.drawImage(b.getImage(), b.getX(), b.getY(), this);
+
+
+                int beamImgW = b.getX() - (b.getWidth() / 2);
+                int beamImgH = b.getY() - (b.getHeight() / 2);
+
+                g2d.drawImage(b.getImage(), beamImgW, beamImgH, this);
             }
 
             g2d.dispose();
@@ -448,7 +458,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
         }
 
 
-        //drawHitboxes(g);
+        drawHitboxes(g);
     }
 
     private void drawHitboxes(Graphics g)
@@ -463,6 +473,14 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
             for(Point p : player.getHitboxPoints())
                 g2d.drawOval(p.x, p.y, 1,1);
+
+            g2d = (Graphics2D) g.create();
+            g2d.setColor(Color.GREEN);
+
+            for(Beam b : player.getProjectiles()) {
+                g2d.draw(b.getRectangleBounds());
+                g2d.drawOval(b.getX(), b.getY(), 1, 1);
+            }
 
         }
 
