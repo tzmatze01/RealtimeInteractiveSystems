@@ -148,7 +148,6 @@ public class Player extends MovingObject {
 
         projectiles.add(new Beam(ObjectType.PLAYER_BEAM, playerID,"beam", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 6));
 
-        //this.mp.play();
     }
 
     public double getRotation()

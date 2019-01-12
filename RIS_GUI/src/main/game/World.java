@@ -19,6 +19,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
     private int screenWidth;
     private int screenHeight;
 
+
     // width should be alrger than height, to compute the
     private static  int METEORITE_MIN_WIDTH = 50;
     private static int METORITE_MAX_WIDTH = 250;
@@ -35,7 +36,6 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
     private static double COLLECTABLE_VELOCITY = 1.5;
     private static int COLLECTABLE_POINTS = 500;
-
 
 
     private MovingObject mo;
@@ -62,6 +62,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
      */
 
     private List<MovingObject> movingObjects;
+
 
     public World(int screenWidth, int screenHeight, int[][] gamePlan)
     {
@@ -176,9 +177,9 @@ public class World extends JPanel implements KeyListener, ActionListener {
             if(mo.getX() < -(mo.getWidth() / 2) || mo.getX() >= (screenWidth + (mo.getWidth() / 2)) ||
                 mo.getY() < -(mo.getHeight() / 2) || mo.getY() >= (screenHeight + (mo.getHeight() / 2)))
                 delMovingObjects.add(mo);
-            if(mo.getEnergy() <= 0)
+            else if(mo.getEnergy() <= 0)
                 delMovingObjects.add(mo);
-            if(mo.isToDelete())
+            else if(mo.isToDelete())
                 delMovingObjects.add(mo);
         }
 

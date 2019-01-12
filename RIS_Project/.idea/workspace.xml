@@ -6,7 +6,7 @@
       <change beforePath="$PROJECT_DIR$/../RIS_GUI/src/main/game/World.java" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/game/World.java" />
       <change beforePath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Enemy.java" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Enemy.java" />
       <change beforePath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Player.java" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/Player.java" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/type/MovingObject.java" afterPath="$PROJECT_DIR$/../RIS_GUI/src/main/sprites/type/MovingObject.java" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />

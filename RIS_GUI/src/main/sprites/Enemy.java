@@ -187,7 +187,7 @@ public class Enemy extends MovingObject {
         System.out.println("enemy "+getEnemyID()+" shoots to "+dx+" : "+dy);
 
 
-        //projectiles.add(new Beam(ObjectType.ENEMY_BEAM, getEnemyID(),"beam.png", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 5));
+        projectiles.add(new Beam(ObjectType.ENEMY_BEAM, getEnemyID(),"beam", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 5));
 
 
         //projectiles.add(new Beam(ObjectType.PLAYER_BEAM, playerID,"beam", BEAM_WIDTH, BEAM_HEIGHT,  x, y, dx, dy, 5));
