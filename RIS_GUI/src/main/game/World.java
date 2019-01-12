@@ -253,7 +253,8 @@ public class World extends JPanel implements KeyListener, ActionListener {
                 if(collMO.getType() != mo.getType())
                 {
 
-                    if (simpleCollisionDetection(collMO, mo))
+                    if(collMO.getRectangleBounds().intersects(mo.getRectangleBounds()))
+                    //if (simpleCollisionDetection(collMO, mo))
                     {
                         // TODO Playerbeam collides with player
 
@@ -288,6 +289,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
                                     int playerID = ((Player)mo).getPlayerID();
                                     players.get(playerID).addGamePoints(collMO.getGamePoints());
                                 }
+                                /*
                                 if (collMO.getType() == METEORITE) {
 
                                     if(mo.detectCollision(collMO.getHitboxPoints()))
@@ -295,6 +297,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
                                         // TODO 
                                     }
                                 }
+                                */
                                 if (collMO.getType() == ENEMY_BEAM) {
 
                                     if(mo.detectCollision(collMO.getHitboxPoints()))
@@ -303,6 +306,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
                                     }
                                 }
 
+                                // for every other object just get energy and substract from player
                                 mo.reduceEnergy(collMO.getEnergy());
                                 break;
                                 /*
@@ -466,7 +470,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
         }
 
 
-        //drawHitboxes(g);
+        drawHitboxes(g);
     }
 
     private void drawHitboxes(Graphics g)
@@ -477,8 +481,10 @@ public class World extends JPanel implements KeyListener, ActionListener {
         for(Player player : players.values())
         {
             g2d.rotate(player.getRotation(), player.getX(), player.getY());
-            g2d.draw(player.getRectangleBounds());
+            //g2d.draw(player.getRectangleBounds());
 
+            for(Point p : player.getHitboxPoints())
+                g2d.drawOval(p.x, p.y, 1,1);
 
         }
 
@@ -501,8 +507,8 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         for(Enemy enemy : enemies.values())
         {
-            g2d.draw(enemy.getRectangleBounds());
-            g2d.draw(enemy.scanNeighborhood());
+            //g2d.draw(enemy.getRectangleBounds());
+            //g2d.draw(enemy.scanNeighborhood());
 
             for(Point p : enemy.getHitboxPoints())
                 g2d.drawOval(p.x, p.y, 1, 1);
