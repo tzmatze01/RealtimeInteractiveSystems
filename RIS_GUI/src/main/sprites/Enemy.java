@@ -29,6 +29,8 @@ public class Enemy extends MovingObject {
     private double ddx = 0;
     private double ddy = 0;
 
+    private static int PLAYER_MIN_DIST = 150;
+
 
     public Enemy(int enemyID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy, int gamePoints, double velocity, int focusPlayer, int shootingDurationInMS) {
         super(ObjectType.ENEMY, imgFileName, imageWidth, imageHeight, xPos, yPos, energy, gamePoints);
@@ -67,81 +69,26 @@ public class Enemy extends MovingObject {
 
         // TODO set min dist to player
 
+
         double deltaX = Math.abs(playerPos.x - getX());
         double deltaY = Math.abs(playerPos.y - getY());
 
         double hyp = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
         double angle = Math.toDegrees(Math.asin(deltaY / hyp));
 
-
-        //System.out.println("angle: "+angle);
-
-        /*
-        if(playerPos.y <= getY() && playerPos.x >= getX())
-        {
-            // correction because angle is only 0-90 degrees in each quadrant and changes direction 0°->90° 90°->0°
-            this.rotation = (int)angle;
-
-            ddx = Math.abs(Math.sin(Math.toRadians(angle)));
-            ddy = Math.abs(Math.cos(Math.toRadians(angle)));
-
-            xPos += ddx * velocity;
-            yPos -= ddy * velocity;
-        }
-        else if(playerPos.y >= getY() && playerPos.x >= getX())
-        {
-            //angle += 90;
-            // correction because angle is only 0-90 degrees in each quadrant and changes direction 0°->90° 90°->0°
-            this.rotation = 90 + (int)(90-angle);
-
-            ddx = Math.abs(Math.sin(Math.toRadians(angle)));
-            ddy = Math.abs(Math.cos(Math.toRadians(angle)));
-
-            xPos += ddx * velocity;
-            yPos += ddy * velocity;
-        }
-        else if(playerPos.y > getY() && playerPos.x < getX())
-        {
-            //angle = Math.abs(angle - 90) + 180;
-            // correction because angle is only 0-90 degrees in each quadrant and changes direction 0°->90° 90°->0°
-            this.rotation = 180 + (int)angle;
-
-            ddx = Math.abs(Math.sin(Math.toRadians(angle)));
-            ddy = Math.abs(Math.cos(Math.toRadians(angle)));
-
-            xPos -= ddx * velocity;
-            yPos += ddy * velocity;
-        }
-        else if(playerPos.y < getY() && playerPos.x < getX())
-        {
-            //angle += 270;
-            // correction because angle is only 0-90 degrees in each quadrant and changes direction 0°->90° 90°->0°
-            this.rotation = 270 + (int)(90-angle);
-
-            ddx = Math.abs(Math.sin(Math.toRadians(angle)));
-            ddy = Math.abs(Math.cos(Math.toRadians(angle)));
-
-            xPos -= ddx * velocity;
-            yPos -= ddy * velocity;
-        }
-
-        */
-
-
-        double dx = 0;
-        double dy = 0;
-
         if(playerPos.y <= getY() && playerPos.x >= getX())
         {
             this.rotation = calcQuadrantAngleCorrection(2, angle);
-            angle = Math.abs(angle - 90);
 
-            ddx = Math.abs(Math.sin(Math.toRadians(angle)));
-            ddy = Math.abs(Math.cos(Math.toRadians(angle)));
+            if(PLAYER_MIN_DIST <= hyp) {
+                angle = Math.abs(angle - 90);
 
-            xPos += ddx * velocity;
-            yPos -= ddy * velocity;
+                ddx = Math.abs(Math.sin(Math.toRadians(angle)));
+                ddy = Math.abs(Math.cos(Math.toRadians(angle)));
 
+                xPos += ddx * velocity;
+                yPos -= ddy * velocity;
+            }
             //System.out.println("Q1: "+xPos+ " : "+yPos);
         }
         else if(playerPos.y >= getY() && playerPos.x >= getX())
@@ -149,11 +96,13 @@ public class Enemy extends MovingObject {
             this.rotation = calcQuadrantAngleCorrection(3, angle);
             angle += 90;
 
-            ddx = Math.abs(Math.sin(Math.toRadians(angle)));
-            ddy = Math.abs(Math.cos(Math.toRadians(angle)));
+            if(PLAYER_MIN_DIST <= hyp) {
+                ddx = Math.abs(Math.sin(Math.toRadians(angle)));
+                ddy = Math.abs(Math.cos(Math.toRadians(angle)));
 
-            xPos += ddx * velocity;
-            yPos += ddy * velocity;
+                xPos += ddx * velocity;
+                yPos += ddy * velocity;
+            }
 
             //System.out.println("Q2: "+xPos+ " : "+yPos);
         }
@@ -162,11 +111,13 @@ public class Enemy extends MovingObject {
             this.rotation = calcQuadrantAngleCorrection(4, angle);
             angle = Math.abs(angle - 90) + 180;
 
-            ddx = Math.abs(Math.sin(Math.toRadians(angle)));
-            ddy = Math.abs(Math.cos(Math.toRadians(angle)));
+            if(PLAYER_MIN_DIST <= hyp) {
+                ddx = Math.abs(Math.sin(Math.toRadians(angle)));
+                ddy = Math.abs(Math.cos(Math.toRadians(angle)));
 
-            xPos -= ddx * velocity;
-            yPos += ddy * velocity;
+                xPos -= ddx * velocity;
+                yPos += ddy * velocity;
+            }
 
             //System.out.println("Q3: "+xPos+ " : "+yPos);
         }
@@ -175,19 +126,16 @@ public class Enemy extends MovingObject {
             this.rotation = calcQuadrantAngleCorrection(1, angle);
             angle += 270;
 
-            ddx = Math.abs(Math.sin(Math.toRadians(angle)));
-            ddy = Math.abs(Math.cos(Math.toRadians(angle)));
+            if(PLAYER_MIN_DIST <= hyp) {
+                ddx = Math.abs(Math.sin(Math.toRadians(angle)));
+                ddy = Math.abs(Math.cos(Math.toRadians(angle)));
 
-            xPos -= ddx * velocity;
-            yPos -= ddy * velocity;
+                xPos -= ddx * velocity;
+                yPos -= ddy * velocity;
+            }
 
             //System.out.println("Q4: "+xPos+ " : "+yPos);
         }
-        //System.out.println("rotation: "+rotation);
-        //System.out.println("ddx: "+ddx*velocity+ " ddy: "+ddy*velocity);
-        // this.rotation = (int) angle - 180;
-
-        //this.rotation = (int)angle;
 
         if(System.currentTimeMillis() >= nextShootTime)
             shoot();
