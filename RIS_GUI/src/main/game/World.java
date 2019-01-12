@@ -26,7 +26,17 @@ public class World extends JPanel implements KeyListener, ActionListener {
     private static int METEORITE_MIN_HEIGHT = 50;
     private static int METORITE_MAX_HEIGHT = 150;
 
-    private static int PLAYER_VELOCITY = 3;
+    private static int PLAYER_VELOCITY = 4;
+
+    private static int ENEMY_ENERGY = 100;
+    private static int ENEMY_POINTS = 300;
+    private static int ENEMY_SHOOTING_DURATION = 2000; // in MS
+    private static double ENEMY_VELOCITY = 1.5;
+
+    private static double COLLECTABLE_VELOCITY = 1.5;
+    private static int COLLECTABLE_POINTS = 500;
+
+
 
     private MovingObject mo;
     //private Player player;
@@ -251,6 +261,9 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
                                     int playerID = ((Player)mo).getPlayerID();
                                     players.get(playerID).addGamePoints(collMO.getGamePoints());
+
+                                    // needs break, because collectable should not reduce energy
+                                    break;
                                 }
                                 /*
                                 if (collMO.getType() == METEORITE) {
@@ -351,7 +364,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         int imgSize = 30;
 
-        return new Collectable("artifact"+collectableNumber, imgSize, imgSize, screenWidth + (imgSize / 2), yStart, yEnd, m, velocity, 10, 500);
+        return new Collectable("artifact"+collectableNumber, imgSize, imgSize, screenWidth + (imgSize / 2), yStart, yEnd, m, COLLECTABLE_VELOCITY, 10, COLLECTABLE_POINTS);
     }
 
     private Enemy generateEnemy() {
@@ -361,7 +374,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         int imgSize = 60;
 
-        return new Enemy(enemies.size(),"enemy", imgSize,imgSize, screenWidth + (imgSize / 2), yStart, 100, 300, 1.5, focusPlayer, 2000);
+        return new Enemy(enemies.size(),"enemy", imgSize,imgSize, screenWidth + (imgSize / 2), yStart, ENEMY_ENERGY, ENEMY_POINTS, ENEMY_VELOCITY, focusPlayer, ENEMY_SHOOTING_DURATION);
     }
 
 
@@ -405,12 +418,14 @@ public class World extends JPanel implements KeyListener, ActionListener {
             int imgW = enemy.getX() - (enemy.getWidth() / 2);
             int imgH = enemy.getY() - (enemy.getHeight() / 2);
 
-            /*
+            AffineTransform backup = g2d.getTransform();
             AffineTransform trans = new AffineTransform();
 
+            trans.rotate(0, enemy.getX(), enemy.getY());
             trans.rotate(enemy.getRotation(), enemy.getX(), enemy.getY());
             g2d.transform(trans);
-            */
+
+            //System.out.println("rotate: "+enemy.getRotation());
 
             g2d.drawImage(enemy.getImage(), imgW, imgH, this);
 
@@ -433,7 +448,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
         }
 
 
-        drawHitboxes(g);
+        //drawHitboxes(g);
     }
 
     private void drawHitboxes(Graphics g)

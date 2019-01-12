@@ -126,7 +126,10 @@ public class Enemy extends MovingObject {
 
         //System.out.println("velocity: "+velocity);
         //System.out.println("ddx: "+ddx*velocity+ " ddy: "+ddy*velocity);
-        this.rotation = (int) angle - 180;
+//        this.rotation = (int) angle - 180;
+
+        this.rotation = (int)angle;
+
         //System.out.println("angle to player: "+angle);
 
         if(System.currentTimeMillis() >= nextShootTime)
@@ -142,7 +145,10 @@ public class Enemy extends MovingObject {
         double dy = 0;
 
 
-        //projectiles.add(new Beam(ObjectType.ENEMY_BEAM, 0,"beam.png", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 5));
+        //projectiles.add(new Beam(ObjectType.ENEMY_BEAM, getEnemyID(),"beam.png", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 5));
+
+
+        //projectiles.add(new Beam(ObjectType.PLAYER_BEAM, playerID,"beam", BEAM_WIDTH, BEAM_HEIGHT,  x, y, dx, dy, 5));
     }
 
     public int getFocusPlayer() {
