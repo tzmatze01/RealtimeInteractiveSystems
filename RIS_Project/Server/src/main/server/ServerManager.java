@@ -1,17 +1,11 @@
 package main.server;
 
-import main.handler.NetworkMessageHandler;
 import main.manager.Manager;
-import main.messages.LoginMessage;
-import main.messages.Message;
-import main.messages.type.MessageType;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
-import java.util.Map;
 
 // netzwerk listener
 
@@ -36,12 +30,13 @@ public class ServerManager extends Manager {
         }
 
 
-        ObjectInputStream ois = null;
+        //ObjectInputStream ois = null;
 
+
+        System.out.print("Waiting for mssgs...");
 
         while(isAlive)
         {
-            System.out.print("Waiting for mssgs...");
 
 
             try {
@@ -51,7 +46,10 @@ public class ServerManager extends Manager {
                 e.printStackTrace();
             }
 
+            Thread socketThread = new Thread(new SocketHandler(socket, listeners));
+            socketThread.start();
 
+            /*
             // read the incoming messages
             //ObjectInputStream ois = null;
             try
@@ -70,6 +68,7 @@ public class ServerManager extends Manager {
             {
                 e.printStackTrace();
             }
+            */
         }
     }
 }
