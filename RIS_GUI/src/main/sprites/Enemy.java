@@ -29,6 +29,7 @@ public class Enemy extends MovingObject {
     private double ddx = 0;
     private double ddy = 0;
 
+
     public Enemy(int enemyID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy, int gamePoints, double velocity, int focusPlayer, int shootingDurationInMS) {
         super(ObjectType.ENEMY, imgFileName, imageWidth, imageHeight, xPos, yPos, energy, gamePoints);
 
@@ -46,6 +47,21 @@ public class Enemy extends MovingObject {
         this.projectiles = new ArrayList<>();
     }
 
+    private int calcQuadrantAngleCorrection(int quadrant, double angle)
+    {
+
+        // correction because angle is only 0-90 degrees and in each quadrant degrees change direction 0°->90° 90°->0°
+        if(quadrant == 1)
+            return (int)angle;
+        else if(quadrant == 2)
+            return 90 + (int)(90-angle);
+        else if(quadrant == 3)
+            return 180 + (int)angle;
+        else if(quadrant == 4)
+            return 270 + (int)(90-angle);
+
+        return 0;
+    }
 
     public void move() {
 
@@ -55,29 +71,69 @@ public class Enemy extends MovingObject {
         double deltaY = Math.abs(playerPos.y - getY());
 
         double hyp = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-
-        //double angle = Math.abs(Math.tan(deltaX / deltaY));
-
-        //double angle = Math.sin(deltaY / hyp);
         double angle = Math.toDegrees(Math.asin(deltaY / hyp));
 
-        //System.out.println("angle to before: "+Math.toDegrees(angle));
-        // get random player pos and move in this direction
-        //this.xPos -= 1;
 
-        //ddx = Math.abs(Math.cos(Math.toRadians(rotation)));
-        //ddy = Math.abs(Math.sin(Math.toRadians(rotation)));
+        //System.out.println("angle: "+angle);
 
-        //double xMovement = ddx * dMovement;
-        //double yMovement = ddy * dMovement;
+        /*
+        if(playerPos.y <= getY() && playerPos.x >= getX())
+        {
+            // correction because angle is only 0-90 degrees in each quadrant and changes direction 0°->90° 90°->0°
+            this.rotation = (int)angle;
 
-        // check which quadrant - pos player to enemy
+            ddx = Math.abs(Math.sin(Math.toRadians(angle)));
+            ddy = Math.abs(Math.cos(Math.toRadians(angle)));
+
+            xPos += ddx * velocity;
+            yPos -= ddy * velocity;
+        }
+        else if(playerPos.y >= getY() && playerPos.x >= getX())
+        {
+            //angle += 90;
+            // correction because angle is only 0-90 degrees in each quadrant and changes direction 0°->90° 90°->0°
+            this.rotation = 90 + (int)(90-angle);
+
+            ddx = Math.abs(Math.sin(Math.toRadians(angle)));
+            ddy = Math.abs(Math.cos(Math.toRadians(angle)));
+
+            xPos += ddx * velocity;
+            yPos += ddy * velocity;
+        }
+        else if(playerPos.y > getY() && playerPos.x < getX())
+        {
+            //angle = Math.abs(angle - 90) + 180;
+            // correction because angle is only 0-90 degrees in each quadrant and changes direction 0°->90° 90°->0°
+            this.rotation = 180 + (int)angle;
+
+            ddx = Math.abs(Math.sin(Math.toRadians(angle)));
+            ddy = Math.abs(Math.cos(Math.toRadians(angle)));
+
+            xPos -= ddx * velocity;
+            yPos += ddy * velocity;
+        }
+        else if(playerPos.y < getY() && playerPos.x < getX())
+        {
+            //angle += 270;
+            // correction because angle is only 0-90 degrees in each quadrant and changes direction 0°->90° 90°->0°
+            this.rotation = 270 + (int)(90-angle);
+
+            ddx = Math.abs(Math.sin(Math.toRadians(angle)));
+            ddy = Math.abs(Math.cos(Math.toRadians(angle)));
+
+            xPos -= ddx * velocity;
+            yPos -= ddy * velocity;
+        }
+
+        */
 
 
-
+        double dx = 0;
+        double dy = 0;
 
         if(playerPos.y <= getY() && playerPos.x >= getX())
         {
+            this.rotation = calcQuadrantAngleCorrection(2, angle);
             angle = Math.abs(angle - 90);
 
             ddx = Math.abs(Math.sin(Math.toRadians(angle)));
@@ -90,6 +146,7 @@ public class Enemy extends MovingObject {
         }
         else if(playerPos.y >= getY() && playerPos.x >= getX())
         {
+            this.rotation = calcQuadrantAngleCorrection(3, angle);
             angle += 90;
 
             ddx = Math.abs(Math.sin(Math.toRadians(angle)));
@@ -102,6 +159,7 @@ public class Enemy extends MovingObject {
         }
         else if(playerPos.y > getY() && playerPos.x < getX())
         {
+            this.rotation = calcQuadrantAngleCorrection(4, angle);
             angle = Math.abs(angle - 90) + 180;
 
             ddx = Math.abs(Math.sin(Math.toRadians(angle)));
@@ -114,6 +172,7 @@ public class Enemy extends MovingObject {
         }
         else if(playerPos.y < getY() && playerPos.x < getX())
         {
+            this.rotation = calcQuadrantAngleCorrection(1, angle);
             angle += 270;
 
             ddx = Math.abs(Math.sin(Math.toRadians(angle)));
@@ -124,18 +183,17 @@ public class Enemy extends MovingObject {
 
             //System.out.println("Q4: "+xPos+ " : "+yPos);
         }
-
-
-        //System.out.println("velocity: "+velocity);
+        //System.out.println("rotation: "+rotation);
         //System.out.println("ddx: "+ddx*velocity+ " ddy: "+ddy*velocity);
-//        this.rotation = (int) angle - 180;
+        // this.rotation = (int) angle - 180;
 
-        this.rotation = (int)angle;
-
-        //System.out.println("angle to player: "+angle);
+        //this.rotation = (int)angle;
 
         if(System.currentTimeMillis() >= nextShootTime)
             shoot();
+
+        for(Beam b : projectiles)
+            b.move();
     }
 
     private void shoot()
@@ -143,54 +201,31 @@ public class Enemy extends MovingObject {
         // TODO shoot faster when player is closer
         this.nextShootTime = System.currentTimeMillis() + shootingDurationInMS;
 
-
         double dx = 0;
         double dy = 0;
 
-        int x = 0;
-        int y = 0;
-
         if(rotation >= 0 && rotation < 90)
         {
-            dx += ddx;
-            dy += ddy;
-
-            x = (int) xPos+(getWidth() / 2);
-            y = (int) yPos;
+            dx -= ddx;
+            dy -= ddy;
         }
         else if(rotation >= 90 && rotation < 180)
         {
-            dx -= ddx;
+            dx += ddx;
             dy += ddy;
-
-            x = (int) xPos;
-            y = (int) yPos+(getWidth() / 2);
         }
         else if(rotation >= 180 && rotation < 270)
         {
-            dx -= ddx;
-            dy -= ddy;
-
-            x =  (int) xPos - (getWidth() / 2);
-            y =  (int) yPos;
+            dx += ddx;
+            dy += ddy;
         }
         else if(rotation >= 270 && rotation < 360)
         {
-            dx += ddx;
-            dy -= ddy;
-
-            x =  (int) xPos;
-            y = (int) yPos - (getWidth() / 2);
+            dx -= ddx;
+            dy += ddy;
         }
 
-
-        System.out.println("enemy "+getEnemyID()+" shoots to "+dx+" : "+dy);
-
-
         projectiles.add(new Beam(ObjectType.ENEMY_BEAM, getEnemyID(),"beam", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 5));
-
-
-        //projectiles.add(new Beam(ObjectType.PLAYER_BEAM, playerID,"beam", BEAM_WIDTH, BEAM_HEIGHT,  x, y, dx, dy, 5));
     }
 
     public int getFocusPlayer() {
@@ -217,8 +252,8 @@ public class Enemy extends MovingObject {
         return this.projectiles;
     }
 
-    public int getRotation() {
-        return rotation;
+    public double getRotation() {
+        return Math.toRadians(this.rotation);
     }
 
     // rectangle for detection of meteorites

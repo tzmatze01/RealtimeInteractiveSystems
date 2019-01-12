@@ -109,45 +109,28 @@ public class Player extends MovingObject {
         double dx = 0;
         double dy = 0;
 
-        int x = 0;
-        int y = 0;
-
         if(rotation >= 0 && rotation < 90)
         {
             dx += ddx;
             dy += ddy;
-
-            x = (int) xPos+(getWidth() / 2);
-            y = (int) yPos;
         }
         else if(rotation >= 90 && rotation < 180)
         {
             dx -= ddx;
             dy += ddy;
-
-            x = (int) xPos;
-            y = (int) yPos+(getWidth() / 2);
         }
         else if(rotation >= 180 && rotation < 270)
         {
             dx -= ddx;
             dy -= ddy;
-
-            x =  (int) xPos - (getWidth() / 2);
-            y =  (int) yPos;
         }
         else if(rotation >= 270 && rotation < 360)
         {
             dx += ddx;
             dy -= ddy;
-
-            x =  (int) xPos;
-            y = (int) yPos - (getWidth() / 2);
         }
 
-
         projectiles.add(new Beam(ObjectType.PLAYER_BEAM, playerID,"beam", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 6));
-
     }
 
     public double getRotation()

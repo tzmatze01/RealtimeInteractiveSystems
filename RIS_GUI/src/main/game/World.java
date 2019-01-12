@@ -32,7 +32,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
     private static int ENEMY_ENERGY = 100;
     private static int ENEMY_POINTS = 300;
     private static int ENEMY_SHOOTING_DURATION = 2000; // in MS
-    private static double ENEMY_VELOCITY = 1.5;
+    private static double ENEMY_VELOCITY = 2.5;
 
     private static double COLLECTABLE_VELOCITY = 1.5;
     private static int COLLECTABLE_POINTS = 500;
@@ -141,18 +141,16 @@ public class World extends JPanel implements KeyListener, ActionListener {
         for(MovingObject mo : movingObjects)
         {
             mo.move();
-
             allMovingObjects.add(mo);
         }
 
         for(Enemy enemy : enemies.values())
         {
-            enemy.move();
-
             int playerID = enemy.getFocusPlayer();
-            Player tmpPlayer = players.get(playerID);
-            enemy.setFocusPlayerPos(tmpPlayer.getX(), tmpPlayer.getY());
+            enemy.setFocusPlayerPos(players.get(playerID).getX(), players.get(playerID).getY());
 
+            enemy.move();
+            allMovingObjects.addAll(enemy.getProjectiles());
             allMovingObjects.add(enemy);
         }
 
@@ -193,7 +191,8 @@ public class World extends JPanel implements KeyListener, ActionListener {
             }
             else if(mo.getType() == ENEMY_BEAM)
             {
-
+                int enemyID = ((Beam)mo).getPlayerID();
+                enemies.get(enemyID).getProjectiles().remove(mo);
             }
             else if(mo.getType() == METEORITE || mo.getType() == COLLECTABLE)
                 movingObjects.remove(mo);
@@ -230,8 +229,6 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
                     if(collMO.getRectangleBounds().intersects(mo.getRectangleBounds()))
                     {
-                        // TODO Playerbeam collides with player
-
                         switch (mo.getType()) {
                             case PLAYER_BEAM:
                                 if(collMO.getType() == METEORITE || collMO.getType() == ENEMY)
@@ -312,6 +309,11 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         // TODO generate with level number - enemies, collectables, meteorites
 
+        if(enemies.isEmpty()) {
+            Enemy enemy = generateEnemy();
+            enemies.put(enemy.getEnemyID(), enemy);
+        }
+        /*
         if(movingObjects.isEmpty()) {
 
             movingObjects.add(generateMeteorite());
@@ -321,6 +323,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
             Enemy enemy = generateEnemy();
             enemies.put(enemy.getEnemyID(), enemy);
         }
+        */
     }
 
     private MovingObject generateMeteorite()
@@ -399,7 +402,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
             g2d = (Graphics2D) g.create();
 
-            // MOVING PLAYER
+            // DRAW PLAYER
             int imgW = player.getX() - (player.getWidth() / 2);
             int imgH = player.getY() - (player.getHeight() / 2);
 
@@ -430,21 +433,17 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
             g2d = (Graphics2D) g.create();
 
+            // DRAW PLAYER
             int imgW = enemy.getX() - (enemy.getWidth() / 2);
             int imgH = enemy.getY() - (enemy.getHeight() / 2);
 
             AffineTransform backup = g2d.getTransform();
             AffineTransform trans = new AffineTransform();
 
-            //trans.rotate(0, enemy.getX(), enemy.getY());
             trans.rotate(enemy.getRotation(), enemy.getX(), enemy.getY());
             g2d.transform(trans);
 
-            //System.out.println("rotate: "+enemy.getRotation());
-
             g2d.drawImage(enemy.getImage(), imgW, imgH, this);
-
-            //g2d.transform(backup);
         }
 
         // MOVE OBJECTS
@@ -457,7 +456,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
             g2d.drawImage(mo.getImage(), midX, midY, this);
         }
 
-        drawHitboxes(g);
+        //drawHitboxes(g);
     }
 
 

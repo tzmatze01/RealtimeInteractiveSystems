@@ -62,26 +62,8 @@ public abstract class MovingObject {
         ImageIcon ii = new ImageIcon("src/main/resources/img/display/"+imgFileName+".png");
         ImageIcon hb_ii = new ImageIcon("src/main/resources/img/hitbox/"+hitboxFileName);
 
-        if(getType() == ObjectType.ENEMY_BEAM)
-        {
-            System.out.println(""+getType()+" hb_li: "+hb_ii.getImageLoadStatus());
-            System.out.println(""+getType()+" li: "+ii.getImageLoadStatus());
-
-        }
-
         image = ii.getImage().getScaledInstance(w, h, 0);
         hb_image = hb_ii.getImage().getScaledInstance(w, h, 0);
-
-        if(getType() == ObjectType.ENEMY_BEAM)
-        {
-            System.out.println(""+getType()+" hb_li: "+hb_ii.getImageLoadStatus());
-            System.out.println(""+getType()+" li: "+ii.getImageLoadStatus());
-
-        }
-
-
-        System.out.println("");
-        // TODO load hb_image beam before
     }
 
     public void move() { }
@@ -158,24 +140,16 @@ public abstract class MovingObject {
         int[] pixels = new int[w * h];
 
 
-        if(getType() == ObjectType.ENEMY_BEAM)
-        {
-            System.out.println("calc: "+hb_image);
-            //System.out.println(""+getType()+" li: "+ii.getImageLoadStatus());
-        }
-
-
         PixelGrabber pg = new PixelGrabber(hb_image, 0, 0, w, h, pixels, 0, w);
         try {
             pg.grabPixels();
         } catch (InterruptedException e) {
             throw new IllegalStateException("Error: Interrupted Waiting for Pixels");
         }
-        /*
         if ((pg.getStatus() & ImageObserver.ABORT) != 0) {
             throw new IllegalStateException("Error: Image Fetch Aborted"+pg.getStatus());
         }
-        */
+
 
         // check if last pixel was black, or end of row, to only store 'outline' pixels
         boolean lastPixelBlack = false;
