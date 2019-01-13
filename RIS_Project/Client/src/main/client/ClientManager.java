@@ -72,7 +72,7 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
             e.printStackTrace();
         }
 
-        /*
+
         // login user
         System.out.println("Login Name:\n");
         Scanner sc = new Scanner(System.in);
@@ -90,8 +90,11 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
                     this.loggedIn = true;
         }
 
+        System.out.println("Client logged In!");
+
         while(isAlive && loggedIn) {
 
+            System.out.println("logged in worked");
             // TODO print out ois ?? and update gui
 
             // TODO check if game started
@@ -100,7 +103,7 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
             listeners.get(message.getType()).addMessage(message);
 
         }
-        */
+
     }
 
     private Message readFromOIS()
@@ -135,36 +138,35 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
     public void keyPressed(KeyEvent e) {
         // TODO check if registered
 
-        System.out.println("key pressed"+e.paramString());
-        Message message = null;
+        if(loggedIn) {
+            System.out.println("key pressed" + e.paramString());
+            Message message = null;
 
-        switch (e.getKeyCode())
-        {
-            case KeyEvent.VK_UP:
-            case KeyEvent.VK_DOWN:
-            case KeyEvent.VK_LEFT:
-            case KeyEvent.VK_RIGHT:
-            case KeyEvent.VK_W:
-            case KeyEvent.VK_A:
-            case KeyEvent.VK_S:
-            case KeyEvent.VK_D:
-            case KeyEvent.VK_SPACE:
-                message = new KeyEventMessage(KeyEventType.KEY_PRESSED, e.getKeyCode());
-                break;
-            case KeyEvent.VK_ESCAPE:
-                message = new LogoutMessage();
-                break;
-        }
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_UP:
+                case KeyEvent.VK_DOWN:
+                case KeyEvent.VK_LEFT:
+                case KeyEvent.VK_RIGHT:
+                case KeyEvent.VK_W:
+                case KeyEvent.VK_A:
+                case KeyEvent.VK_S:
+                case KeyEvent.VK_D:
+                case KeyEvent.VK_SPACE:
+                    message = new KeyEventMessage(KeyEventType.KEY_PRESSED, e.getKeyCode());
+                    break;
+                case KeyEvent.VK_ESCAPE:
+                    message = new LogoutMessage();
+                    break;
+                case KeyEvent.VK_L:
+                    message = new LoginMessage("test", "asdads");
+                    break;
+            }
 
-        //System.out.println("new m: "+m.toString());
-        //messages.add(m);
+            //System.out.println("new m: "+m.toString());
+            //messages.add(m);
 
-        // TODO get handler and write messg
-        //writeToOOS(message);
-        try {
-            oos.writeObject(message);
-        } catch (IOException e1) {
-            e1.printStackTrace();
+            // TODO get handler and write messg
+            writeToOOS(message);
         }
     }
 

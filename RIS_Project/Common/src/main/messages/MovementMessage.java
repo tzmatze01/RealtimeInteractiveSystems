@@ -11,6 +11,7 @@ public class MovementMessage extends Message {
 
     private int xPos;
     private int yPos;
+
     private ObjectType objectType;
 
     public MovementMessage(int xPos, int yPos, ObjectType objectType)

@@ -8,7 +8,10 @@ import main.messages.KeyEventMessage;
 import main.messages.LoginMessage;
 import main.messages.LogoutMessage;
 import main.messages.MovementMessage;
-import main.server.ServerManager;
+import main.server.Server;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
@@ -16,13 +19,10 @@ public class Main {
     public static void main(String [] args) {
 
         // vars for server
-        String[] allowedUserNames = {"hans", "peter", "test"};
-        int[][] gamePlan = {{10,0,0}, {15,3,0}, {20,5,1}, {25,5,3}};
-        
 
-        ServerManager manager = new ServerManager(9090);
 
-        LoginHandler<LoginMessage> hLogin = new LoginHandler<>(allowedUserNames);
+        /*
+        LoginHandler<LoginMessage> hLogin = new LoginHandler<>(allowedUserNames, loggedInUsers);
         LogoutHandler<LogoutMessage> hLogout = new LogoutHandler<>();
         MovementHandler<MovementMessage> hMovement = new MovementHandler();
         KeyEventHandler<KeyEventMessage> hKeyEvent = new KeyEventHandler<>();
@@ -37,10 +37,13 @@ public class Main {
         tMovement.start();
         tKeyEvent.start();
 
+
         manager.registerMessageHandler(hLogin);
         manager.registerMessageHandler(hLogout);
         manager.registerMessageHandler(hMovement);
         manager.registerMessageHandler(hKeyEvent);
+         */
+        Server manager = new Server(9090);
 
         Thread mainThread = new Thread(manager);
 

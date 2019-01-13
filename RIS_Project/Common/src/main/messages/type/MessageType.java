@@ -5,7 +5,8 @@ public enum MessageType {
     MOVEMENT(0),
     LOGIN(1),
     LOGOUT(2),
-    KEY_EVENT(3);
+    KEY_EVENT(3),
+    NEW_MOVING_OBJECT(4);
 
     private int type;
 
