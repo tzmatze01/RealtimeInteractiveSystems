@@ -1,5 +1,6 @@
-package main.handler;
+package handler;
 
+import main.handler.NetworkMessageHandler;
 import main.messages.Message;
 import main.messages.type.MessageType;
 

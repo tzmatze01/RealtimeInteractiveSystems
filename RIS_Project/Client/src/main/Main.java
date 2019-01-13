@@ -1,14 +1,16 @@
 package main;
 
+import handler.LoginHandler;
+import handler.LogoutHandler;
 import main.client.ClientManager;
+import main.handler.MovementHandler;
 import main.messages.LoginMessage;
+import main.messages.LogoutMessage;
 import main.messages.MovementMessage;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.net.Socket;
-import java.util.Scanner;
 
 public class Main extends JFrame {
 
@@ -32,7 +34,24 @@ public class Main extends JFrame {
 
         add(world);
         */
+
         ClientManager clientManager = new ClientManager("localhost", 9090);
+
+        LoginHandler<LoginMessage> hLogin = new LoginHandler<>();
+        LogoutHandler<LogoutMessage> hLogout = new LogoutHandler<>();
+        MovementHandler<MovementMessage> hMovement = new MovementHandler();
+
+        Thread tLogin = new Thread(hLogin);
+        Thread tLogout = new Thread(hLogout);
+        Thread tMovement = new Thread(hMovement);
+
+        tLogin.start();
+        tLogout.start();
+        tMovement.start();
+
+        clientManager.registerMessageHandler(hLogin);
+        clientManager.registerMessageHandler(hLogout);
+        clientManager.registerMessageHandler(hMovement);
 
         clientManager.addKeyListener(clientManager);
         clientManager.setFocusable(true);
@@ -49,9 +68,6 @@ public class Main extends JFrame {
 
         Thread clientThread = new Thread(clientManager);
         clientThread.start();
-
-        //setVisible(true);
-
     }
 
     public static void main(String [] args) throws IOException {

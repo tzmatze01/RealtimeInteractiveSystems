@@ -4,7 +4,8 @@ public enum MessageType {
 
     MOVEMENT(0),
     LOGIN(1),
-    LOGOUT(2);
+    LOGOUT(2),
+    KEY_EVENT(3);
 
     private int type;
 

@@ -18,7 +18,7 @@ public abstract class NetworkMessageHandler<T extends Message> implements Runnab
 
     public boolean isAlive() { return isAlive; }
 
-    public abstract void handleMessage(T message);
+    protected abstract void handleMessage(T message);
 
     // returns Type of the handled messages
     public abstract MessageType getHandledMessageType();

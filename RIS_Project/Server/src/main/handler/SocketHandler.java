@@ -1,4 +1,4 @@
-package main.server;
+package main.handler;
 
 import main.handler.NetworkMessageHandler;
 import main.messages.Message;
@@ -41,7 +41,6 @@ public class SocketHandler implements Runnable {
             e.printStackTrace();
         }
 
-
         System.out.println("created new inputstream: "+socket.toString());
 
         while(isAlive)
@@ -50,8 +49,9 @@ public class SocketHandler implements Runnable {
             {
                 Message message = ((Message)ois.readObject());
 
-
                 NetworkMessageHandler nmh = listeners.get(message.getType());
+                System.out.println("msg type: "+message.getType());
+                System.out.println("msg type: "+nmh.getHandledMessageType());
                 nmh.addMessage(message);
 
             } catch (IOException e) {
@@ -63,6 +63,7 @@ public class SocketHandler implements Runnable {
             // TODO get response from nmh and return
         }
     }
+
 
 
     public boolean getAlive() {

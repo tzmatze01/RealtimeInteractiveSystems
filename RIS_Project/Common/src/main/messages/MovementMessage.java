@@ -1,5 +1,6 @@
 package main.messages;
 
+import main.game.sprites.type.ObjectType;
 import main.messages.type.KeyEventType;
 import main.messages.type.MessageType;
 
@@ -8,25 +9,40 @@ import java.io.Serializable;
 
 public class MovementMessage extends Message {
 
+    private int xPos;
+    private int yPos;
+    private ObjectType objectType;
 
-    private KeyEventType ket;
-    private int keyCode;
-
-    public MovementMessage(KeyEventType ket, int keyCode)
+    public MovementMessage(int xPos, int yPos, ObjectType objectType)
     {
         super(MessageType.MOVEMENT);
 
-        this.ket = ket;
-        this.keyCode = keyCode;
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.objectType = objectType;
     }
 
-
-    public  KeyEventType getKet() {
-        return ket;
+    public int getxPos() {
+        return xPos;
     }
 
-    public int getKeyCode() {
-        return keyCode;
+    public void setxPos(int xPos) {
+        this.xPos = xPos;
     }
 
+    public int getyPos() {
+        return yPos;
+    }
+
+    public void setyPos(int yPos) {
+        this.yPos = yPos;
+    }
+
+    public ObjectType getObjectType() {
+        return objectType;
+    }
+
+    public void setObjectType(ObjectType objectType) {
+        this.objectType = objectType;
+    }
 }

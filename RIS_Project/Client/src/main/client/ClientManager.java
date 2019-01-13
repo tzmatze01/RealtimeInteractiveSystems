@@ -2,9 +2,7 @@ package main.client;
 
 import main.handler.NetworkMessageHandler;
 import main.manager.Manager;
-import main.messages.LoginMessage;
-import main.messages.Message;
-import main.messages.MovementMessage;
+import main.messages.*;
 import main.messages.type.KeyEventType;
 import main.messages.type.MessageType;
 
@@ -13,6 +11,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.*;
@@ -22,20 +21,21 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
 
     Map<MessageType, NetworkMessageHandler> listeners;
     boolean isAlive;
+    boolean loggedIn;
 
     private Socket socket;
     private String address;
     private int port;
 
-
     private LinkedList<Message> messages;
     private ObjectOutputStream oos = null;
-
+    private ObjectInputStream ois = null;
 
     public ClientManager(String address, int port)
     {
         this.listeners = new HashMap<>();
         this.isAlive = true;
+        this.loggedIn = false;
 
         this.address = address;
         this.port = port;
@@ -64,40 +64,69 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
     @Override
     public void run() {
 
-        //ObjectOutputStream oos = null;
-
         try {
             socket = new Socket(address, port);
             oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        //System.out.println("Login (1)\nMovement Message (2)");
+        /*
+        // login user
+        System.out.println("Login Name:\n");
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
 
+        writeToOOS(new LoginMessage(input, ""));
 
+        // wait for logged in message
+        while(!loggedIn)
+        {
+            Message message = readFromOIS();
 
-        while(isAlive) {
+            if(message.getType() == MessageType.LOGIN)
+                if(((LoginMessage)message).isLoggedIn())
+                    this.loggedIn = true;
+        }
+
+        while(isAlive && loggedIn) {
 
             // TODO print out ois ?? and update gui
 
             // TODO check if game started
 
-            if(!messages.isEmpty())
-            {
-                try {
-                    oos.writeObject(messages.removeFirst());
-                    System.out.println("send message");
+            Message message = readFromOIS();
+            listeners.get(message.getType()).addMessage(message);
 
-                    oos.flush();
-                    // TODO get correct handler and give message to it
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
+        */
     }
 
+    private Message readFromOIS()
+    {
+        Message message = null;
+
+        try {
+            message = ((Message)ois.readObject());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return message;
+    }
+
+    private void writeToOOS(Message message)
+    {
+        try {
+            oos.writeObject(message);
+            oos.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void keyTyped(KeyEvent e) { }
@@ -106,7 +135,7 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
     public void keyPressed(KeyEvent e) {
         // TODO check if registered
 
-        //System.out.println("key pressed"+e.paramString());
+        System.out.println("key pressed"+e.paramString());
         Message message = null;
 
         switch (e.getKeyCode())
@@ -120,7 +149,10 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
             case KeyEvent.VK_S:
             case KeyEvent.VK_D:
             case KeyEvent.VK_SPACE:
-                message = new MovementMessage(KeyEventType.KEY_PRESSED, e.getKeyCode());
+                message = new KeyEventMessage(KeyEventType.KEY_PRESSED, e.getKeyCode());
+                break;
+            case KeyEvent.VK_ESCAPE:
+                message = new LogoutMessage();
                 break;
         }
 
@@ -128,9 +160,9 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
         //messages.add(m);
 
         // TODO get handler and write messg
+        //writeToOOS(message);
         try {
             oos.writeObject(message);
-            oos.flush();
         } catch (IOException e1) {
             e1.printStackTrace();
         }
@@ -138,9 +170,10 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
 
     @Override
     public void keyReleased(KeyEvent e) {
+
         // TODO check if registered
 
-        messages.add(new MovementMessage(KeyEventType.KEY_RELEASED, e.getKeyCode()));
+        messages.add(new KeyEventMessage(KeyEventType.KEY_RELEASED, e.getKeyCode()));
 
     }
 

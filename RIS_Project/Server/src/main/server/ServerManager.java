@@ -1,9 +1,13 @@
 package main.server;
 
 import main.handler.NetworkMessageHandler;
+import main.handler.SocketHandler;
 import main.manager.Manager;
 import main.messages.type.MessageType;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -12,7 +16,7 @@ import java.util.Map;
 
 // netzwerk listener
 
-public class ServerManager implements Manager {
+public class ServerManager implements Manager, ActionListener {
 
     Map<MessageType, NetworkMessageHandler> listeners;
     boolean isAlive;
@@ -20,6 +24,9 @@ public class ServerManager implements Manager {
     private ServerSocket serverSocket;
     private Socket socket;
     private int port;
+
+    private Timer timer;
+    private final int DELAY = 10;
 
     public ServerManager(int port) {
 
@@ -47,8 +54,6 @@ public class ServerManager implements Manager {
 
         while(isAlive)
         {
-
-
             try {
                 socket = serverSocket.accept();
             }
@@ -102,5 +107,10 @@ public class ServerManager implements Manager {
         {
             // TODO Error messages handler already exists
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO step
     }
 }

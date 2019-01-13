@@ -1,26 +1,25 @@
 package main.handler;
 
 import main.messages.Message;
-import main.messages.MovementMessage;
 import main.messages.type.MessageType;
 
-import java.awt.event.KeyEvent;
-
-public class MovementHandler<T extends Message> extends NetworkMessageHandler<T> {
+public class LogoutHandler<T extends Message> extends NetworkMessageHandler<T>{
 
 
-    public MovementHandler() {
+    public LogoutHandler() {
 
     }
 
     @Override
     public void handleMessage(T message) {
 
+        System.out.println("Logout Handler: "+message.getType());
     }
 
     @Override
     public MessageType getHandledMessageType() {
-        return MessageType.MOVEMENT;
+        return MessageType.LOGOUT;
     }
+
 
 }
