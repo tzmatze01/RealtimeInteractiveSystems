@@ -1,15 +1,19 @@
 package main.messages;
 
+import main.messages.type.KeyEventType;
 import main.messages.type.MessageType;
 
-public class LoginMessage implements Message {
+public class LoginMessage extends Message {
+
+    private static KeyEventType ket;
 
     private String userName;
     private String password;
 
     public LoginMessage(String userName, String password) {
 
-        //super(MessageType.LOGIN);
+        super(MessageType.LOGIN);
+
         this.userName = userName;
         this.password = password;
     }
@@ -25,9 +29,6 @@ public class LoginMessage implements Message {
         return this.password;
     }
 
-    @Override
-    public MessageType getType()
-    {
-        return MessageType.LOGIN;
-    }
+
+
 }

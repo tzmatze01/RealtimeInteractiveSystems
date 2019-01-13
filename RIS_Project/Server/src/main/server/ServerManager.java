@@ -1,21 +1,31 @@
 package main.server;
 
+import main.handler.NetworkMessageHandler;
 import main.manager.Manager;
+import main.messages.type.MessageType;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.Map;
 
 // netzwerk listener
 
-public class ServerManager extends Manager {
+public class ServerManager implements Manager {
+
+    Map<MessageType, NetworkMessageHandler> listeners;
+    boolean isAlive;
 
     private ServerSocket serverSocket;
     private Socket socket;
     private int port;
 
     public ServerManager(int port) {
+
+        this.listeners = new HashMap<>();
+        this.isAlive = true;
+
         this.port = port;
         this.listeners = new HashMap<>();
     }
@@ -69,6 +79,28 @@ public class ServerManager extends Manager {
                 e.printStackTrace();
             }
             */
+        }
+    }
+
+    @Override
+    public void setAlive(boolean isAlive) {
+        this.isAlive = isAlive;
+    }
+
+    @Override
+    public boolean getAlive() {
+        return this.isAlive;
+    }
+
+    @Override
+    public void registerMessageHandler(NetworkMessageHandler nmh) {
+        if(!listeners.containsKey(nmh.getHandledMessageType()))
+        {
+            listeners.put(nmh.getHandledMessageType(), nmh);
+        }
+        else
+        {
+            // TODO Error messages handler already exists
         }
     }
 }

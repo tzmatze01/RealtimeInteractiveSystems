@@ -32,7 +32,6 @@ public class SocketHandler implements Runnable {
 
         ObjectInputStream ois = null;
 
-        //ObjectInputStream ois = null;
         try
         {
             ois = new ObjectInputStream(socket.getInputStream());
@@ -54,6 +53,7 @@ public class SocketHandler implements Runnable {
 
                 NetworkMessageHandler nmh = listeners.get(message.getType());
                 nmh.addMessage(message);
+
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (ClassNotFoundException e) {

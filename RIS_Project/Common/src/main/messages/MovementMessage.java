@@ -1,35 +1,32 @@
 package main.messages;
 
+import main.messages.type.KeyEventType;
 import main.messages.type.MessageType;
 
-public class MovementMessage implements Message {
+import java.awt.event.KeyEvent;
+import java.io.Serializable;
 
-    private int x;
-    private int y;
+public class MovementMessage extends Message {
 
-    public MovementMessage(int x, int y)
+
+    private KeyEventType ket;
+    private int keyCode;
+
+    public MovementMessage(KeyEventType ket, int keyCode)
     {
-        //super(MessageType.MOVEMENT);
+        super(MessageType.MOVEMENT);
 
-        this.x = x;
-        this.y = y;
-
-    }
-
-    public int getX()
-    {
-        return this.x;
-    }
-
-    public int getY()
-    {
-        return this.y;
+        this.ket = ket;
+        this.keyCode = keyCode;
     }
 
 
-    @Override
-    public MessageType getType() {
-
-        return MessageType.MOVEMENT;
+    public  KeyEventType getKet() {
+        return ket;
     }
+
+    public int getKeyCode() {
+        return keyCode;
+    }
+
 }

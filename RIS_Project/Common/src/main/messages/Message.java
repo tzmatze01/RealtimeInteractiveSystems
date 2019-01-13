@@ -4,17 +4,17 @@ import main.messages.type.MessageType;
 
 import java.io.Serializable;
 
-public interface Message extends Serializable {
+public abstract class  Message implements Serializable {
 
-    //private MessageType type;
+    private MessageType type;
 
-    /*
+
     public Message(MessageType type)
     {
         this.type = type;
     }
-    */
 
 
-    MessageType getType();
+
+    public MessageType getType() { return this.type; }
 }
