@@ -22,7 +22,7 @@ public class MONewHandler<T extends Message> extends NetworkMessageHandler<T> {
         MONewMessage m = (MONewMessage)message;
 
         if(m.getMOType() == ObjectType.PLAYER)
-            world.addPlayer(new Player(m.getObjectID(), "player", m.getImgWidth(), m.getImgHeight(), m.getxPos(), m.getyPos(), m.getEnergy()));
+            world.addPlayer(new Player(m.getObjectID(), "player1", m.getImgWidth(), m.getImgHeight(), m.getxPos(), m.getyPos(), m.getEnergy()));
     }
 
     @Override

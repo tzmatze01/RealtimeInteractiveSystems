@@ -58,7 +58,7 @@ public abstract class MovingObject {
         //String hitboxFileName = imgFileName + ".jpg";
 
 
-        ImageIcon ii = new ImageIcon("Client/src/main/resources/"+imgFileName+".png");
+        ImageIcon ii = new ImageIcon("Client/src/main/game/resources/"+imgFileName+".png");
         //ImageIcon hb_ii = new ImageIcon("Server/src/main/game/resources/"+hitboxFileName);
 
         image = ii.getImage().getScaledInstance(w, h, 0);

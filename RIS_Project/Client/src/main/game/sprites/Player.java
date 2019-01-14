@@ -56,7 +56,7 @@ public class Player extends MovingObject {
 
     public void move() {
 
-        // TODO only move beams in loop
+        // TODO add projectiles to self when spacebar, don't need to send back, only to other player
 
         for(Beam b : projectiles)
         {
