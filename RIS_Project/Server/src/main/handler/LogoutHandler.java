@@ -2,12 +2,15 @@ package main.handler;
 
 import main.messages.Message;
 import main.messages.type.MessageType;
+import main.network.ConnectionCookie;
 
 public class LogoutHandler<T extends Message> extends NetworkMessageHandler<T>{
 
+    private ConnectionCookie cc;
 
-    public LogoutHandler() {
+    public LogoutHandler(ConnectionCookie cc) {
 
+        this.cc = cc;
     }
 
     @Override

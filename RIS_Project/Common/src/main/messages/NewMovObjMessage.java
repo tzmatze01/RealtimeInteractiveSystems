@@ -8,8 +8,11 @@ public class NewMovObjMessage extends Message {
     private int xPos;
     private int yPos;
 
-    public NewMovObjMessage(MessageType type)
+    private int imgWidth;
+    private int imgHeight;
+
+    public NewMovObjMessage()
     {
-        super(MessageType.NEW_MOVING_OBJECT);
+        super(MessageType.NEW_MOVING_OBJECT, 0);
     }
 }

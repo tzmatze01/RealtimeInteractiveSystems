@@ -5,6 +5,7 @@ import main.manager.Manager;
 import main.messages.*;
 import main.messages.type.KeyEventType;
 import main.messages.type.MessageType;
+import main.network.ConnectionCookie;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,6 +32,10 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
     private ObjectOutputStream oos = null;
     private ObjectInputStream ois = null;
 
+    private ConnectionCookie cc;
+
+    private Image img;
+
     public ClientManager(String address, int port)
     {
         this.listeners = new HashMap<>();
@@ -42,6 +47,15 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
 
         // FIFO
         this.messages = new LinkedList<>();
+
+        init();
+    }
+
+    public void init()
+    {
+        ImageIcon ii = new ImageIcon("Client/src/main/game/resources/player1.png");
+        img = ii.getImage().getScaledInstance(100, 80, 0);
+
     }
 
     @Override
@@ -59,6 +73,19 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
         Graphics2D g2d = (Graphics2D) g.create();
 
         g2d.drawOval(10, 10, 10, 10);
+
+
+        Toolkit.getDefaultToolkit().sync();
+        //ImageIcon ii = new ImageIcon(Toolkit.getDefaultToolkit().getImage((ResourcesManager.class.getResource("src/main/game/resources/player1.png"))));
+
+        // check path where java is looking
+        //System.out.println(System.getProperty("user.dir"));
+
+
+        g2d.drawImage(img,20,20, this);
+
+
+        g2d.drawOval(100, 100, 10, 10);
     }
 
     @Override
@@ -86,15 +113,17 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
             Message message = readFromOIS();
 
             if(message.getType() == MessageType.LOGIN)
-                if(((LoginMessage)message).isLoggedIn())
+                if(((LoginMessage)message).isLoggedIn()) {
                     this.loggedIn = true;
+                    this.cc = new ConnectionCookie(message.getUserID(), ((LoginMessage) message).getUserName());
+                    System.out.println("Logged in with name: "+cc.getUserName());
+                }
         }
 
-        System.out.println("Client logged In!");
 
-        while(isAlive && loggedIn) {
+        while(isAlive && cc.isLoggedIn()) {
 
-            System.out.println("logged in worked");
+            System.out.println("in big while loop");
             // TODO print out ois ?? and update gui
 
             // TODO check if game started
@@ -137,9 +166,11 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
     @Override
     public void keyPressed(KeyEvent e) {
         // TODO check if registered
+        System.out.println("key listener present");
 
         if(loggedIn) {
             System.out.println("key pressed" + e.paramString());
+
             Message message = null;
 
             switch (e.getKeyCode()) {
@@ -152,10 +183,10 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
                 case KeyEvent.VK_S:
                 case KeyEvent.VK_D:
                 case KeyEvent.VK_SPACE:
-                    message = new KeyEventMessage(KeyEventType.KEY_PRESSED, e.getKeyCode());
+                    message = new KeyEventMessage(KeyEventType.KEY_PRESSED, e.getKeyCode(), cc.getOwnUserID());
                     break;
                 case KeyEvent.VK_ESCAPE:
-                    message = new LogoutMessage();
+                    message = new LogoutMessage(cc.getOwnUserID());
                     break;
                 case KeyEvent.VK_L:
                     message = new LoginMessage("test", "asdads");
@@ -175,8 +206,7 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
 
         // TODO check if registered
 
-        messages.add(new KeyEventMessage(KeyEventType.KEY_RELEASED, e.getKeyCode()));
-
+        messages.add(new KeyEventMessage(KeyEventType.KEY_RELEASED, e.getKeyCode(), cc.getOwnUserID()));
     }
 
     @Override

@@ -14,9 +14,9 @@ public class MovementMessage extends Message {
 
     private ObjectType objectType;
 
-    public MovementMessage(int xPos, int yPos, ObjectType objectType)
+    public MovementMessage(int xPos, int yPos, ObjectType objectType, int userID)
     {
-        super(MessageType.MOVEMENT);
+        super(MessageType.MOVEMENT, userID);
 
         this.xPos = xPos;
         this.yPos = yPos;

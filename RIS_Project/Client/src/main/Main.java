@@ -1,7 +1,7 @@
 package main;
 
-import handler.LoginHandler;
-import handler.LogoutHandler;
+import main.handler.LoginHandler;
+import main.handler.LogoutHandler;
 import main.client.ClientManager;
 import main.handler.MovementHandler;
 import main.messages.LoginMessage;

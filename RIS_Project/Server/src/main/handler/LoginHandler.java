@@ -1,37 +1,40 @@
 package main.handler;
 
-import main.handler.cookie.ConnectionCookie;
+import main.game.World;
+import main.network.ConnectionCookie;
 import main.messages.LoginMessage;
 import main.messages.Message;
 import main.messages.type.MessageType;
-
-import java.util.List;
 
 public class LoginHandler<T extends Message> extends NetworkMessageHandler<T> {
 
     private String[] allowedHosts;
     private ConnectionCookie cc;
+    private World world;
 
-    public LoginHandler(String[] allowedHosts, ConnectionCookie cc) {
+    public LoginHandler(String[] allowedHosts, ConnectionCookie cc, World world) {
         this.allowedHosts = allowedHosts;
         this.cc = cc;
+        this.world = world;
     }
 
     @Override
     public void handleMessage(T message) {
 
         String userName = ((LoginMessage)message).getUserName();
-        System.out.println("search username: "+userName);
 
         for(String tmpUserName : allowedHosts)
         {
             if(tmpUserName.matches(userName)) {
-                System.out.println("found username: " + userName);
-                this.cc.setLoggedIn(true);
-                System.out.println("cc logged in: " + cc.isLoggedIn());
+
+                //System.out.println("logged in: "+userName);
+                // TODO more complex method for userID creation
+                int userID = cc.countRegisteredUsers() + 1;
+                cc.addUser(userName, userID);
+
+                world.addPlayer(userID);
             }
         }
-        System.out.println("end!");
     }
 
     @Override

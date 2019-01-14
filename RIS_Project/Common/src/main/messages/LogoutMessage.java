@@ -6,10 +6,9 @@ public class LogoutMessage extends Message {
 
 
 
-    public LogoutMessage()
+    public LogoutMessage(int userID)
     {
-        super(MessageType.LOGOUT);
-
+        super(MessageType.LOGOUT, userID);
     }
 
 }

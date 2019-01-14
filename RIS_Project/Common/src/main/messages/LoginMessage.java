@@ -14,16 +14,16 @@ public class LoginMessage extends Message {
 
     public LoginMessage(String userName, String password)
     {
-        super(MessageType.LOGIN);
+        super(MessageType.LOGIN, 0); // userID is 0, because this is the constructor for pre-loggedIn login--messaged
 
         this.userName = userName;
         this.password = password;
         this.loggedIn = false;
     }
 
-    public LoginMessage(String username, boolean loggedIn)
+    public LoginMessage(String username, boolean loggedIn, int userID)
     {
-        super(MessageType.LOGIN);
+        super(MessageType.LOGIN, userID);
 
         this.userName = username;
         this.password = "";

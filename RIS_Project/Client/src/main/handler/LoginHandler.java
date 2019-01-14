@@ -1,4 +1,4 @@
-package handler;
+package main.handler;
 
 import main.handler.NetworkMessageHandler;
 import main.messages.Message;

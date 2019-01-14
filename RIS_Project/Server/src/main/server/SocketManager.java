@@ -1,20 +1,19 @@
 package main.server;
 
-import main.handler.LoginHandler;
+import main.game.sprites.type.ObjectType;
 import main.handler.NetworkMessageHandler;
-import main.handler.cookie.ConnectionCookie;
 import main.manager.Manager;
 import main.messages.LoginMessage;
 import main.messages.Message;
+import main.messages.MovementMessage;
 import main.messages.type.MessageType;
+import main.network.ConnectionCookie;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SocketManager implements Manager {
@@ -26,16 +25,16 @@ public class SocketManager implements Manager {
     private ObjectOutputStream oos;
 
     private boolean isAlive;
-
-    private boolean loggedIn;
+    //private boolean loggedIn;
 
     private ConnectionCookie cc;
+    private String userName;
 
     public SocketManager(Socket socket, ConnectionCookie cc) {
 
         this.socket = socket;
         this.listeners = new HashMap<>();
-        this.loggedIn = loggedIn;
+        //this.loggedIn = false;
 
         this.cc = cc;
     }
@@ -53,62 +52,49 @@ public class SocketManager implements Manager {
             e.printStackTrace();
         }
 
-        // wait for login message
-        //LoginHandler<LoginMessage> tmpLoginHandler = (LoginHandler<LoginMessage>)listeners.get(MessageType.LOGIN);
-        /*
-        while(!cc.isLoggedIn())
-        {
-            System.out.println("idle...");
-            Message message = readFromOIS();
-
-            if(message.getType() == MessageType.LOGIN) {
-                //System.out.println("dpre one!"+cc.isLoggedIn());
-                listeners.get(message.getType()).addMessage(message);
-                //System.out.println("done!"+cc.isLoggedIn());
-            }
-            else
-                System.out.println("expected login message, got: "+message.getType());
+        // expect login message from user
+        Message message = readFromOIS();
+        if(message.getType() == MessageType.LOGIN) {
+            listeners.get(message.getType()).addMessage(message);
+            this.userName = ((LoginMessage)message).getUserName();
         }
-        */
-
-        // TODO while loop before waits for next message
-
-        Message mmessage = readFromOIS();
-        if(mmessage.getType() == MessageType.LOGIN) {
-            //System.out.println("dpre one!"+cc.isLoggedIn());
-            listeners.get(mmessage.getType()).addMessage(mmessage);
-            //System.out.println("done!"+cc.isLoggedIn());
+        else {
+            System.out.println("expected login message, got: " + message.getType());
+            return;
         }
-        else
-            System.out.println("expected login message, got: "+mmessage.getType());
 
+        // wait till user is authenticated
+        System.out.println("authenticating new user...");
+        while(!cc.isUserLoggedIn(userName)) { }
 
-        //System.out.println("wait reply to user." );
-        // send successful login message back to user
-        writeToOOS(new LoginMessage("deiMudder", true));
+        System.out.println("user: "+userName+" is logged in!");
+        writeToOOS(new LoginMessage(userName, true, cc.getUserID(userName)));
 
-        System.out.println("aent reply to user." );
-
-        while(isAlive && loggedIn)
+        while(cc.isUserLoggedIn(userName))
         {
+            System.out.println("sm in while loop");
+
             try
             {
-                Message message = ((Message)ois.readObject());
-
+                message = (Message)ois.readObject();
                 NetworkMessageHandler nmh = listeners.get(message.getType());
-                System.out.println("msg type: "+message.getType());
-                System.out.println("msg type: "+nmh.getHandledMessageType());
                 nmh.addMessage(message);
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            }
+            catch (IOException e)
+            {
                 e.printStackTrace();
             }
-
-            // TODO get response from nmh and return
+            catch (ClassNotFoundException e)
+            {
+                e.printStackTrace();
+            }
         }
     }
 
+    public void sendGameUpdates()
+    {
+        writeToOOS(new MovementMessage(1, 2, ObjectType.METEORITE, cc.getUserID(userName)));
+    }
 
     private Message readFromOIS()
     {
@@ -135,6 +121,9 @@ public class SocketManager implements Manager {
         }
     }
 
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
 
     public boolean getAlive() {
         return isAlive;
@@ -153,7 +142,4 @@ public class SocketManager implements Manager {
         }
     }
 
-    public void setAlive(boolean alive) {
-        isAlive = alive;
-    }
 }

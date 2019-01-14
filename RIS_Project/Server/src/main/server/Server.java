@@ -2,13 +2,11 @@ package main.server;
 
 import main.game.World;
 import main.handler.*;
-import main.handler.cookie.ConnectionCookie;
-import main.manager.Manager;
 import main.messages.KeyEventMessage;
 import main.messages.LoginMessage;
 import main.messages.LogoutMessage;
 import main.messages.MovementMessage;
-import main.messages.type.MessageType;
+import main.network.ConnectionCookie;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -17,13 +15,12 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 // netzwerk listener
 
 public class Server implements Runnable, ActionListener {
+
 
     private int port;
     private ServerSocket serverSocket;
@@ -40,6 +37,7 @@ public class Server implements Runnable, ActionListener {
     private Timer timer;
     private final int DELAY = 10;
 
+    ConnectionCookie cc;
 
     public Server(int port) {
 
@@ -49,11 +47,14 @@ public class Server implements Runnable, ActionListener {
         this.sockets = new ArrayList<>();
 
         this.allowedUserNames = new String[]{"hans", "peter", "test"};
+
         this.gamePlan = new int[][]{{10,0,0}, {15,3,0}, {20,5,1}, {25,5,3}};
 
         this.loggedInUsers = new ArrayList<>();
 
-        this.world = new World();
+        this.cc = new ConnectionCookie();
+
+        this.world = new World(cc.getScreenWidth(), cc.getScreenHeight(), gamePlan);
 
         timer = new Timer(DELAY, this);
         timer.start();
@@ -70,7 +71,7 @@ public class Server implements Runnable, ActionListener {
             e.printStackTrace();
         }
 
-        System.out.print("Waiting for players...");
+        System.out.println("Waiting for players...");
 
         // wait for two players
         while(sockets.size() < 2)
@@ -84,28 +85,26 @@ public class Server implements Runnable, ActionListener {
                 e.printStackTrace();
             }
 
-            ConnectionCookie cc = new ConnectionCookie(false);
-
             SocketManager sm = new SocketManager(socket, cc);
 
-            LoginHandler<LoginMessage> hLogin = new LoginHandler<>(allowedUserNames, cc);
-            LogoutHandler<LogoutMessage> hLogout = new LogoutHandler<>();
-            MovementHandler<MovementMessage> hMovement = new MovementHandler();
-            KeyEventHandler<KeyEventMessage> hKeyEvent = new KeyEventHandler<>();
+            LoginHandler<LoginMessage> hLogin = new LoginHandler<>(allowedUserNames, cc, world);
+            LogoutHandler<LogoutMessage> hLogout = new LogoutHandler<>(cc);
+            //MovementHandler<MovementMessage> hMovement = new MovementHandler();
+            KeyEventHandler<KeyEventMessage> hKeyEvent = new KeyEventHandler<>(world, cc);
 
             Thread tLogin = new Thread(hLogin);
             Thread tLogout = new Thread(hLogout);
-            Thread tMovement = new Thread(hMovement);
+            //Thread tMovement = new Thread(hMovement);
             Thread tKeyEvent = new Thread(hKeyEvent);
 
             tLogin.start();
             tLogout.start();
-            tMovement.start();
+            //tMovement.start();
             tKeyEvent.start();
 
             sm.registerMessageHandler(hLogin);
             sm.registerMessageHandler(hLogout);
-            sm.registerMessageHandler(hMovement);
+            //sm.registerMessageHandler(hMovement);
             sm.registerMessageHandler(hKeyEvent);
 
             Thread socketThread = new Thread(sm);
@@ -120,6 +119,13 @@ public class Server implements Runnable, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO step
+
+        //System.out.println("step");
+        // TODO check if enouigh players before first step
+        // step world step
+        //this.world.step();
+
+        //for(SocketManager sm : sockets)
+        //    sm.sendGameUpdates();
     }
 }
