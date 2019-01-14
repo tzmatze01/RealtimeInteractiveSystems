@@ -2,39 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3946d730-20f7-46cc-ac97-15fbd3a6e037" name="Default" comment="">
-      <change beforePath="" afterPath="$PROJECT_DIR$/Common/src/main/messages/MONewMessage.java" />
       <change beforePath="$PROJECT_DIR$/../RIS_GUI/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../RIS_GUI/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/Main.java" afterPath="$PROJECT_DIR$/Client/src/main/Main.java" />
       <change beforePath="$PROJECT_DIR$/Client/src/main/client/ClientManager.java" afterPath="$PROJECT_DIR$/Client/src/main/client/ClientManager.java" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/game/World.java" afterPath="$PROJECT_DIR$/Client/src/main/game/World.java" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/game/sprites/Player.java" afterPath="$PROJECT_DIR$/Client/src/main/game/sprites/Player.java" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/game/sprites/type/MovingObject.java" afterPath="$PROJECT_DIR$/Client/src/main/game/sprites/type/MovingObject.java" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/handler/LoginHandler.java" afterPath="$PROJECT_DIR$/Client/src/main/handler/LoginHandler.java" />
-      <change beforePath="$PROJECT_DIR$/Client/src/main/handler/LogoutHandler.java" afterPath="$PROJECT_DIR$/Client/src/main/handler/LogoutHandler.java" />
-      <change beforePath="$PROJECT_DIR$/Common/src/main/handler/MovementHandler.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Common/src/main/handler/NetworkMessageHandler.java" afterPath="$PROJECT_DIR$/Common/src/main/handler/NetworkMessageHandler.java" />
-      <change beforePath="$PROJECT_DIR$/Common/src/main/messages/KeyEventMessage.java" afterPath="$PROJECT_DIR$/Common/src/main/messages/KeyEventMessage.java" />
-      <change beforePath="$PROJECT_DIR$/Common/src/main/messages/LoginMessage.java" afterPath="$PROJECT_DIR$/Common/src/main/messages/LoginMessage.java" />
-      <change beforePath="$PROJECT_DIR$/Common/src/main/messages/LogoutMessage.java" afterPath="$PROJECT_DIR$/Common/src/main/messages/LogoutMessage.java" />
-      <change beforePath="$PROJECT_DIR$/Common/src/main/messages/Message.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Common/src/main/messages/MovementMessage.java" afterPath="$PROJECT_DIR$/Common/src/main/messages/MOMovMessage.java" />
-      <change beforePath="$PROJECT_DIR$/Common/src/main/messages/NewMovObjMessage.java" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Common/src/main/messages/type/MessageType.java" afterPath="$PROJECT_DIR$/Common/src/main/messages/type/MessageType.java" />
-      <change beforePath="$PROJECT_DIR$/Common/src/main/network/ConnectionCookie.java" afterPath="$PROJECT_DIR$/Common/src/main/network/ConnectionCookie.java" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/Main.java" afterPath="$PROJECT_DIR$/Server/src/main/Main.java" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/game/World.java" afterPath="$PROJECT_DIR$/Server/src/main/game/World.java" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/game/sprites/Beam.java" afterPath="$PROJECT_DIR$/Server/src/main/game/sprites/Beam.java" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/game/sprites/Collectable.java" afterPath="$PROJECT_DIR$/Server/src/main/game/sprites/Collectable.java" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/game/sprites/Enemy.java" afterPath="$PROJECT_DIR$/Server/src/main/game/sprites/Enemy.java" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/game/sprites/Meteorite.java" afterPath="$PROJECT_DIR$/Server/src/main/game/sprites/Meteorite.java" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/game/sprites/Player.java" afterPath="$PROJECT_DIR$/Server/src/main/game/sprites/Player.java" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/game/sprites/type/MovingObject.java" afterPath="$PROJECT_DIR$/Server/src/main/game/sprites/type/MovingObject.java" />
       <change beforePath="$PROJECT_DIR$/Server/src/main/handler/KeyEventHandler.java" afterPath="$PROJECT_DIR$/Server/src/main/handler/KeyEventHandler.java" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/handler/LoginHandler.java" afterPath="$PROJECT_DIR$/Server/src/main/handler/LoginHandler.java" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/handler/LogoutHandler.java" afterPath="$PROJECT_DIR$/Server/src/main/handler/LogoutHandler.java" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/server/Server.java" afterPath="$PROJECT_DIR$/Server/src/main/server/Server.java" />
-      <change beforePath="$PROJECT_DIR$/Server/src/main/server/SocketManager.java" afterPath="$PROJECT_DIR$/Server/src/main/server/SocketManager.java" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -70,11 +40,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MovingObject.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MovingObject.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Client/src/main/game/sprites/type/MovingObject.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="53" column="5" lean-forward="true" selection-start-line="53" selection-start-column="5" selection-end-line="53" selection-end-column="5" />
+            <state relative-caret-position="-2307">
+              <caret line="41" column="25" lean-forward="true" selection-start-line="41" selection-start-column="25" selection-end-line="41" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1582#1583#0" expanded="true" />
@@ -109,9 +79,12 @@
       <file leaf-file-name="KeyEventHandler.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Server/src/main/handler/KeyEventHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="390">
+              <caret line="34" column="0" lean-forward="true" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+              <folding>
+                <element signature="e#1879#1880#0" expanded="true" />
+                <element signature="e#1923#1924#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -136,16 +109,16 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ClientManager.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="ClientManager.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Client/src/main/client/ClientManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="406">
-              <caret line="136" column="44" lean-forward="true" selection-start-line="136" selection-start-column="44" selection-end-line="136" selection-end-column="44" />
+            <state relative-caret-position="182">
+              <caret line="176" column="14" lean-forward="false" selection-start-line="176" selection-start-column="14" selection-end-line="176" selection-end-column="14" />
               <folding>
-                <element signature="e#5693#5694#0" expanded="true" />
-                <element signature="e#5731#5732#0" expanded="true" />
-                <element signature="e#5778#5779#0" expanded="true" />
-                <element signature="e#5813#5814#0" expanded="true" />
+                <element signature="e#6030#6031#0" expanded="true" />
+                <element signature="e#6068#6069#0" expanded="true" />
+                <element signature="e#6115#6116#0" expanded="true" />
+                <element signature="e#6150#6151#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -248,11 +221,11 @@
         <option value="$PROJECT_DIR$/Client/src/main/handler/MOMovHandler.java" />
         <option value="$PROJECT_DIR$/Server/src/main/server/SocketManager.java" />
         <option value="$PROJECT_DIR$/Server/src/main/server/Server.java" />
-        <option value="$PROJECT_DIR$/Server/src/main/handler/KeyEventHandler.java" />
-        <option value="$PROJECT_DIR$/Client/src/main/client/ClientManager.java" />
         <option value="$PROJECT_DIR$/Server/src/main/game/World.java" />
         <option value="$PROJECT_DIR$/Client/src/main/game/World.java" />
         <option value="$PROJECT_DIR$/Client/src/main/game/sprites/type/MovingObject.java" />
+        <option value="$PROJECT_DIR$/Server/src/main/handler/KeyEventHandler.java" />
+        <option value="$PROJECT_DIR$/Client/src/main/client/ClientManager.java" />
       </list>
     </option>
   </component>
@@ -815,12 +788,12 @@
       <workItem from="1546893622214" duration="598000" />
       <workItem from="1547301608629" duration="4419000" />
       <workItem from="1547335184583" duration="738000" />
-      <workItem from="1547381531861" duration="48607000" />
+      <workItem from="1547381531861" duration="48866000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="99156000" />
+    <option name="totallyTimeSpent" value="99415000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -833,7 +806,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-1754" y="23" width="1598" height="968" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32958034" sideWeight="0.497558" order="6" side_tool="false" content_ui="tabs" />
@@ -843,7 +815,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21305841" sideWeight="0.5321337" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27262315" sideWeight="0.46786633" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27262315" sideWeight="0.46786633" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3286991" sideWeight="0.49520767" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22533633" sideWeight="0.4834734" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1317,31 +1289,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Client/src/main/client/ClientManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="406">
-          <caret line="136" column="44" lean-forward="true" selection-start-line="136" selection-start-column="44" selection-end-line="136" selection-end-column="44" />
-          <folding>
-            <element signature="e#5693#5694#0" expanded="true" />
-            <element signature="e#5731#5732#0" expanded="true" />
-            <element signature="e#5778#5779#0" expanded="true" />
-            <element signature="e#5813#5814#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Server/src/main/game/World.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="231">
           <caret line="123" column="0" lean-forward="false" selection-start-line="123" selection-start-column="0" selection-end-line="123" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Server/src/main/handler/KeyEventHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1377,8 +1328,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Client/src/main/game/sprites/type/MovingObject.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="53" column="5" lean-forward="true" selection-start-line="53" selection-start-column="5" selection-end-line="53" selection-end-column="5" />
+        <state relative-caret-position="-2307">
+          <caret line="41" column="25" lean-forward="true" selection-start-line="41" selection-start-column="25" selection-end-line="41" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1582#1583#0" expanded="true" />
@@ -1395,6 +1346,30 @@
             <element signature="e#2239#2240#0" expanded="true" />
             <element signature="e#6054#6055#0" expanded="true" />
             <element signature="e#6079#6080#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Server/src/main/handler/KeyEventHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="390">
+          <caret line="34" column="0" lean-forward="true" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+          <folding>
+            <element signature="e#1879#1880#0" expanded="true" />
+            <element signature="e#1923#1924#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Client/src/main/client/ClientManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="182">
+          <caret line="176" column="14" lean-forward="false" selection-start-line="176" selection-start-column="14" selection-end-line="176" selection-end-column="14" />
+          <folding>
+            <element signature="e#6030#6031#0" expanded="true" />
+            <element signature="e#6068#6069#0" expanded="true" />
+            <element signature="e#6115#6116#0" expanded="true" />
+            <element signature="e#6150#6151#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -23,12 +23,16 @@ public class KeyEventHandler<T extends Message> extends NetworkMessageHandler<T>
     @Override
     protected void handleMessage(T message) {
 
-        if(((KeyEventMessage)message).getKet() == KeyEventType.KEY_PRESSED)
-            world.keyPressed(message.getUserID(), ((KeyEventMessage)message).getKeyCode());
-        else if(((KeyEventMessage)message).getKet() == KeyEventType.KEY_RELEASED)
-            world.keyReleased(message.getUserID(), ((KeyEventMessage)message).getKeyCode());
+        if(((KeyEventMessage)message).getKet() == KeyEventType.KEY_PRESSED) {
+            world.keyPressed(message.getUserID(), ((KeyEventMessage) message).getKeyCode());
 
-        System.out.println("Movement Handler: "+message.getType());
+            System.out.println("Key pressed");
+        }
+        else if(((KeyEventMessage)message).getKet() == KeyEventType.KEY_RELEASED) {
+            System.out.println("Key released");
+            world.keyReleased(message.getUserID(), ((KeyEventMessage) message).getKeyCode());
+        }
+
 
         /*
 

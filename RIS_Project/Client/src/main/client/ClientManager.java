@@ -172,11 +172,9 @@ public class ClientManager implements KeyListener, Manager {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        // TODO check if registered
-        System.out.println("key listener present");
 
         if(loggedIn) {
-            System.out.println("key pressed" + e.paramString());
+            //System.out.println("key pressed" + e.paramString());
 
             Message message = null;
 
@@ -200,10 +198,6 @@ public class ClientManager implements KeyListener, Manager {
                     break;
             }
 
-            //System.out.println("new m: "+m.toString());
-            //messages.add(m);
-
-            // TODO get handler and write messg
             writeToOOS(message);
         }
     }
@@ -211,9 +205,27 @@ public class ClientManager implements KeyListener, Manager {
     @Override
     public void keyReleased(KeyEvent e) {
 
-        // TODO check if registered
+        if(loggedIn) {
+            //System.out.println("key pressed" + e.paramString());
 
-        messages.add(new KeyEventMessage(KeyEventType.KEY_RELEASED, e.getKeyCode(), cc.getOwnUserID()));
+            Message message = null;
+
+            switch (e.getKeyCode()) {
+                case KeyEvent.VK_UP:
+                case KeyEvent.VK_DOWN:
+                case KeyEvent.VK_LEFT:
+                case KeyEvent.VK_RIGHT:
+                case KeyEvent.VK_W:
+                case KeyEvent.VK_A:
+                case KeyEvent.VK_S:
+                case KeyEvent.VK_D:
+                case KeyEvent.VK_SPACE:
+                    message = new KeyEventMessage(KeyEventType.KEY_RELEASED, e.getKeyCode(), cc.getOwnUserID());
+                    break;
+            }
+
+            writeToOOS(message);
+        }
     }
 
     @Override
