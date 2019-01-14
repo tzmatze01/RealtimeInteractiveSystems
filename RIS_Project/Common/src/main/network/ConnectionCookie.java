@@ -1,21 +1,21 @@
 package main.network;
 
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
 public class ConnectionCookie {
 
 
-    private static int screenWidth = 1200;
-    private static int screenHeight = 800;
+    // TODO timer refresh for painting
+
+    private static int SCREENWIDTH = 1200;
+    private static int SCREENHEIGHT = 800;
 
 
     private Map<String, Integer> userNameID;
-
+    private Map<Integer, Boolean> isPlaying;
 
     private int userID; // has to be set by client, after successful login by server
     private String userName;
@@ -31,11 +31,13 @@ public class ConnectionCookie {
 
         // Server Cookie
         this.userNameID = new HashMap<>();
+        this.isPlaying = new HashMap<>();
 
         this.userID = 0;
         this.userName = "";
 
     }
+
 
     public ConnectionCookie(int userID, String userName)
     {
@@ -48,7 +50,24 @@ public class ConnectionCookie {
     }
 
 
+
     // SERVER METHODS
+    public void addUserPlaying(int userID)
+    {
+        this.isPlaying.put(userID, true);
+    }
+
+    public void setUserPlaying(int userID, boolean isPlaying)
+    {
+        this.isPlaying.remove(userID);
+        this.isPlaying.put(userID, isPlaying);
+    }
+
+    public boolean isUserPlaying(int userID)
+    {
+        return this.isPlaying.get(userID);
+    }
+
     public boolean isUserLoggedIn(String username)
     {
         return this.userNameID.containsKey(username);
@@ -87,11 +106,11 @@ public class ConnectionCookie {
 
     // OTHER METHODS
     public static int getScreenWidth() {
-        return screenWidth;
+        return SCREENWIDTH;
     }
 
     public static int getScreenHeight() {
-        return screenHeight;
+        return SCREENHEIGHT;
     }
 
 

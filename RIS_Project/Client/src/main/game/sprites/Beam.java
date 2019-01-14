@@ -1,7 +1,7 @@
 package main.game.sprites;
 
-import main.game.sprites.type.ObjectType;
 import main.game.sprites.type.MovingObject;
+import main.game.sprites.type.ObjectType;
 
 public class Beam extends MovingObject {
 
@@ -15,7 +15,7 @@ public class Beam extends MovingObject {
 
     public Beam(int id, ObjectType type, int playerID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, double dx, double dy, double velocity)
     {
-        super(id, type, imgFileName, imageWidth, imageHeight, xPos, yPos, 10, 0);
+        super(id, type, imgFileName, imageWidth, imageHeight, xPos, yPos, 10);
 
         this.playerID = playerID;
 

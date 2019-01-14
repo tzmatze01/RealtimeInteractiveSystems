@@ -1,8 +1,8 @@
 package main.messages;
 
 import main.messages.type.KeyEventType;
+import main.messages.type.Message;
 import main.messages.type.MessageType;
-import main.network.ConnectionCookie;
 
 public class KeyEventMessage extends Message {
 

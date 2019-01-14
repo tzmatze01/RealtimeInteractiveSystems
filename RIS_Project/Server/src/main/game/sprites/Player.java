@@ -13,7 +13,7 @@ import main.game.sprites.type.MovingObject;
 
 public class Player extends MovingObject {
 
-    private int playerID;
+    //private int playerID;
 
     private int dMovement;
     private int dRotation;
@@ -32,11 +32,12 @@ public class Player extends MovingObject {
 
     private MediaPlayer mp;
 
+    private int beamCounter;
 
     public Player(int playerID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy, int velocity) {
-        super(ObjectType.PLAYER, imgFileName, imageWidth, imageHeight, xPos, yPos, energy, 0);
+        super(playerID, ObjectType.PLAYER, imgFileName, imageWidth, imageHeight, xPos, yPos, energy, 0);
 
-        this.playerID = playerID;
+        //this.playerID = playerID;
 
         this.rotation = 0;
         this.oldRotation = 0;
@@ -45,6 +46,7 @@ public class Player extends MovingObject {
 
         this.projectiles = new ArrayList<>();
 
+        this.beamCounter = 0;
         //loadSound(filename);
     }
 
@@ -104,6 +106,8 @@ public class Player extends MovingObject {
 
     private void shoot()
     {
+        beamCounter++;
+
         double dx = 0;
         double dy = 0;
 
@@ -128,7 +132,7 @@ public class Player extends MovingObject {
             dy -= ddy;
         }
 
-        projectiles.add(new Beam(ObjectType.PLAYER_BEAM, playerID,"beam", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 6));
+        projectiles.add(new Beam(beamCounter, ObjectType.PLAYER_BEAM, getId(),"beam", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 6));
     }
 
     public double getRotation()
@@ -141,9 +145,11 @@ public class Player extends MovingObject {
         return this.projectiles;
     }
 
+    /*
     public int getPlayerID() {
         return playerID;
     }
+    */
 
     public void reduceGamePoints(int amount)
     {

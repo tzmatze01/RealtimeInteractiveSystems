@@ -11,6 +11,8 @@ import java.util.Set;
 
 public abstract class MovingObject {
 
+    private int id;
+
     private ObjectType type;
     //private Image image;
     private Image hb_image;
@@ -29,8 +31,9 @@ public abstract class MovingObject {
     private Set<Point> relevantPoints;
 
 
-    public MovingObject(ObjectType type, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy, int gamePoints)
+    public MovingObject(int id, ObjectType type, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy, int gamePoints)
     {
+        this.id = id;
         this.type = type;
 
         this.w = imageWidth;
@@ -228,4 +231,7 @@ public abstract class MovingObject {
         return false;
     }
 
+    public int getId() {
+        return id;
+    }
 }

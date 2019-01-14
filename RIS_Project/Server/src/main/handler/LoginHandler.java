@@ -3,7 +3,7 @@ package main.handler;
 import main.game.World;
 import main.network.ConnectionCookie;
 import main.messages.LoginMessage;
-import main.messages.Message;
+import main.messages.type.Message;
 import main.messages.type.MessageType;
 
 public class LoginHandler<T extends Message> extends NetworkMessageHandler<T> {

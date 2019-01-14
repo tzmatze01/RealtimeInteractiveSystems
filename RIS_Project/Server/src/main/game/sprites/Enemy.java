@@ -10,7 +10,7 @@ import java.util.List;
 public class Enemy extends MovingObject {
 
 
-    private int enemyID;
+    //private int enemyID;
 
     private double velocity;
     private int rotation;
@@ -31,11 +31,12 @@ public class Enemy extends MovingObject {
 
     private static int PLAYER_MIN_DIST = 150;
 
+    private int beamCounter;
 
     public Enemy(int enemyID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy, int gamePoints, double velocity, int focusPlayer, int shootingDurationInMS) {
-        super(ObjectType.ENEMY, imgFileName, imageWidth, imageHeight, xPos, yPos, energy, gamePoints);
+        super(enemyID, ObjectType.ENEMY, imgFileName, imageWidth, imageHeight, xPos, yPos, energy, gamePoints);
 
-        this.enemyID = enemyID;
+        //this.enemyID = enemyID;
 
         this.velocity = velocity;
         this.focusPlayer = focusPlayer;
@@ -47,6 +48,8 @@ public class Enemy extends MovingObject {
         this.nextShootTime = System.currentTimeMillis() + shootingDurationInMS;
 
         this.projectiles = new ArrayList<>();
+
+        beamCounter = 0;
     }
 
     private int calcQuadrantAngleCorrection(int quadrant, double angle)
@@ -146,6 +149,8 @@ public class Enemy extends MovingObject {
 
     private void shoot()
     {
+        beamCounter++;
+
         // TODO shoot faster when player is closer
         this.nextShootTime = System.currentTimeMillis() + shootingDurationInMS;
 
@@ -173,7 +178,7 @@ public class Enemy extends MovingObject {
             dy += ddy;
         }
 
-        projectiles.add(new Beam(ObjectType.ENEMY_BEAM, getEnemyID(),"beam", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 5));
+        projectiles.add(new Beam(beamCounter, ObjectType.ENEMY_BEAM, getId(),"beam", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 5));
     }
 
     public int getFocusPlayer() {
@@ -191,9 +196,11 @@ public class Enemy extends MovingObject {
 
     }
 
+    /*
     public int getEnemyID() {
         return enemyID;
     }
+    */
 
     public List<Beam> getProjectiles()
     {

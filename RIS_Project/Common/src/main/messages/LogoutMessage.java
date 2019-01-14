@@ -1,5 +1,6 @@
 package main.messages;
 
+import main.messages.type.Message;
 import main.messages.type.MessageType;
 
 public class LogoutMessage extends Message {

@@ -1,9 +1,11 @@
 package main.client;
 
+import main.game.World;
 import main.handler.NetworkMessageHandler;
 import main.manager.Manager;
 import main.messages.*;
 import main.messages.type.KeyEventType;
+import main.messages.type.Message;
 import main.messages.type.MessageType;
 import main.network.ConnectionCookie;
 
@@ -17,7 +19,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.*;
 
-public class ClientManager extends JPanel implements KeyListener, Manager {
+public class ClientManager implements KeyListener, Manager {
 
 
     Map<MessageType, NetworkMessageHandler> listeners;
@@ -33,11 +35,14 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
     private ObjectInputStream ois = null;
 
     private ConnectionCookie cc;
+    private World world;
 
     private Image img;
 
-    public ClientManager(String address, int port)
+    public ClientManager(String address, int port, World world)
     {
+        this.world = world;
+
         this.listeners = new HashMap<>();
         this.isAlive = true;
         this.loggedIn = false;
@@ -58,6 +63,7 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
 
     }
 
+    /*
     @Override
     public void paintComponent(Graphics g) {
 
@@ -87,6 +93,7 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
 
         g2d.drawOval(100, 100, 10, 10);
     }
+    */
 
     @Override
     public void run() {
@@ -123,7 +130,6 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
 
         while(isAlive && cc.isLoggedIn()) {
 
-            System.out.println("in big while loop");
             // TODO print out ois ?? and update gui
 
             // TODO check if game started
@@ -131,6 +137,7 @@ public class ClientManager extends JPanel implements KeyListener, Manager {
             Message message = readFromOIS();
             listeners.get(message.getType()).addMessage(message);
 
+            System.out.println("mmsg type: "+message.getType());
         }
 
     }

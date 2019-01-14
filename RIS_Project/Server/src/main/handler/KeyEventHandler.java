@@ -2,12 +2,10 @@ package main.handler;
 
 import main.game.World;
 import main.messages.KeyEventMessage;
-import main.messages.Message;
+import main.messages.type.Message;
 import main.messages.type.KeyEventType;
 import main.messages.type.MessageType;
 import main.network.ConnectionCookie;
-
-import java.awt.event.KeyEvent;
 
 public class KeyEventHandler<T extends Message> extends NetworkMessageHandler<T> {
 
@@ -31,6 +29,7 @@ public class KeyEventHandler<T extends Message> extends NetworkMessageHandler<T>
             world.keyReleased(message.getUserID(), ((KeyEventMessage)message).getKeyCode());
 
         System.out.println("Movement Handler: "+message.getType());
+
         /*
 
         int keyCode = ((KeyEventMessage)message).getKeyCode();

@@ -12,8 +12,8 @@ public class Meteorite extends MovingObject {
 
     private double m;
 
-    public Meteorite(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPosStart, int yPosEnd, double m, double velocity, int energy, int gamePoints) {
-        super(ObjectType.METEORITE, imgFileName, imageWidth, imageHeight, xPos, yPosStart, energy, gamePoints);
+    public Meteorite(int id, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPosStart, int yPosEnd, double m, double velocity, int energy, int gamePoints) {
+        super(id, ObjectType.METEORITE, imgFileName, imageWidth, imageHeight, xPos, yPosStart, energy, gamePoints);
 
         this.yPosStart = yPosStart;
         this.yPosEnd = yPosEnd;

@@ -5,7 +5,6 @@ import main.handler.*;
 import main.messages.KeyEventMessage;
 import main.messages.LoginMessage;
 import main.messages.LogoutMessage;
-import main.messages.MovementMessage;
 import main.network.ConnectionCookie;
 
 import javax.swing.*;
@@ -28,7 +27,7 @@ public class Server implements Runnable, ActionListener {
     private boolean isAlive;
     private List<SocketManager> sockets;
 
-    private List<String> loggedInUsers;
+    //private List<String> loggedInUsers;
     private String[] allowedUserNames;
     private int[][] gamePlan;
 
@@ -36,6 +35,9 @@ public class Server implements Runnable, ActionListener {
 
     private Timer timer;
     private final int DELAY = 10;
+    private final int NUM_GAME_PLAYERS = 1;
+
+    private boolean gameStarted;
 
     ConnectionCookie cc;
 
@@ -50,10 +52,11 @@ public class Server implements Runnable, ActionListener {
 
         this.gamePlan = new int[][]{{10,0,0}, {15,3,0}, {20,5,1}, {25,5,3}};
 
-        this.loggedInUsers = new ArrayList<>();
+        //this.loggedInUsers = new ArrayList<>();
+
+        this.gameStarted = false;
 
         this.cc = new ConnectionCookie();
-
         this.world = new World(cc.getScreenWidth(), cc.getScreenHeight(), gamePlan);
 
         timer = new Timer(DELAY, this);
@@ -89,7 +92,7 @@ public class Server implements Runnable, ActionListener {
 
             LoginHandler<LoginMessage> hLogin = new LoginHandler<>(allowedUserNames, cc, world);
             LogoutHandler<LogoutMessage> hLogout = new LogoutHandler<>(cc);
-            //MovementHandler<MovementMessage> hMovement = new MovementHandler();
+            //MovementHandler<MOMovMessage> hMovement = new MovementHandler();
             KeyEventHandler<KeyEventMessage> hKeyEvent = new KeyEventHandler<>(world, cc);
 
             Thread tLogin = new Thread(hLogin);
@@ -120,9 +123,22 @@ public class Server implements Runnable, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+        // check if enough players are registered
+        if(!gameStarted && cc.countRegisteredUsers() == NUM_GAME_PLAYERS && world.countRegisteredPlayers() == NUM_GAME_PLAYERS)
+            this.gameStarted = true;
+        else if(gameStarted)
+        {
+            world.step();
+
+            for(SocketManager sm : sockets)
+                sm.sendGameUpdates(world.getMessagesPlayer(cc.getUserID(sm.getUserName())));
+        }
+
         //System.out.println("step");
         // TODO check if enouigh players before first step
         // step world step
+
+
         //this.world.step();
 
         //for(SocketManager sm : sockets)

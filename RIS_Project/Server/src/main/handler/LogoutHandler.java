@@ -1,6 +1,6 @@
 package main.handler;
 
-import main.messages.Message;
+import main.messages.type.Message;
 import main.messages.type.MessageType;
 import main.network.ConnectionCookie;
 

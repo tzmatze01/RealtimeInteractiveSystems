@@ -1,4 +1,4 @@
-package main.messages;
+package main.messages.type;
 
 import main.messages.type.MessageType;
 

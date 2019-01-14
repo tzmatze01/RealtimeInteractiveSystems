@@ -4,8 +4,8 @@ import main.game.sprites.type.ObjectType;
 import main.handler.NetworkMessageHandler;
 import main.manager.Manager;
 import main.messages.LoginMessage;
-import main.messages.Message;
-import main.messages.MovementMessage;
+import main.messages.MOMovMessage;
+import main.messages.type.Message;
 import main.messages.type.MessageType;
 import main.network.ConnectionCookie;
 
@@ -14,6 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SocketManager implements Manager {
@@ -30,11 +31,15 @@ public class SocketManager implements Manager {
     private ConnectionCookie cc;
     private String userName;
 
+    private boolean gameStart;
+
     public SocketManager(Socket socket, ConnectionCookie cc) {
 
         this.socket = socket;
         this.listeners = new HashMap<>();
         //this.loggedIn = false;
+
+        this.gameStart = false;
 
         this.cc = cc;
     }
@@ -72,7 +77,7 @@ public class SocketManager implements Manager {
 
         while(cc.isUserLoggedIn(userName))
         {
-            System.out.println("sm in while loop");
+            //System.out.println("sm in while loop");
 
             try
             {
@@ -91,9 +96,33 @@ public class SocketManager implements Manager {
         }
     }
 
-    public void sendGameUpdates()
+    public void sendGameUpdates(List<Message> messages)
     {
-        writeToOOS(new MovementMessage(1, 2, ObjectType.METEORITE, cc.getUserID(userName)));
+        /*
+        if(!gameStart)
+        {
+            // TODO send game init messages
+
+            // TODO cc set userplaying?
+
+            gameStart = true;
+        }
+        else if(gameStart)
+        {
+
+            // 1. check created obj
+            // 2. check (both) player pos & health
+            // 3. check obj, enemies movement
+
+            writeToOOS(new MOMovMessage(1, 2, ObjectType.METEORITE, cc.getUserID(userName)));
+
+            // TODO check player health -> set cc is Playing
+
+        }
+        */
+
+        for(Message m : messages)
+            writeToOOS(m);
     }
 
     private Message readFromOIS()
@@ -142,4 +171,7 @@ public class SocketManager implements Manager {
         }
     }
 
+    public String getUserName() {
+        return userName;
+    }
 }

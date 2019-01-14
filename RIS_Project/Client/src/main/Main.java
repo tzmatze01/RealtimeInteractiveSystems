@@ -1,12 +1,9 @@
 package main;
 
-import main.handler.LoginHandler;
-import main.handler.LogoutHandler;
+import main.game.World;
+import main.handler.*;
 import main.client.ClientManager;
-import main.handler.MovementHandler;
-import main.messages.LoginMessage;
-import main.messages.LogoutMessage;
-import main.messages.MovementMessage;
+import main.messages.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,29 +32,40 @@ public class Main extends JFrame {
         add(world);
         */
 
-        ClientManager clientManager = new ClientManager("localhost", 9090);
+        World world = new World(10);
+        ClientManager clientManager = new ClientManager("localhost", 9090, world);
 
         LoginHandler<LoginMessage> hLogin = new LoginHandler<>();
         LogoutHandler<LogoutMessage> hLogout = new LogoutHandler<>();
-        MovementHandler<MovementMessage> hMovement = new MovementHandler();
+        MODelHandler<MODelMessage> hMODeletion = new MODelHandler<>(world);
+        MOMovHandler<MOMovMessage> hMOMovement = new MOMovHandler<>(world);
+        MONewHandler<MONewMessage> hMONew = new MONewHandler<>(world);
+
 
         Thread tLogin = new Thread(hLogin);
         Thread tLogout = new Thread(hLogout);
-        Thread tMovement = new Thread(hMovement);
+        Thread tDeletion = new Thread(hMODeletion);
+        Thread tMovement = new Thread(hMOMovement);
+        Thread tNew = new Thread(hMONew);
 
         tLogin.start();
         tLogout.start();
+        tDeletion.start();
         tMovement.start();
+        tNew.start();
 
         clientManager.registerMessageHandler(hLogin);
         clientManager.registerMessageHandler(hLogout);
-        clientManager.registerMessageHandler(hMovement);
+        clientManager.registerMessageHandler(hMODeletion);
+        clientManager.registerMessageHandler(hMOMovement);
+        clientManager.registerMessageHandler(hMONew);
 
-        clientManager.addKeyListener(clientManager);
-        clientManager.setFocusable(true);
+        world.addKeyListener(clientManager);
+        //clientManager.addKeyListener(clientManager);
+        world.setFocusable(true);
 
 
-        add(clientManager);
+        add(world);
 
         setSize(800, 600);
 
