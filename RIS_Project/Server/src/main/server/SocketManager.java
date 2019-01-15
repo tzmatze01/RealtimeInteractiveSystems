@@ -18,16 +18,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SocketManager implements Manager {
+public class SocketManager extends Manager {
 
     protected Socket socket;
-    protected Map<MessageType, NetworkMessageHandler> listeners;
 
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
-
-    private boolean isAlive;
-    //private boolean loggedIn;
 
     private ConnectionCookie cc;
     private String userName;
@@ -167,27 +163,6 @@ public class SocketManager implements Manager {
             oos.flush();
         } catch (IOException e) {
             e.printStackTrace();
-        }
-    }
-
-    public void setAlive(boolean alive) {
-        isAlive = alive;
-    }
-
-    public boolean getAlive() {
-        return isAlive;
-    }
-
-    @Override
-    public void registerMessageHandler(NetworkMessageHandler nmh) {
-
-        if(!listeners.containsKey(nmh.getHandledMessageType()))
-        {
-            listeners.put(nmh.getHandledMessageType(), nmh);
-        }
-        else
-        {
-            // TODO Error messages handler already exists
         }
     }
 

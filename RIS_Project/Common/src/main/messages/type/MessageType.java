@@ -7,7 +7,8 @@ public enum MessageType {
     KEY_EVENT(2),
     NEW_MOVING_OBJECT(3),
     DEL_MOVING_OBJECT(4),
-    MOV_MOVING_OBJECT(5);
+    MOV_MOVING_OBJECT(5),
+    INFO_MESSAGE(6);
 
     private int type;
 

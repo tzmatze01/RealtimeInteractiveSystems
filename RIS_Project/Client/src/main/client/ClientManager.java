@@ -19,11 +19,10 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.*;
 
-public class ClientManager implements KeyListener, Manager {
+public class ClientManager extends Manager implements KeyListener {
 
 
-    Map<MessageType, NetworkMessageHandler> listeners;
-    boolean isAlive;
+
     boolean loggedIn;
 
     private Socket socket;
@@ -40,10 +39,9 @@ public class ClientManager implements KeyListener, Manager {
 
     public ClientManager(String address, int port, World world)
     {
+        super();
         this.world = world;
 
-        this.listeners = new HashMap<>();
-        this.isAlive = true;
         this.loggedIn = false;
 
         this.address = address;
@@ -52,8 +50,6 @@ public class ClientManager implements KeyListener, Manager {
         // FIFO
         this.messages = new LinkedList<>();
     }
-
-
 
     @Override
     public void run() {
@@ -188,26 +184,5 @@ public class ClientManager implements KeyListener, Manager {
         }
     }
 
-    @Override
-    public void setAlive(boolean isAlive) {
-        this.isAlive = isAlive;
-    }
 
-    @Override
-    public boolean getAlive() {
-        return this.isAlive;
-    }
-
-    @Override
-    public void registerMessageHandler(NetworkMessageHandler nmh) {
-
-        if(!listeners.containsKey(nmh.getHandledMessageType()))
-        {
-            listeners.put(nmh.getHandledMessageType(), nmh);
-        }
-        else
-        {
-            // TODO Error messages handler already exists
-        }
-    }
 }

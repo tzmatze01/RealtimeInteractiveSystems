@@ -302,7 +302,7 @@ public class World extends JPanel implements ActionListener {
         }
 
 
-        drawHitboxes(g);
+        //drawHitboxes(g);
     }
 
 

@@ -35,7 +35,7 @@ public class Server implements Runnable, ActionListener {
 
     private Timer timer;
     private final int DELAY = 10;
-    private final int NUM_GAME_PLAYERS = 2;
+    private final int NUM_GAME_PLAYERS = 1;
 
     private boolean gameStarted;
 
