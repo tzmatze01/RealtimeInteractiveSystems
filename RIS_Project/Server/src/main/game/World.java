@@ -141,15 +141,21 @@ public class World { // implements KeyListener, ActionListener {
 
     public void addPlayer(int playerID)
     {
+
         players.put(playerID, new Player(playerID,"player", 80, 40, 20,20, PLAYER_ENERGY, PLAYER_VELOCITY));
 
         // add message queue for new player
         messageQueues.put(playerID, new LinkedList<>());
 
+        // send messages of existing players to new player
+        for(Player player : players.values())
+            if(player.getId() != playerID)
+                addMessagePlayer(playerID, new MONewMessage(ObjectType.PLAYER, player.getId(), 20, 20, 100, 80, 40, "player"+player.getId()));
+
         // TODO this might break if userID is generated differently --> LoginHandler
         addMessageAll(new MONewMessage(ObjectType.PLAYER, playerID, 20,20, 100, 80, 40, "player"+playerID));
 
-        //System.out.println("added mq ");
+
     }
 
     private void addMessageAll(Message message)
@@ -193,7 +199,7 @@ public class World { // implements KeyListener, ActionListener {
             mo.move();
             allMovingObjects.add(mo);
 
-            System.out.println(""+mo.getType().toString()+" "+mo.getId()+" x: "+mo.getX()+ " y: "+mo.getY());
+            //System.out.println(""+mo.getType().toString()+" "+mo.getId()+" x: "+mo.getX()+ " y: "+mo.getY());
             addMessageAll(new MOMovMessage(mo.getX(), mo.getY(), 0, mo.getType(), mo.getId()));
         }
 

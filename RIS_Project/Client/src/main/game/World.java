@@ -296,7 +296,7 @@ public class World extends JPanel implements ActionListener {
             int midY = mo.getY() - (mo.getHeight() / 2);
 
 
-            System.out.println(""+mo.getType().toString()+" "+mo.getId()+" x: "+mo.getX()+ " y: "+mo.getY());
+            //System.out.println(""+mo.getType().toString()+" "+mo.getId()+" x: "+mo.getX()+ " y: "+mo.getY());
 
             g2d.drawImage(mo.getImage(), midX, midY, this);
         }
