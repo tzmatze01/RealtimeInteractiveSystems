@@ -35,7 +35,7 @@ public class Server implements Runnable, ActionListener {
 
     private Timer timer;
     private final int DELAY = 10;
-    private final int NUM_GAME_PLAYERS = 1;
+    private final int NUM_GAME_PLAYERS = 2;
 
     private boolean gameStarted;
 
@@ -51,7 +51,7 @@ public class Server implements Runnable, ActionListener {
         this.allowedUserNames = new String[]{"hans", "peter", "test"};
 
         // meteorites, collectable, enemies
-        this.gamePlan = new int[][]{{3,1,1}, {4,2,0}, {5,2,1}, {7,3,2}, {7,5,3}};
+        this.gamePlan = new int[][]{{3,1,0}, {4,2,0}, {5,2,1}, {7,3,2}, {7,5,3}};
 
         //this.loggedInUsers = new ArrayList<>();
 

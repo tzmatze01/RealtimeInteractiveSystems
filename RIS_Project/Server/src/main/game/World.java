@@ -126,7 +126,9 @@ public class World { // implements KeyListener, ActionListener {
     //@Override
     public void keyPressed(int playerID, int keyCode) {
 
-        players.get(playerID).keyPressed(keyCode);
+        // TODO keyEvent messages are still sent, but player is already deleted
+        if(players.get(playerID) != null)
+            players.get(playerID).keyPressed(keyCode);
 
         //for(Player player : players.values())
         //    player.keyPressed(keyCode);
@@ -135,7 +137,8 @@ public class World { // implements KeyListener, ActionListener {
     // @Override
     public void keyReleased(int playerID, int keyCode) {
 
-        players.get(playerID).keyReleased(keyCode);
+        if(players.get(playerID) != null)
+            players.get(playerID).keyReleased(keyCode);
 
         //for(Player player : players.values())
         //    player.keyReleased(keyCode);

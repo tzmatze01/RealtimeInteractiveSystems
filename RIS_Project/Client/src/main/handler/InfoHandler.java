@@ -7,6 +7,7 @@ import main.messages.type.MessageType;
 
 public class InfoHandler<T extends Message> extends NetworkMessageHandler<T> {
 
+    // TODO connection cookie to set game over and lock keyboard input
 
     private World world;
 

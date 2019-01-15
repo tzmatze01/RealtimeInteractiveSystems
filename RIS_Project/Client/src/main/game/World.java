@@ -64,7 +64,11 @@ public class World extends JPanel implements ActionListener {
 
         super.paintComponent(g);
 
+        // TODO not working
+        //g.drawImage(background, 0, 0, null);
+
         doDrawing(g);
+
 
         Toolkit.getDefaultToolkit().sync();
     }
@@ -226,7 +230,7 @@ public class World extends JPanel implements ActionListener {
         //System.out.println("doDrawing");
 
         Graphics2D g2d = (Graphics2D) g.create();
-        //g2d.drawImage(background, 0, 0, this);
+        //g2d.drawImage(background, screenwidth, screenheight, this);
 
 
         for(Player player : players.values()) {

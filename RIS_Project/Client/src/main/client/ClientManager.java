@@ -79,6 +79,7 @@ public class ClientManager extends Manager implements KeyListener {
                 if(((LoginMessage)message).isLoggedIn()) {
                     this.loggedIn = true;
                     this.cc = new ConnectionCookie(message.getUserID(), ((LoginMessage) message).getUserName());
+
                     System.out.println("Logged in with name: "+cc.getUserName());
                 }
         }
