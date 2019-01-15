@@ -149,7 +149,7 @@ public class World extends JPanel implements ActionListener {
 
     public void addEnemyBeam(int enemyID, Beam beam)
     {
-        System.out.println("ADD Enemy "+enemyID+" Beam "+beam.getId());
+        //System.out.println("ADD Enemy "+enemyID+" Beam "+beam.getId());
 
         enemies.get(enemyID).addBeam(beam);
     }
@@ -162,7 +162,7 @@ public class World extends JPanel implements ActionListener {
             System.out.print(b.getId()+ " ");
         */
 
-        System.out.println("DEL Enemy "+enemyID+" Beam "+beamID);
+        //System.out.println("DEL Enemy "+enemyID+" Beam "+beamID);
 
         enemies.get(enemyID).removeBeam(beamID);
     }
@@ -294,6 +294,9 @@ public class World extends JPanel implements ActionListener {
         {
             int midX = mo.getX() - (mo.getWidth() / 2);
             int midY = mo.getY() - (mo.getHeight() / 2);
+
+
+            System.out.println(""+mo.getType().toString()+" "+mo.getId()+" x: "+mo.getX()+ " y: "+mo.getY());
 
             g2d.drawImage(mo.getImage(), midX, midY, this);
         }

@@ -30,7 +30,7 @@ public class MOMovHandler<T extends Message> extends NetworkMessageHandler<T> {
                 break;
             case COLLECTABLE:
             case METEORITE:
-                world.setMOPos(m.getObjectID(), m.getxPos(), m.getxPos());
+                world.setMOPos(m.getObjectID(), m.getxPos(), m.getyPos());
                 break;
         }
     }
