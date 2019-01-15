@@ -15,7 +15,7 @@ public class MOMovMessage extends Message {
 
 
     // Movement Messages are only sent for players, enemies - to reduce network traffic
-
+    // v2 also for collectables, meteorites
     public MOMovMessage(int xPos, int yPos, double rotation, ObjectType objectType, int objectID)
     {
         // gets onl send by socketHandler, no userID  needed

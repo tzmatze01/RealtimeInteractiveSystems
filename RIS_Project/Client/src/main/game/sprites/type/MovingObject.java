@@ -56,7 +56,7 @@ public abstract class MovingObject {
     private void loadImage(String imgFileName)
     {
         //String hitboxFileName = imgFileName + ".jpg";
-
+        //System.out.println("load image: "+imgFileName+".png");
 
         ImageIcon ii = new ImageIcon("Client/src/main/game/resources/"+imgFileName+".png");
         //ImageIcon hb_ii = new ImageIcon("Server/src/main/game/resources/"+hitboxFileName);

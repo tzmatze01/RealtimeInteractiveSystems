@@ -24,6 +24,7 @@ public class World extends JPanel implements ActionListener {
     private Map<Integer, MovingObject> movingObjects;
 
     private Image background;
+    Image xximg;
 
     private int screenwidth;
     private int screenheight;
@@ -46,6 +47,12 @@ public class World extends JPanel implements ActionListener {
 
         ImageIcon ii = new ImageIcon("Client/src/main/resources/space.jpeg");
         this.background = ii.getImage().getScaledInstance(screenwidth, screenheight, 0);
+
+
+        ImageIcon iix = new ImageIcon("Client/src/main/game/resources/meteorite1.png");
+        //ImageIcon hb_ii = new ImageIcon("Server/src/main/game/resources/"+hitboxFileName);
+
+        xximg = ii.getImage().getScaledInstance(50, 50 , 0);
 
         timer = new Timer(DELAY, this);
         timer.start();
@@ -93,15 +100,18 @@ public class World extends JPanel implements ActionListener {
 
     public void step() {
 
+        // pos beams of player are not sent over network
         for (Player player : players.values()) {
             player.move();
         }
 
+        /*
         for (MovingObject mo : movingObjects.values()) {
             mo.move();
         }
+        */
 
-
+        // pos beams of player are not sent over network
         for (Enemy enemy : enemies.values()) {
 
             enemy.move();
@@ -143,6 +153,10 @@ public class World extends JPanel implements ActionListener {
 
     public void removeEnemyBeam(int enemyID, int beamID)
     {
+        System.out.print("player beam keys: ");
+        for(Beam b : enemies.get(enemyID).getProjectiles())
+            System.out.print(b.getId());
+
         enemies.get(enemyID).removeBeam(beamID);
     }
 
@@ -153,6 +167,10 @@ public class World extends JPanel implements ActionListener {
 
     public void removePlayerBeam(int playerID, int beamID)
     {
+        System.out.print("player beam keys: ");
+        for(Beam b : players.get(playerID).getProjectiles())
+            System.out.print(b.getId());
+
         players.get(playerID).removeBeam(beamID);
     }
 
@@ -167,6 +185,13 @@ public class World extends JPanel implements ActionListener {
         }
     }
 
+    public void setMOPos(int moID, int xPos, int yPos)
+    {
+        if(movingObjects.containsKey(moID)) {
+            movingObjects.get(moID).setXPos(xPos);
+            movingObjects.get(moID).setYPos(yPos);
+        }
+    }
     public void addPlayerPoints(int playerID, int points)
     {
         if(players.containsKey(playerID))
@@ -186,7 +211,8 @@ public class World extends JPanel implements ActionListener {
 
         Graphics2D g2d = (Graphics2D) g.create();
 
-        g.drawImage(background, 0, 0, this);
+        //g2d.drawImage(background, 0, 0, this);
+        g2d.drawImage(xximg, 50, 50, this);
 
         for(Player player : players.values()) {
 
@@ -216,10 +242,9 @@ public class World extends JPanel implements ActionListener {
 
             g2d.drawImage(player.getImage(), imgW, imgH, this);
 
-            g2d.setColor(Color.WHITE);
-            g2d.draw(player.getRectangleBounds());
-
-            g2d.drawOval(20, 20, 5,5);
+            //g2d.setColor(Color.WHITE);
+            //g2d.draw(player.getRectangleBounds());
+            //g2d.drawOval(20, 20, 5,5);
         }
 
 
@@ -264,11 +289,11 @@ public class World extends JPanel implements ActionListener {
         }
 
 
-        //drawHitboxes(g);
+        drawHitboxes(g);
     }
 
 
-    /*
+
     private void drawHitboxes(Graphics g)
     {
         Graphics2D g2d = (Graphics2D) g.create();
@@ -279,16 +304,17 @@ public class World extends JPanel implements ActionListener {
             g2d.rotate(player.getRotation(), player.getX(), player.getY());
             //g2d.draw(player.getRectangleBounds());
 
-            for(Point p : player.getHitboxPoints())
-                g2d.drawOval(p.x, p.y, 1,1);
+            //for(Point p : player.getHitboxPoints())
+            //    g2d.drawOval(p.x, p.y, 1,1);
 
-            g2d = (Graphics2D) g.create();
-            g2d.setColor(Color.GREEN);
+            //g2d = (Graphics2D) g.create();
+            //g2d.setColor(Color.GREEN);
 
-            for(Beam b : player.getProjectiles()) {
-                g2d.draw(b.getRectangleBounds());
-                g2d.drawOval(b.getX(), b.getY(), 1, 1);
-            }
+
+            //for(Beam b : player.getProjectiles()) {
+            //    g2d.draw(b.getRectangleBounds());
+            //    g2d.drawOval(b.getX(), b.getY(), 1, 1);
+            //}
 
         }
 
@@ -296,12 +322,12 @@ public class World extends JPanel implements ActionListener {
         g2d = (Graphics2D) g.create();
         g2d.setColor(Color.RED);
 
-        for(MovingObject mo : movingObjects)
+        for(MovingObject mo : movingObjects.values())
         {
             g2d.draw(mo.getRectangleBounds());
 
-            for(Point p : mo.getHitboxPoints())
-                g2d.drawOval(p.x, p.y, 1,1);
+            //for(Point p : mo.getHitboxPoints())
+            //    g2d.drawOval(p.x, p.y, 1,1);
         }
 
 
@@ -311,13 +337,13 @@ public class World extends JPanel implements ActionListener {
 
         for(Enemy enemy : enemies.values())
         {
-            //g2d.draw(enemy.getRectangleBounds());
+            g2d.draw(enemy.getRectangleBounds());
             //g2d.draw(enemy.scanNeighborhood());
 
-            for(Point p : enemy.getHitboxPoints())
-                g2d.drawOval(p.x, p.y, 1, 1);
+            //for(Point p : enemy.getHitboxPoints())
+            //    g2d.drawOval(p.x, p.y, 1, 1);
         }
     }
-    */
+
 
 }

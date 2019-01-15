@@ -31,6 +31,8 @@ public class KeyEventHandler<T extends Message> extends NetworkMessageHandler<T>
             //System.out.println("Key released");
             world.keyReleased(message.getUserID(), ((KeyEventMessage) message).getKeyCode());
         }
+
+        //System.out.println("KeyEvent Listener got message");
     }
 
     @Override

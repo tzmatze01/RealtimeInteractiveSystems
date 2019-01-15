@@ -18,6 +18,8 @@ public class MOMovHandler<T extends Message> extends NetworkMessageHandler<T> {
 
         MOMovMessage m = (MOMovMessage)message;
 
+        //System.out.println("move: "+m.getObjectType()+" to x: "+m.getxPos()+" y: "+m.getyPos());
+
         switch (m.getObjectType())
         {
             case PLAYER:
@@ -25,6 +27,11 @@ public class MOMovHandler<T extends Message> extends NetworkMessageHandler<T> {
                 break;
             case ENEMY:
                 world.setEnemyPos(m.getObjectID(), m.getxPos(), m.getyPos(), m.getRotation());
+                break;
+            case COLLECTABLE:
+            case METEORITE:
+                world.setMOPos(m.getObjectID(), m.getxPos(), m.getxPos());
+                break;
         }
     }
 

@@ -20,6 +20,8 @@ public class MONewHandler<T extends Message> extends NetworkMessageHandler<T> {
 
         MONewMessage m = (MONewMessage)message;
 
+        System.out.println("got new: "+m.getObjectType().toString()+" id: "+m.getObjectID());
+
         switch (m.getObjectType())
         {
             case METEORITE:

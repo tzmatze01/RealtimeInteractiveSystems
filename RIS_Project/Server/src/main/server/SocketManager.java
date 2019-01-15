@@ -4,6 +4,7 @@ import main.game.sprites.type.ObjectType;
 import main.handler.NetworkMessageHandler;
 import main.manager.Manager;
 import main.messages.LoginMessage;
+import main.messages.MODelMessage;
 import main.messages.MOMovMessage;
 import main.messages.type.Message;
 import main.messages.type.MessageType;
@@ -74,8 +75,10 @@ public class SocketManager implements Manager {
 
         System.out.println("user: "+userName+" is logged in!");
         writeToOOS(new LoginMessage(userName, true, cc.getUserID(userName)));
+        cc.setUserPlaying(cc.getUserID(userName), true);
 
-        while(cc.isUserLoggedIn(userName))
+        // TODO cc is playing
+        while(cc.isUserLoggedIn(userName) && cc.isUserPlaying(cc.getUserID(userName)))
         {
             //System.out.println("sm in while loop");
 
@@ -83,8 +86,12 @@ public class SocketManager implements Manager {
             {
                 message = (Message)ois.readObject();
 
-                if(!listeners.containsKey(message.getType()))
-                    System.out.println("found no listner for: "+message.getType());
+                //if(!listeners.containsKey(message.getType()))
+                //System.out.println("found no listner for: "+message.getType());
+
+                // listener bleiben registriert
+                //System.out.println("listnerers: "+listeners.keySet().toString());
+                //System.out.println("mssg to string: "+message.toString());
 
                 NetworkMessageHandler nmh = listeners.get(message.getType());
                 nmh.addMessage(message);
@@ -125,8 +132,14 @@ public class SocketManager implements Manager {
         }
         */
 
-        for(Message m : messages)
+        for(Message m : messages) {
+
+            // check for player died message
+            if(m.getType() == MessageType.DEL_MOVING_OBJECT && ((MODelMessage)m).getObjectID() == 666)
+                cc.setUserPlaying(cc.getUserID(userName), false);
+
             writeToOOS(m);
+        }
     }
 
     private Message readFromOIS()

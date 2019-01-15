@@ -21,6 +21,8 @@ public class MODelHandler<T extends Message> extends NetworkMessageHandler<T> {
     protected void handleMessage(T message) {
         MODelMessage m = (MODelMessage) message;
 
+        System.out.println("Delete object "+m.getObjectType().toString()+" with id "+m.getObjectID());
+
         switch (m.getObjectType())
         {
             case METEORITE:

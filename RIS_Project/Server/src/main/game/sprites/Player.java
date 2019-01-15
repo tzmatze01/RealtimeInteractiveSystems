@@ -179,33 +179,37 @@ public class Player extends MovingObject {
 
         //int keyCode = e.getKeyCode();
 
+        //System.out.println("got key: "+keyCode);
+
         switch( keyCode ) {
             case KeyEvent.VK_W:
             case KeyEvent.VK_UP:
-                System.out.println("player up.");
+                //System.out.println("player up.");
                 dMovement = velocity;
                 break;
             case KeyEvent.VK_S:
             case KeyEvent.VK_DOWN:
-                System.out.println("player down.");
+                //System.out.println("player down.");
                 dMovement = -velocity;
                 break;
             case KeyEvent.VK_A:
             case KeyEvent.VK_LEFT:
-                System.out.println("player left.");
+                //System.out.println("player left.");
                 dRotation = -2;
                 break;
             case KeyEvent.VK_D:
             case KeyEvent.VK_RIGHT :
-                System.out.println("player right.");
+                //System.out.println("player right.");
                 dRotation = 2;
                 break;
             case KeyEvent.VK_SPACE:
-                System.out.println("player shoot.");
+                //System.out.println("player shoot.");
                 shoot();
                 break;
 
         }
+
+        //System.out.println();
     }
 
     public void keyReleased(int keyCode) {
