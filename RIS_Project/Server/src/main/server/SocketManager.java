@@ -135,8 +135,11 @@ public class SocketManager implements Manager {
         for(Message m : messages) {
 
             // check for player died message
-            if(m.getType() == MessageType.DEL_MOVING_OBJECT && ((MODelMessage)m).getObjectID() == 666)
+            if(m.getType() == MessageType.DEL_MOVING_OBJECT && ((MODelMessage)m).getObjectID() == -1)
                 cc.setUserPlaying(cc.getUserID(userName), false);
+
+            //if(m.getType() != MessageType.MOV_MOVING_OBJECT)
+            //    System.out.println("sent "+m.getType()+" to user "+userName);
 
             writeToOOS(m);
         }

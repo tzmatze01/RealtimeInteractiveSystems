@@ -20,7 +20,7 @@ public class MONewHandler<T extends Message> extends NetworkMessageHandler<T> {
 
         MONewMessage m = (MONewMessage)message;
 
-        System.out.println("got new: "+m.getObjectType().toString()+" id: "+m.getObjectID());
+        //System.out.println("New object: "+m.getObjectType().toString()+" with id "+m.getObjectID());
 
         switch (m.getObjectType())
         {

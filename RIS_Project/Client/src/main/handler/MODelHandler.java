@@ -29,7 +29,7 @@ public class MODelHandler<T extends Message> extends NetworkMessageHandler<T> {
                 world.removeMeteorite(m.getObjectID());
                 break;
             case ENEMY_BEAM:
-                world.removeEnemyBeam(m.getShooterID(), m.getObjectID());
+                world.removeEnemyBeam(m.getOwnerID(), m.getObjectID());
 
                 // TODO possibly faulty
                 //if(m.madeDamage())
@@ -37,7 +37,7 @@ public class MODelHandler<T extends Message> extends NetworkMessageHandler<T> {
 
                 break;
             case PLAYER_BEAM:
-                world.removePlayerBeam(m.getShooterID(), m.getObjectID());
+                world.removePlayerBeam(m.getOwnerID(), m.getObjectID());
 
                 if(m.madePoints())
                     world.addPlayerPoints(m.getShooterID(), m.getAddedPlayerPoints());

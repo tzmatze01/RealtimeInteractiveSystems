@@ -97,7 +97,8 @@ public class ClientManager implements KeyListener, Manager {
             Message message = readFromOIS();
             listeners.get(message.getType()).addMessage(message);
 
-            //System.out.println("mmsg type: "+message.getType());
+            //if(message.getType() != MessageType.MOV_MOVING_OBJECT)
+            //    System.out.println("mmsg type: "+message.getType());
         }
 
     }

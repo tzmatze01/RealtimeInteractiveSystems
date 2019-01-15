@@ -7,6 +7,7 @@ import main.messages.MODelMessage;
 import main.messages.MOMovMessage;
 import main.messages.MONewMessage;
 import main.messages.type.Message;
+import main.messages.type.MessageType;
 
 import java.awt.event.*;
 import java.util.*;
@@ -56,7 +57,7 @@ public class World { // implements KeyListener, ActionListener {
     private int enemyCounter;
 
     // message queues for registered players
-    private Map<Integer, LinkedList<Message>> messageQueues;
+    private ConcurrentMap<Integer, LinkedList<Message>> messageQueues;
 
     public World(int screenWidth, int screenHeight, int[][] gamePlan)
     {
@@ -76,13 +77,14 @@ public class World { // implements KeyListener, ActionListener {
         this.moCounter = 0;
         this.enemyCounter = 0;
 
-        this.messageQueues = new HashMap<>();
+        this.messageQueues = new ConcurrentHashMap<>();
         //initBoard();
     }
 
     public List<Message> getMessagesPlayer(int playerID)
     {
         //System.out.println("mq size "+messageQueues.size());
+        //List<Message> newMessages = (List<Message>) messageQueues.get(playerID).clone();
 
         List<Message> newMessages = (List<Message>) messageQueues.get(playerID).clone();
         messageQueues.get(playerID).clear();
@@ -152,6 +154,9 @@ public class World { // implements KeyListener, ActionListener {
 
     private void addMessageAll(Message message)
     {
+        //if(message.getType() != MessageType.MOV_MOVING_OBJECT)
+        //    System.out.println("Queue both: "+message.getType());
+
         for(List<Message> messageQueue : messageQueues.values())
             messageQueue.add(message);
     }
@@ -178,9 +183,9 @@ public class World { // implements KeyListener, ActionListener {
 
             addMessageAll(new MOMovMessage(player.getX(), player.getY(), player.getRotation(), ObjectType.PLAYER, player.getId()));
 
-            for(Beam b : player.getNewBeams())
+            for(Beam b : player.getNewBeams()) {
                 addMessageAll(new MONewMessage(ObjectType.PLAYER_BEAM, b.getId(), player.getId(), b.getX(), b.getY(), b.getDx(), b.getDy(), b.getVelocity(), b.getEnergy(), b.getWidth(), b.getHeight(), "beam"));
-
+                }
         }
 
         for(MovingObject mo : movingObjects)
@@ -204,8 +209,10 @@ public class World { // implements KeyListener, ActionListener {
 
             addMessageAll(new MOMovMessage(enemy.getX(), enemy.getY(), enemy.getRotation(), ObjectType.ENEMY, enemy.getId()));
 
-            for(Beam b : enemy.getNewBeams())
+            for(Beam b : enemy.getNewBeams()) {
                 addMessageAll(new MONewMessage(ObjectType.ENEMY_BEAM, b.getId(), enemy.getId(), b.getX(), b.getY(), b.getDx(), b.getDy(), b.getVelocity(), b.getEnergy(), b.getWidth(), b.getHeight(), "beam"));
+                System.out.println("ADD Enemy "+enemy.getId()+" Beam "+b.getId());
+            }
         }
 
         generateGameObjects();
@@ -229,8 +236,6 @@ public class World { // implements KeyListener, ActionListener {
             if(mo.getX() < -(mo.getWidth() / 2) || mo.getX() >= (screenWidth + (mo.getWidth() / 2)) ||
                     mo.getY() < -(mo.getHeight() / 2) || mo.getY() >= (screenHeight + (mo.getHeight() / 2))) {
                 delMovingObjects.add(mo);
-
-                addMessageAll(new MODelMessage(mo.getType(), mo.getId()));
             }
             else if(mo.getEnergy() <= 0) {
                 delMovingObjects.add(mo);
@@ -242,22 +247,36 @@ public class World { // implements KeyListener, ActionListener {
         // delete moving objects
         for(MovingObject mo : delMovingObjects)
         {
+            //addMessageAll(new MODelMessage(mo.getType(), mo.getId()));
+
             if(mo.getType() == ObjectType.PLAYER_BEAM)
             {
                 int playerID = ((Beam)mo).getPlayerID();
                 players.get(playerID).getProjectiles().remove(mo);
+
+
+                addMessageAll(new MODelMessage(ObjectType.PLAYER_BEAM, mo.getId(), playerID));
             }
             else if(mo.getType() == ObjectType.ENEMY_BEAM)
             {
                 int enemyID = ((Beam)mo).getPlayerID();
                 enemies.get(enemyID).getProjectiles().remove(mo);
+
+                //System.out.println("DEL Enemy "+enemyID+" Beam "+mo.getId());
+                addMessageAll(new MODelMessage(ObjectType.ENEMY_BEAM, mo.getId(), enemyID));
             }
-            else if(mo.getType() == ObjectType.METEORITE || mo.getType() == ObjectType.COLLECTABLE)
+            else if(mo.getType() == ObjectType.METEORITE || mo.getType() == ObjectType.COLLECTABLE) {
                 movingObjects.remove(mo);
+
+
+                addMessageAll(new MODelMessage(mo.getType(), mo.getId(), 0));
+            }
             else if(mo.getType() == ObjectType.ENEMY)
             {
                 int enemyID = ((Enemy)mo).getId();
                 enemies.remove(enemyID);
+
+                addMessageAll(new MODelMessage(ObjectType.ENEMY, mo.getId(), 0));
             }
             else if(mo.getType() == ObjectType.PLAYER)
             {
@@ -267,10 +286,10 @@ public class World { // implements KeyListener, ActionListener {
                 System.out.println("player "+mo.getId()+" died!");
 
                 // add message to queue for corresponding listener to alter connection cookie
-                addMessagePlayer(mo.getId(), new MODelMessage(ObjectType.PLAYER, 666));
+                addMessagePlayer(mo.getId(), new MODelMessage(ObjectType.PLAYER, -1, -1));
 
                 // add message to all players that player died
-                addMessageAll(new MODelMessage(ObjectType.PLAYER, mo.getId()));
+                //addMessageAll(new MODelMessage(ObjectType.PLAYER, mo.getId()));
             }
 
             // TODO player dies? - display tomb
@@ -293,7 +312,7 @@ public class World { // implements KeyListener, ActionListener {
 
                     if(collMO.getRectangleBounds().intersects(mo.getRectangleBounds()))
                     {
-                        System.out.println(""+mo.getType()+" hit "+collMO.getType());
+                        //System.out.println(""+mo.getType()+" hit "+collMO.getType());
 
                         switch (mo.getType()) {
                             case PLAYER_BEAM:
@@ -319,11 +338,11 @@ public class World { // implements KeyListener, ActionListener {
                                             // when enemy or meteorite dies, send DEL message with points to player
 
                                             // add message for del collMO with points
-                                            addMessageAll(new MODelMessage(collMO.getType(), collMO.getId(), 0, collMO.getGamePoints()));
+                                            //addMessageAll(new MODelMessage(collMO.getType(), collMO.getId(), 0, collMO.getGamePoints()));
                                         }
 
                                         // add message for del beam without any effect
-                                        addMessageAll(new MODelMessage(ObjectType.PLAYER_BEAM, mo.getId(), ((Beam)mo).getPlayerID()));
+                                        //addMessageAll(new MODelMessage(ObjectType.PLAYER_BEAM, mo.getId(), ((Beam)mo).getPlayerID()));
                                     }
                                 }
                                 break;
@@ -336,7 +355,7 @@ public class World { // implements KeyListener, ActionListener {
                                     players.get(playerID).addGamePoints(collMO.getGamePoints());
 
                                     // add message to corresponding player for del collectable with points
-                                    addMessagePlayer(playerID, new MODelMessage(ObjectType.COLLECTABLE, collMO.getId(), mo.getId(), 0, collMO.getGamePoints()));
+                                    //addMessagePlayer(playerID, new MODelMessage(ObjectType.COLLECTABLE, collMO.getId(), mo.getId(), 0, collMO.getGamePoints()));
                                 }
                                 if (collMO.getType() == ObjectType.METEORITE) {
 
@@ -348,8 +367,8 @@ public class World { // implements KeyListener, ActionListener {
                                         mo.reduceEnergy(meteoriteEnergy);
                                         collMO.reduceEnergy(playerEnergy);
 
-                                        if(collMO.getEnergy() <= 0)
-                                            addMessageAll(new MODelMessage(ObjectType.METEORITE, collMO.getId()));
+                                        //if(collMO.getEnergy() <= 0)
+                                        //    addMessageAll(new MODelMessage(ObjectType.METEORITE, collMO.getId()));
                                     }
                                 }
                                 if (collMO.getType() == ObjectType.ENEMY_BEAM) {
@@ -361,7 +380,6 @@ public class World { // implements KeyListener, ActionListener {
 
                                         // add message to corresponding player for del enemy beam with beam damage
                                         //addMessagePlayer(mo.getId(), new MODelMessage(ObjectType.ENEMY_BEAM, collMO.getId(), ((Beam)collMO).getPlayerID(), collMO.getEnergy(), 0));
-                                        addMessagePlayer(mo.getId(), new MODelMessage(ObjectType.ENEMY_BEAM, collMO.getId(), ((Beam)collMO).getPlayerID(), collMO.getEnergy(), 0));
                                     }
                                 }
                                 break;
@@ -435,7 +453,7 @@ public class World { // implements KeyListener, ActionListener {
         addMessageAll(new MONewMessage(ObjectType.METEORITE, meteoriteNumber, screenWidth + (imgWidth / 2), yStart, yEnd, m, velocity, 100, imgWidth, imgHeight, "meteorite"+meteoriteNumber));
 
 
-        System.out.println("created meteorite: "+moCounter);
+        //System.out.println("created meteorite: "+moCounter);
         return new Meteorite(moCounter,"meteorite"+meteoriteNumber, imgWidth, imgHeight, screenWidth + (imgWidth / 2), yStart, yEnd, m, velocity, 100, 10);
     }
 
@@ -460,7 +478,7 @@ public class World { // implements KeyListener, ActionListener {
 
         addMessageAll(new MONewMessage(ObjectType.COLLECTABLE, collectableNumber, screenWidth + (imgSize / 2), yStart, yEnd, m, COLLECTABLE_VELOCITY, 10, imgSize, imgSize, "artifact"+collectableNumber));
 
-        System.out.println("created collectable: "+moCounter);
+        //System.out.println("created collectable: "+moCounter);
         return new Collectable(moCounter,"artifact"+collectableNumber, imgSize, imgSize, screenWidth + (imgSize / 2), yStart, yEnd, m, COLLECTABLE_VELOCITY, 10, COLLECTABLE_POINTS);
     }
 
@@ -475,7 +493,7 @@ public class World { // implements KeyListener, ActionListener {
 
         addMessageAll(new MONewMessage(ObjectType.ENEMY, enemyCounter, screenWidth + (imgSize / 2), yStart, ENEMY_ENERGY, imgSize, imgSize, "enemy"));
 
-        System.out.println("created enemy: "+enemyCounter);
+        // System.out.println("created enemy: "+enemyCounter);
         return new Enemy(enemyCounter,"enemy", imgSize,imgSize, screenWidth + (imgSize / 2), yStart, ENEMY_ENERGY, ENEMY_POINTS, ENEMY_VELOCITY, focusPlayer, ENEMY_SHOOTING_DURATION);
     }
 

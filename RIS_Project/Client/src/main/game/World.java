@@ -76,27 +76,6 @@ public class World extends JPanel implements ActionListener {
 
 
 
-    public void setPlayerPos(int playerID, int xPos, int yPos, double rotation)
-    {
-        // needs if check, because some movement message arrive earlier than creation messages
-        if(players.containsKey(playerID)) {
-            players.get(playerID).setXPos(xPos);
-            players.get(playerID).setYPos(yPos);
-            players.get(playerID).setdRotation(rotation);
-        }
-    }
-
-
-    public void addPlayer(Player player) {
-        players.put(player.getId(), player);
-    }
-
-    public void removePlayer(int playerID)
-    {
-        players.remove(playerID);
-    }
-
-
 
     public void step() {
 
@@ -121,6 +100,27 @@ public class World extends JPanel implements ActionListener {
     }
 
 
+
+    public void setPlayerPos(int playerID, int xPos, int yPos, double rotation)
+    {
+        // needs if check, because some movement message arrive earlier than creation messages
+        if(players.containsKey(playerID)) {
+            players.get(playerID).setXPos(xPos);
+            players.get(playerID).setYPos(yPos);
+            players.get(playerID).setdRotation(rotation);
+        }
+    }
+
+
+    public void addPlayer(Player player) {
+        players.put(player.getId(), player);
+    }
+
+    public void removePlayer(int playerID)
+    {
+        players.remove(playerID);
+    }
+
     public void addMeteorite(Meteorite meteorite) {
         movingObjects.put(meteorite.getId(), meteorite);
     }
@@ -128,6 +128,7 @@ public class World extends JPanel implements ActionListener {
     public void removeMeteorite(int meteoriteID) {
         movingObjects.remove(meteoriteID);
     }
+
 
     public void addCollectable(Collectable collectable) {
         movingObjects.put(collectable.getId(), collectable);
@@ -148,28 +149,37 @@ public class World extends JPanel implements ActionListener {
 
     public void addEnemyBeam(int enemyID, Beam beam)
     {
+        System.out.println("ADD Enemy "+enemyID+" Beam "+beam.getId());
+
         enemies.get(enemyID).addBeam(beam);
     }
 
     public void removeEnemyBeam(int enemyID, int beamID)
     {
-        System.out.print("player beam keys: ");
+        /*
+        System.out.print("enemy beam keys: ");
         for(Beam b : enemies.get(enemyID).getProjectiles())
-            System.out.print(b.getId());
+            System.out.print(b.getId()+ " ");
+        */
+
+        System.out.println("DEL Enemy "+enemyID+" Beam "+beamID);
 
         enemies.get(enemyID).removeBeam(beamID);
     }
 
     public void addPlayerBeam(int playerID, Beam beam)
     {
+
         players.get(playerID).addBeam(beam);
     }
 
     public void removePlayerBeam(int playerID, int beamID)
     {
+        /*
         System.out.print("player beam keys: ");
         for(Beam b : players.get(playerID).getProjectiles())
-            System.out.print(b.getId());
+            System.out.print(b.getId()+ " ");
+        */
 
         players.get(playerID).removeBeam(beamID);
     }

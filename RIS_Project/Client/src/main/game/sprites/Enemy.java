@@ -34,11 +34,11 @@ public class Enemy extends MovingObject {
 
     public void addBeam(Beam beam)
     {
-        System.out.println("add enemy "+beam.getPlayerID()+" beam "+beam.getId());
+        //System.out.println("add enemy "+beam.getPlayerID()+" beam "+beam.getId());
 
         projectiles.put(beam.getId(), beam);
 
-        System.out.print("projectiles size: "+projectiles.size());
+        //System.out.print("projectiles size: "+projectiles.size());
     }
 
     public void removeBeam(int beamID)
