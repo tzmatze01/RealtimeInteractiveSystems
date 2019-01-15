@@ -41,30 +41,32 @@ public class Main extends JFrame {
         MODelHandler<MODelMessage> hMODeletion = new MODelHandler<>(world);
         MOMovHandler<MOMovMessage> hMOMovement = new MOMovHandler<>(world);
         MONewHandler<MONewMessage> hMONew = new MONewHandler<>(world);
-
+        InfoHandler<InfoMessage> hInfo = new InfoHandler<>(world);
 
         Thread tLogin = new Thread(hLogin);
         Thread tLogout = new Thread(hLogout);
         Thread tDeletion = new Thread(hMODeletion);
         Thread tMovement = new Thread(hMOMovement);
         Thread tNew = new Thread(hMONew);
+        Thread tInfo = new Thread(hInfo);
 
         tLogin.start();
         tLogout.start();
         tDeletion.start();
         tMovement.start();
         tNew.start();
+        tInfo.start();
 
         clientManager.registerMessageHandler(hLogin);
         clientManager.registerMessageHandler(hLogout);
         clientManager.registerMessageHandler(hMODeletion);
         clientManager.registerMessageHandler(hMOMovement);
         clientManager.registerMessageHandler(hMONew);
+        clientManager.registerMessageHandler(hInfo);
 
         world.addKeyListener(clientManager);
         //clientManager.addKeyListener(clientManager);
         world.setFocusable(true);
-
 
         add(world);
 

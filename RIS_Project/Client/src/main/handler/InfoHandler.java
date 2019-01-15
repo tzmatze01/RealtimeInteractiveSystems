@@ -19,22 +19,23 @@ public class InfoHandler<T extends Message> extends NetworkMessageHandler<T> {
 
         InfoMessage m = (InfoMessage)message;
 
-        switch (m.getObjectType())
-        {
-            case PLAYER:
-                if(m.isDamageMessage())
-                    world.addPlayerDamage(m.getUserID(), m.getDamage());
-                else if(m.isGamePointsMessage())
-                    world.addPlayerPoints(m.getUserID(), m.getGamePoints());
-                break;
-            case OTHER:
 
-                break;
-        }
+        if(m.isDamageMessage())
+            world.addPlayerDamage(m.getUserID(), m.getDamage());
+        else if(m.isGamePointsMessage())
+            world.addPlayerPoints(m.getUserID(), m.getGamePoints());
+        else if(m.getLevel() > 0)
+            world.setLevel(m.getLevel());
+
+        // TODO check userID to find out who lost -> 0 = all won or lost
+        //else if(m.isGameOver() && m.isWinGame())
+        //else if(m.isGameOver() && !m.isWinGame())
+
+
     }
 
     @Override
     public MessageType getHandledMessageType() {
-        return null;
+        return MessageType.INFO_MESSAGE;
     }
 }

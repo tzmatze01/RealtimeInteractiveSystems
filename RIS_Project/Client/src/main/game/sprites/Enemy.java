@@ -8,19 +8,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class Enemy extends MovingObject {
 
 
     private double rotation;
 
-    private Map<Integer, Beam> projectiles;
+    private ConcurrentMap<Integer, Beam> projectiles;
 
     public Enemy(int id, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy) {
         super(id, ObjectType.ENEMY, imgFileName, imageWidth, imageHeight, xPos, yPos, energy);
 
 
-        this.projectiles = new HashMap<>();
+        this.projectiles = new ConcurrentHashMap<>();
         this.rotation = 0;
     }
 

@@ -86,15 +86,14 @@ public class ClientManager extends Manager implements KeyListener {
 
         while(isAlive && cc.isLoggedIn()) {
 
-            // TODO print out ois ?? and update gui
-
-            // TODO check if game started
 
             Message message = readFromOIS();
-            listeners.get(message.getType()).addMessage(message);
 
             //if(message.getType() != MessageType.MOV_MOVING_OBJECT)
             //    System.out.println("mmsg type: "+message.getType());
+
+            listeners.get(message.getType()).addMessage(message);
+
         }
 
     }

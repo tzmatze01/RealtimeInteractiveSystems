@@ -7,9 +7,7 @@ public enum ObjectType {
     ENEMY_BEAM(2),
     COLLECTABLE(3),
     PLAYER(4),
-    ENEMY(5),
-    OTHER(6);
-
+    ENEMY(5);
     private int type;
 
     ObjectType(int type)

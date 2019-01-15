@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -17,7 +19,7 @@ public class Player extends MovingObject {
     private double rotation;
     private int velocity;
 
-    private Map<Integer, Beam> projectiles;
+    private ConcurrentMap<Integer, Beam> projectiles;
 
     private MediaPlayer mp;
 
@@ -29,7 +31,7 @@ public class Player extends MovingObject {
 
         this.rotation = 0;
 
-        this.projectiles = new HashMap<>();
+        this.projectiles = new ConcurrentHashMap<>();
     }
 
     private void loadSound(String filename) {

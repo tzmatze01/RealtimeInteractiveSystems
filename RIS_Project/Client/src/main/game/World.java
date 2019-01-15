@@ -10,6 +10,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.AffineTransform;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 
 public class World extends JPanel implements ActionListener {
@@ -19,15 +21,16 @@ public class World extends JPanel implements ActionListener {
     private static int DELAY = 10; // TODO get from cc
 
     // visible and moving objects
-    private Map<Integer, Player> players;
-    private Map<Integer, Enemy> enemies;
-    private Map<Integer, MovingObject> movingObjects;
+    private ConcurrentMap<Integer, Player> players;
+    private ConcurrentMap<Integer, Enemy> enemies;
+    private ConcurrentMap<Integer, MovingObject> movingObjects;
 
     private Image background;
-    Image xximg;
 
     private int screenwidth;
     private int screenheight;
+
+    private int level;
 
     public World(int delay, int screenwidth, int screenheight) {
 
@@ -35,9 +38,11 @@ public class World extends JPanel implements ActionListener {
         this.screenwidth = screenwidth;
         this.screenheight = screenheight;
 
-        this.players = new HashMap<>();
-        this.enemies = new HashMap<>();
-        this.movingObjects = new HashMap<>();
+        this.players = new ConcurrentHashMap<>();
+        this.enemies = new ConcurrentHashMap<>();
+        this.movingObjects = new ConcurrentHashMap<>();
+
+        this.level = 0;
 
         initBoard();
     }
@@ -47,12 +52,6 @@ public class World extends JPanel implements ActionListener {
 
         ImageIcon ii = new ImageIcon("Client/src/main/resources/space.jpeg");
         this.background = ii.getImage().getScaledInstance(screenwidth, screenheight, 0);
-
-
-        ImageIcon iix = new ImageIcon("Client/src/main/game/resources/meteorite1.png");
-        //ImageIcon hb_ii = new ImageIcon("Server/src/main/game/resources/"+hitboxFileName);
-
-        xximg = ii.getImage().getScaledInstance(50, 50 , 0);
 
         timer = new Timer(DELAY, this);
         timer.start();
@@ -214,15 +213,21 @@ public class World extends JPanel implements ActionListener {
             players.get(playerID).reduceEnergy(damage);
     }
 
+    public void setLevel(int level)
+    {
+        this.level = level;
+
+        System.out.println("New level: "+ level);
+    }
+
     private void doDrawing(Graphics g) {
 
         // TODO two player movement https://stackoverflow.com/questions/26828438/how-to-correctly-rotate-my-players-java
         //System.out.println("doDrawing");
 
         Graphics2D g2d = (Graphics2D) g.create();
-
         //g2d.drawImage(background, 0, 0, this);
-        g2d.drawImage(xximg, 50, 50, this);
+
 
         for(Player player : players.values()) {
 

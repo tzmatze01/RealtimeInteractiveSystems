@@ -50,7 +50,8 @@ public class Server implements Runnable, ActionListener {
 
         this.allowedUserNames = new String[]{"hans", "peter", "test"};
 
-        this.gamePlan = new int[][]{{10,0,0}, {15,3,0}, {20,5,1}, {25,5,3}};
+        // meteorites, collectable, enemies
+        this.gamePlan = new int[][]{{3,1,1}, {4,2,0}, {5,2,1}, {7,3,2}, {7,5,3}};
 
         //this.loggedInUsers = new ArrayList<>();
 
