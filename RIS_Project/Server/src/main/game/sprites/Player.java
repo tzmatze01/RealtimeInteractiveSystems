@@ -27,6 +27,8 @@ public class Player extends MovingObject {
     private int velocity;
 
     private List<Beam> projectiles;
+    private List<Beam> projMessage;
+
     private static int BEAM_WIDTH = 20;
     private static int BEAM_HEIGHT = 8;
 
@@ -45,6 +47,7 @@ public class Player extends MovingObject {
         this.velocity = velocity;
 
         this.projectiles = new ArrayList<>();
+        this.projMessage = new ArrayList<>();
 
         this.beamCounter = 0;
         //loadSound(filename);
@@ -54,6 +57,14 @@ public class Player extends MovingObject {
 
         Media sound = new Media(new File("src/main/resources/sound/"+filename).toURI().toString());
         this.mp = new MediaPlayer(sound);
+    }
+
+    public List<Beam> getNewBeams()
+    {
+        List<Beam> tmpBeams = new ArrayList<>(projMessage);
+        projMessage.clear();
+
+        return tmpBeams;
     }
 
     public void move() {
@@ -132,7 +143,9 @@ public class Player extends MovingObject {
             dy -= ddy;
         }
 
-        projectiles.add(new Beam(beamCounter, ObjectType.PLAYER_BEAM, getId(),"beam", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 6));
+        Beam beam = new Beam(beamCounter, ObjectType.PLAYER_BEAM, getId(),"beam", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 6);
+        projectiles.add(beam);
+        projMessage.add(beam);
     }
 
     public double getRotation()
@@ -169,21 +182,26 @@ public class Player extends MovingObject {
         switch( keyCode ) {
             case KeyEvent.VK_W:
             case KeyEvent.VK_UP:
+                System.out.println("player up.");
                 dMovement = velocity;
                 break;
             case KeyEvent.VK_S:
             case KeyEvent.VK_DOWN:
+                System.out.println("player down.");
                 dMovement = -velocity;
                 break;
             case KeyEvent.VK_A:
             case KeyEvent.VK_LEFT:
+                System.out.println("player left.");
                 dRotation = -2;
                 break;
             case KeyEvent.VK_D:
             case KeyEvent.VK_RIGHT :
+                System.out.println("player right.");
                 dRotation = 2;
                 break;
             case KeyEvent.VK_SPACE:
+                System.out.println("player shoot.");
                 shoot();
                 break;
 

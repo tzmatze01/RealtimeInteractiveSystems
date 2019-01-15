@@ -41,6 +41,17 @@ public class Beam extends MovingObject {
         this.yPos += dy * velocity;
     }
 
+    public double getDx() {
+        return dx;
+    }
+
+    public double getDy() {
+        return dy;
+    }
+
+    public double getVelocity() {
+        return velocity;
+    }
 
     public int getPlayerID() {
         return playerID;

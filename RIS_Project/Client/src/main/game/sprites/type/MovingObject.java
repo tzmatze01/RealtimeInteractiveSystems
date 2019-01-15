@@ -82,11 +82,11 @@ public abstract class MovingObject {
         return (int) this.yPos;
     }
 
-    public void setxPos(double xPos) {
+    public void setXPos(double xPos) {
         this.xPos = xPos;
     }
 
-    public void setyPos(double yPos) {
+    public void setYPos(double yPos) {
         this.yPos = yPos;
     }
 
@@ -118,17 +118,6 @@ public abstract class MovingObject {
         return type;
     }
 
-    public int getGamePoints() {
-        return gamePoints;
-    }
-
-    public boolean isToDelete() {
-        return toDelete;
-    }
-
-    public void setToDelete(boolean toDelete) {
-        this.toDelete = toDelete;
-    }
 
     // for collision detection
     public Rectangle getRectangleBounds() {

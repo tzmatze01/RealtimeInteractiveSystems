@@ -58,7 +58,7 @@ public abstract class MovingObject {
     {
         String hitboxFileName = imgFileName + ".jpg";
 
-        System.out.println("src/main/game/resources/"+hitboxFileName);
+        //System.out.println("src/main/game/resources/"+hitboxFileName);
 
         //ImageIcon ii = new ImageIcon("src/main/resources/img/display/"+imgFileName+".png");
         ImageIcon hb_ii = new ImageIcon("Server/src/main/game/resources/"+hitboxFileName);
@@ -98,6 +98,7 @@ public abstract class MovingObject {
     public void reduceEnergy(int amount)
     {
         this.energy -= amount;
+        System.out.println(""+this.type.toString()+" "+this.getId()+" energy: "+this.energy);
     }
 
     public int getEnergy() {

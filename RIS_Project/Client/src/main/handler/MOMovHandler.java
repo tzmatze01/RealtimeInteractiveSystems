@@ -21,10 +21,10 @@ public class MOMovHandler<T extends Message> extends NetworkMessageHandler<T> {
         switch (m.getObjectType())
         {
             case PLAYER:
-                world.setPlayerPos(m.getObjectID(), m.getxPos(), m.getyPos());
+                world.setPlayerPos(m.getObjectID(), m.getxPos(), m.getyPos(), m.getRotation());
                 break;
-            default:
-                System.out.println("amina type: "+m.getObjectType());
+            case ENEMY:
+                world.setEnemyPos(m.getObjectID(), m.getxPos(), m.getyPos(), m.getRotation());
         }
     }
 

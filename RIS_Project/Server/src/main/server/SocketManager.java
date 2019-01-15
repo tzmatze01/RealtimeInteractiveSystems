@@ -82,6 +82,10 @@ public class SocketManager implements Manager {
             try
             {
                 message = (Message)ois.readObject();
+
+                if(!listeners.containsKey(message.getType()))
+                    System.out.println("found no listner for: "+message.getType());
+
                 NetworkMessageHandler nmh = listeners.get(message.getType());
                 nmh.addMessage(message);
             }

@@ -37,7 +37,6 @@ public class ClientManager implements KeyListener, Manager {
     private ConnectionCookie cc;
     private World world;
 
-    private Image img;
 
     public ClientManager(String address, int port, World world)
     {
@@ -52,48 +51,9 @@ public class ClientManager implements KeyListener, Manager {
 
         // FIFO
         this.messages = new LinkedList<>();
-
-        init();
-    }
-
-    public void init()
-    {
-        ImageIcon ii = new ImageIcon("Client/src/main/game/resources/player1.png");
-        img = ii.getImage().getScaledInstance(100, 80, 0);
-
-    }
-
-    /*
-    @Override
-    public void paintComponent(Graphics g) {
-
-        super.paintComponent(g);
-
-        doDrawing(g);
-
-        Toolkit.getDefaultToolkit().sync();
     }
 
 
-    private void doDrawing(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g.create();
-
-        g2d.drawOval(10, 10, 10, 10);
-
-
-        Toolkit.getDefaultToolkit().sync();
-        //ImageIcon ii = new ImageIcon(Toolkit.getDefaultToolkit().getImage((ResourcesManager.class.getResource("src/main/game/resources/player1.png"))));
-
-        // check path where java is looking
-        //System.out.println(System.getProperty("user.dir"));
-
-
-        g2d.drawImage(img,20,20, this);
-
-
-        g2d.drawOval(100, 100, 10, 10);
-    }
-    */
 
     @Override
     public void run() {
@@ -137,7 +97,7 @@ public class ClientManager implements KeyListener, Manager {
             Message message = readFromOIS();
             listeners.get(message.getType()).addMessage(message);
 
-            System.out.println("mmsg type: "+message.getType());
+            //System.out.println("mmsg type: "+message.getType());
         }
 
     }
@@ -206,7 +166,6 @@ public class ClientManager implements KeyListener, Manager {
     public void keyReleased(KeyEvent e) {
 
         if(loggedIn) {
-            //System.out.println("key pressed" + e.paramString());
 
             Message message = null;
 

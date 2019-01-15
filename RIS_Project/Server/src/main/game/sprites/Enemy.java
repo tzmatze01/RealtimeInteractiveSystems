@@ -19,6 +19,8 @@ public class Enemy extends MovingObject {
     private Point playerPos;
 
     private List<Beam> projectiles;
+    private List<Beam> projMessage;
+
     private static int BEAM_WIDTH = 20;
     private static int BEAM_HEIGHT = 8;
 
@@ -48,13 +50,21 @@ public class Enemy extends MovingObject {
         this.nextShootTime = System.currentTimeMillis() + shootingDurationInMS;
 
         this.projectiles = new ArrayList<>();
+        this.projMessage = new ArrayList<>();
 
         beamCounter = 0;
     }
 
+    public List<Beam> getNewBeams()
+    {
+        List<Beam> tmpBeams = new ArrayList<>(projMessage);
+        projMessage.clear();
+
+        return tmpBeams;
+    }
+
     private int calcQuadrantAngleCorrection(int quadrant, double angle)
     {
-
         // correction because angle is only 0-90 degrees and in each quadrant degrees change direction 0°->90° 90°->0°
         if(quadrant == 1)
             return (int)angle;
@@ -178,7 +188,9 @@ public class Enemy extends MovingObject {
             dy += ddy;
         }
 
-        projectiles.add(new Beam(beamCounter, ObjectType.ENEMY_BEAM, getId(),"beam", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 5));
+        Beam b = new Beam(beamCounter, ObjectType.ENEMY_BEAM, getId(),"beam", BEAM_WIDTH, BEAM_HEIGHT,  getX(), getY(), dx, dy, 5);
+        projectiles.add(b);
+        projMessage.add(b);
     }
 
     public int getFocusPlayer() {

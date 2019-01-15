@@ -1,9 +1,10 @@
 package main.game.sprites;
 
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -13,26 +14,13 @@ import main.game.sprites.type.MovingObject;
 
 public class Player extends MovingObject {
 
-    //private int playerID;
-
-    private int dMovement;
-    private int dRotation;
-
-    private double ddx;
-    private double ddy;
-
     private double rotation;
-    private int oldRotation;
-
     private int velocity;
 
-    private List<Beam> projectiles;
-    private static int BEAM_WIDTH = 20;
-    private static int BEAM_HEIGHT = 8;
+    private Map<Integer, Beam> projectiles;
 
     private MediaPlayer mp;
 
-    private int beamCounter;
 
     public Player(int playerID, String imgFileName, int imageWidth, int imageHeight, int xPos, int yPos, int energy) {
         super(playerID, ObjectType.PLAYER, imgFileName, imageWidth, imageHeight, xPos, yPos, energy);
@@ -40,12 +28,8 @@ public class Player extends MovingObject {
         //this.playerID = playerID;
 
         this.rotation = 0;
-        this.oldRotation = 0;
 
-        this.velocity = velocity;
-
-        this.projectiles = new ArrayList<>();
-
+        this.projectiles = new HashMap<>();
     }
 
     private void loadSound(String filename) {
@@ -58,7 +42,7 @@ public class Player extends MovingObject {
 
         // TODO add projectiles to self when spacebar, don't need to send back, only to other player
 
-        for(Beam b : projectiles)
+        for(Beam b : projectiles.values())
         {
             b.move();
         }
@@ -66,15 +50,16 @@ public class Player extends MovingObject {
 
     public void addBeam(Beam beam)
     {
-        projectiles.add(beam);
+        projectiles.put(beam.getId(), beam);
     }
 
-    private void shoot()
-    { }
-
+    public void removeBeam(int beamID)
+    {
+        projectiles.remove(beamID);
+    }
     public void setdRotation(double radians)
     {
-        this.rotation = radians;
+        this.rotation = Math.toDegrees(radians);
     }
     public double getRotation()
     {
@@ -83,14 +68,8 @@ public class Player extends MovingObject {
 
     public List<Beam> getProjectiles()
     {
-        return this.projectiles;
+        return new ArrayList<>(projectiles.values());
     }
-
-    /*
-    public int getPlayerID() {
-        return playerID;
-    }
-    */
 
     public void reduceGamePoints(int amount)
     {

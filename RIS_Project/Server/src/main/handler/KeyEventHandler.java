@@ -25,41 +25,12 @@ public class KeyEventHandler<T extends Message> extends NetworkMessageHandler<T>
 
         if(((KeyEventMessage)message).getKet() == KeyEventType.KEY_PRESSED) {
             world.keyPressed(message.getUserID(), ((KeyEventMessage) message).getKeyCode());
-
-            System.out.println("Key pressed");
+            //System.out.println("Key pressed");
         }
         else if(((KeyEventMessage)message).getKet() == KeyEventType.KEY_RELEASED) {
-            System.out.println("Key released");
+            //System.out.println("Key released");
             world.keyReleased(message.getUserID(), ((KeyEventMessage) message).getKeyCode());
         }
-
-
-        /*
-
-        int keyCode = ((KeyEventMessage)message).getKeyCode();
-
-        switch( keyCode ) {
-            case KeyEvent.VK_W:
-            case KeyEvent.VK_UP:
-                System.out.println("w / up");
-                break;
-            case KeyEvent.VK_S:
-            case KeyEvent.VK_DOWN:
-                System.out.println("s / down");
-                break;
-            case KeyEvent.VK_A:
-            case KeyEvent.VK_LEFT:
-                System.out.println("a / left");
-                break;
-            case KeyEvent.VK_D:
-            case KeyEvent.VK_RIGHT:
-                System.out.println("d / right");
-                break;
-            case KeyEvent.VK_SPACE:
-                System.out.println("space");
-                break;
-        }
-        */
     }
 
     @Override

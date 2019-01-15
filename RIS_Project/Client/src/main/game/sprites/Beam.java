@@ -28,15 +28,6 @@ public class Beam extends MovingObject {
 
     public void move()
     {
-        // TODO
-
-        //
-        //    public Meteorite(String imgFileName, int imageWidth, int imageHeight, int xPos, int yPosStart, int yPosEnd, double m, double velocity, int energy)
-
-        // move with size / accelartion
-        //this.xPos -= velocity;
-        //this.yPos = (m * this.xPos) + yPosEnd;
-
         this.xPos += dx * velocity;
         this.yPos += dy * velocity;
     }

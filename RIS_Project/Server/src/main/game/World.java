@@ -49,8 +49,7 @@ public class World { // implements KeyListener, ActionListener {
     private List<MovingObject> allMovingObjects;
 
     // for ID creation of objects
-    private int collectableCounter;
-    private int meteoriteCounter;
+    private int moCounter;
     private int enemyCounter;
 
     // message queues for registered players
@@ -71,8 +70,7 @@ public class World { // implements KeyListener, ActionListener {
         this.players = new HashMap<>();
         this.enemies = new HashMap<>();
 
-        this.collectableCounter = 0;
-        this.meteoriteCounter = 0;
+        this.moCounter = 0;
         this.enemyCounter = 0;
 
         this.messageQueues = new HashMap<>();
@@ -143,7 +141,8 @@ public class World { // implements KeyListener, ActionListener {
         // add message queue for new player
         messageQueues.put(playerID, new LinkedList<>());
 
-        addMessageAll(new MONewMessage(ObjectType.PLAYER, playerID, 20,20, 100, 80, 40));
+        // TODO this might break if userID is generated differently --> LoginHandler
+        addMessageAll(new MONewMessage(ObjectType.PLAYER, playerID, 20,20, 100, 80, 40, "player"+playerID));
 
         //System.out.println("added mq ");
     }
@@ -175,6 +174,10 @@ public class World { // implements KeyListener, ActionListener {
             allMovingObjects.add(player);
 
             addMessageAll(new MOMovMessage(player.getX(), player.getY(), player.getRotation(), ObjectType.PLAYER, player.getId()));
+
+            for(Beam b : player.getNewBeams())
+                addMessageAll(new MONewMessage(ObjectType.PLAYER_BEAM, b.getId(), player.getId(), b.getX(), b.getY(), b.getDx(), b.getDy(), b.getVelocity(), b.getEnergy(), b.getWidth(), b.getHeight(), "beam"));
+
         }
 
         for(MovingObject mo : movingObjects)
@@ -194,12 +197,12 @@ public class World { // implements KeyListener, ActionListener {
             allMovingObjects.add(enemy);
 
             addMessageAll(new MOMovMessage(enemy.getX(), enemy.getY(), enemy.getRotation(), ObjectType.ENEMY, enemy.getId()));
+
+            for(Beam b : enemy.getNewBeams())
+                addMessageAll(new MONewMessage(ObjectType.ENEMY_BEAM, b.getId(), enemy.getId(), b.getX(), b.getY(), b.getDx(), b.getDy(), b.getVelocity(), b.getEnergy(), b.getWidth(), b.getHeight(), "beam"));
         }
 
         generateGameObjects();
-
-        // for sockethandlers
-        //updateMovingObjectsPostions(allMovingObjects);
 
         collisionDetection(allMovingObjects);
 
@@ -256,6 +259,7 @@ public class World { // implements KeyListener, ActionListener {
                 Player tmpPlayer = players.get(playerID);
                 players.remove(playerID);
 
+                System.out.println("player "+((Player)mo).getId()+" died!");
 
                 // add message to all players for del enemy beam with beam damage
                 addMessageAll(new MODelMessage(ObjectType.PLAYER, playerID));
@@ -381,7 +385,7 @@ public class World { // implements KeyListener, ActionListener {
             Enemy enemy = generateEnemy();
             enemies.put(enemy.getId(), enemy);
         }
-
+*/
         if(movingObjects.isEmpty()) {
 
             movingObjects.add(generateMeteorite());
@@ -389,14 +393,14 @@ public class World { // implements KeyListener, ActionListener {
             movingObjects.add(generateCollectable());
 
             Enemy enemy = generateEnemy();
-            enemies.put(enemy.getEnemyID(), enemy);
+            enemies.put(enemy.getId(), enemy);
         }
-        */
+
     }
 
     private MovingObject generateMeteorite()
     {
-        meteoriteCounter++;
+        moCounter++;
 
         int meteoriteNumber = ThreadLocalRandom.current().nextInt(1, 4);
 
@@ -416,14 +420,14 @@ public class World { // implements KeyListener, ActionListener {
 
         // TODO gamepoints
 
-        addMessageAll(new MONewMessage(ObjectType.METEORITE, meteoriteNumber, screenWidth + (imgWidth / 2), yStart, yEnd, m, velocity, 100, imgWidth, imgHeight));
+        addMessageAll(new MONewMessage(ObjectType.METEORITE, meteoriteNumber, screenWidth + (imgWidth / 2), yStart, yEnd, m, velocity, 100, imgWidth, imgHeight, "meteorite"+meteoriteNumber));
 
-        return new Meteorite(meteoriteCounter,"meteorite"+meteoriteNumber, imgWidth, imgHeight, screenWidth + (imgWidth / 2), yStart, yEnd, m, velocity, 100, 10);
+        return new Meteorite(moCounter,"meteorite"+meteoriteNumber, imgWidth, imgHeight, screenWidth + (imgWidth / 2), yStart, yEnd, m, velocity, 100, 10);
     }
 
     private Collectable generateCollectable()
     {
-        collectableCounter++;
+        moCounter++;
 
         int collectableNumber = ThreadLocalRandom.current().nextInt(1, 3);
 
@@ -440,9 +444,9 @@ public class World { // implements KeyListener, ActionListener {
 
         int imgSize = 30;
 
-        addMessageAll(new MONewMessage(ObjectType.COLLECTABLE, collectableNumber, screenWidth + (imgSize / 2), yStart, yEnd, m, COLLECTABLE_VELOCITY, 10, imgSize, imgSize));
+        addMessageAll(new MONewMessage(ObjectType.COLLECTABLE, collectableNumber, screenWidth + (imgSize / 2), yStart, yEnd, m, COLLECTABLE_VELOCITY, 10, imgSize, imgSize, "artifact"+collectableNumber));
 
-        return new Collectable(collectableCounter,"artifact"+collectableNumber, imgSize, imgSize, screenWidth + (imgSize / 2), yStart, yEnd, m, COLLECTABLE_VELOCITY, 10, COLLECTABLE_POINTS);
+        return new Collectable(moCounter,"artifact"+collectableNumber, imgSize, imgSize, screenWidth + (imgSize / 2), yStart, yEnd, m, COLLECTABLE_VELOCITY, 10, COLLECTABLE_POINTS);
     }
 
     private Enemy generateEnemy()
@@ -454,7 +458,7 @@ public class World { // implements KeyListener, ActionListener {
 
         int imgSize = 60;
 
-        addMessageAll(new MONewMessage(ObjectType.ENEMY, enemyCounter, screenWidth + (imgSize / 2), yStart, ENEMY_ENERGY, imgSize, imgSize));
+        addMessageAll(new MONewMessage(ObjectType.ENEMY, enemyCounter, screenWidth + (imgSize / 2), yStart, ENEMY_ENERGY, imgSize, imgSize, "enemy"));
 
         return new Enemy(enemyCounter,"enemy", imgSize,imgSize, screenWidth + (imgSize / 2), yStart, ENEMY_ENERGY, ENEMY_POINTS, ENEMY_VELOCITY, focusPlayer, ENEMY_SHOOTING_DURATION);
     }

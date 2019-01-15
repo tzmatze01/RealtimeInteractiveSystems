@@ -17,10 +17,14 @@ public class MONewMessage extends Message {
     private double velocity;
     private int energy;
 
+    private String filename;
+
     private int imgWidth;
     private int imgHeight;
 
-    private boolean isStaticMO;
+    private int shooterID;
+    private double dx;
+    private double dy;
     /* TODO myb moving objects by thmselves to reduce network traffic
 
 
@@ -32,7 +36,7 @@ public Collectable(int id, String imgFileName, int imageWidth, int imageHeight, 
      */
 
     // for player & enemy
-    public MONewMessage(ObjectType type, int objectID, int xPos, int yPos, int energy, int imgWidth, int imgHeight)
+    public MONewMessage(ObjectType type, int objectID, int xPos, int yPos, int energy, int imgWidth, int imgHeight, String filename)
     {
         super(MessageType.NEW_MOVING_OBJECT, 0);
 
@@ -46,12 +50,13 @@ public Collectable(int id, String imgFileName, int imageWidth, int imageHeight, 
         this.yPosEnd = 0;
         this.m = 0;
         this.velocity = 0;
-
-        this.isStaticMO = false;
+        this.dx = 0;
+        this.dy = 0;
+        this.filename = filename;
     }
 
-    // for all others
-    public MONewMessage(ObjectType type, int objectID, int xPos, int yPos, int yPosEnd, double m, double velocity, int energy, int imgWidth, int imgHeight)
+    // for collectable, meteorite
+    public MONewMessage(ObjectType type, int objectID, int xPos, int yPos, int yPosEnd, double m, double velocity, int energy, int imgWidth, int imgHeight, String filename)
     {
         super(MessageType.NEW_MOVING_OBJECT, 0);
 
@@ -65,12 +70,31 @@ public Collectable(int id, String imgFileName, int imageWidth, int imageHeight, 
         this.imgWidth = imgWidth;
         this.imgHeight = imgHeight;
         this.energy = energy;
-
-        this.isStaticMO = true;
+        this.dx = 0;
+        this.dy = 0;
+        this.filename = filename;
     }
 
-    public boolean isStaticMO() {
-        return isStaticMO;
+    // for enemy - & player beam
+    public MONewMessage(ObjectType type, int objectID, int shooterID, int xPos, int yPos, double dx, double dy, double velocity, int energy, int imgWidth, int imgHeight, String filename)
+    {
+        super(MessageType.NEW_MOVING_OBJECT, 0);
+
+        this.type = type;
+        this.objectID = objectID;
+        this.xPos = xPos;
+        this.yPos = yPos;
+        this.yPosEnd = 0;
+        this.m = 0;
+        this.velocity = velocity;
+        this.imgWidth = imgWidth;
+        this.imgHeight = imgHeight;
+        this.energy = energy;
+        this.shooterID = shooterID;
+        this.dx = dx;
+        this.dy = dy;
+        this.filename = filename;
+
     }
 
     public int getObjectID() {
@@ -109,8 +133,24 @@ public Collectable(int id, String imgFileName, int imageWidth, int imageHeight, 
         return energy;
     }
 
-    public ObjectType getMOType()
+    public ObjectType getObjectType()
     {
         return this.type;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public int getShooterID() {
+        return shooterID;
+    }
+
+    public double getDx() {
+        return dx;
+    }
+
+    public double getDy() {
+        return dy;
     }
 }

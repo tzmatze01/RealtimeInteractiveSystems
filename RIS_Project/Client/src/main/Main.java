@@ -32,7 +32,8 @@ public class Main extends JFrame {
         add(world);
         */
 
-        World world = new World(10);
+        World world = new World(10, 1200, 800);
+
         ClientManager clientManager = new ClientManager("localhost", 9090, world);
 
         LoginHandler<LoginMessage> hLogin = new LoginHandler<>();
