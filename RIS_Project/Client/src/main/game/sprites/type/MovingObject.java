@@ -46,7 +46,7 @@ public abstract class MovingObject {
 
         this.toDelete = false;
 
-        this.gamePoints = gamePoints;
+        this.gamePoints = 0;
 
         loadImage(imgFileName);
 
@@ -112,6 +112,10 @@ public abstract class MovingObject {
 
     public int getEnergy() {
         return energy;
+    }
+
+    public int getGamePoints() {
+        return gamePoints;
     }
 
     public ObjectType getType() {

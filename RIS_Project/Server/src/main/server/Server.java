@@ -35,7 +35,7 @@ public class Server implements Runnable, ActionListener {
 
     private Timer timer;
     private final int DELAY = 10;
-    private final int NUM_GAME_PLAYERS = 2;
+    private final int NUM_GAME_PLAYERS = 1;
 
     private boolean gameStarted;
 
@@ -125,8 +125,11 @@ public class Server implements Runnable, ActionListener {
     public void actionPerformed(ActionEvent e) {
 
         // check if enough players are registered
-        if(!gameStarted && cc.countRegisteredUsers() == NUM_GAME_PLAYERS && world.countRegisteredPlayers() == NUM_GAME_PLAYERS)
+        if(!gameStarted && cc.countRegisteredUsers() == NUM_GAME_PLAYERS && world.countRegisteredPlayers() == NUM_GAME_PLAYERS) {
+            for(SocketManager sm : sockets)
+                sm.sendGameStart();
             this.gameStarted = true;
+        }
         else if(gameStarted)
         {
             world.step();

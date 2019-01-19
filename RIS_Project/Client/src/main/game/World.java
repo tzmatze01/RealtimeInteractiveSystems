@@ -3,15 +3,20 @@ package main.game;
 
 import main.game.sprites.*;
 import main.game.sprites.type.MovingObject;
+import main.network.ConnectionCookie;
 
 import javax.swing.*;
 import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.TextLayout;
 import java.awt.geom.AffineTransform;
-import java.util.*;
+import javax.swing.JLabel;
+import java.sql.Connection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
 
 
 public class World extends JPanel implements ActionListener {
@@ -30,7 +35,14 @@ public class World extends JPanel implements ActionListener {
     private int screenwidth;
     private int screenheight;
 
+    private JLabel labelHealth;
+    private JLabel labelPoints;
+
     private int level;
+    private int playerID;
+    private boolean gameStart;
+
+    private ConnectionCookie cc;
 
     public World(int delay, int screenwidth, int screenheight) {
 
@@ -42,7 +54,9 @@ public class World extends JPanel implements ActionListener {
         this.enemies = new ConcurrentHashMap<>();
         this.movingObjects = new ConcurrentHashMap<>();
 
+        this.gameStart = false;
         this.level = 0;
+        this.playerID = 0;
 
         initBoard();
     }
@@ -50,7 +64,7 @@ public class World extends JPanel implements ActionListener {
     private void initBoard() {
         setBackground(Color.black);
 
-        ImageIcon ii = new ImageIcon("Client/src/main/resources/space.jpeg");
+        ImageIcon ii = new ImageIcon("Client/src/main/game/resources/space.jpeg");
         this.background = ii.getImage().getScaledInstance(screenwidth, screenheight, 0);
 
         timer = new Timer(DELAY, this);
@@ -64,19 +78,22 @@ public class World extends JPanel implements ActionListener {
 
         super.paintComponent(g);
 
+        if (gameStart && players.size() > 0) {
+            doDrawing(g);
+        }
         // TODO not working
         //g.drawImage(background, 0, 0, null);
 
-        doDrawing(g);
-
-
         Toolkit.getDefaultToolkit().sync();
+
     }
 
 
     @Override
-    public void actionPerformed(ActionEvent e) { step(); }
-
+    public void actionPerformed(ActionEvent e) {
+        if(gameStart && players.size() > 0)
+            step();
+    }
 
 
 
@@ -106,8 +123,11 @@ public class World extends JPanel implements ActionListener {
 
     public void setPlayerPos(int playerID, int xPos, int yPos, double rotation)
     {
+
         // needs if check, because some movement message arrive earlier than creation messages
         if(players.containsKey(playerID)) {
+
+            //System.out.println("set pos playeriD "+playerID);
             players.get(playerID).setXPos(xPos);
             players.get(playerID).setYPos(yPos);
             players.get(playerID).setdRotation(rotation);
@@ -116,6 +136,11 @@ public class World extends JPanel implements ActionListener {
 
 
     public void addPlayer(Player player) {
+
+        // 1st player is own ID
+        //if(playerID == 1000)
+        //    this.playerID = player.getId();
+
         players.put(player.getId(), player);
     }
 
@@ -221,17 +246,35 @@ public class World extends JPanel implements ActionListener {
     {
         this.level = level;
 
-        System.out.println("New level: "+ level);
+       // System.out.println("New level: "+ level);
     }
 
     private void doDrawing(Graphics g) {
 
         // TODO two player movement https://stackoverflow.com/questions/26828438/how-to-correctly-rotate-my-players-java
-        //System.out.println("doDrawing");
+       // System.out.println("doDrawing");
 
         Graphics2D g2d = (Graphics2D) g.create();
-        //g2d.drawImage(background, screenwidth, screenheight, this);
+        g2d.drawImage(background, 0   , 0, this);
 
+        FontRenderContext frc = g2d.getFontRenderContext();
+        Font font1 = new Font("Courier", Font.BOLD, 24);
+        String str1 = new String("HEALTH "+players.get(playerID).getEnergy());
+        TextLayout tl = new TextLayout(str1, font1, frc);
+        g2d.setColor(Color.green);
+        tl.draw(g2d, 10, 20);
+
+
+        // TODO only show health 0
+
+        //frc = g2d.getFontRenderContext();
+        String str2 = new String("POINTS "+players.get(playerID).getGamePoints());
+        TextLayout tl2 = new TextLayout(str2, font1, frc);
+        tl2.draw(g2d, 630, 20);
+
+        String str3 = new String("LEVEL "+level);
+        TextLayout tl3 = new TextLayout(str3, font1, frc);
+        tl3.draw(g2d, 350, 20);
 
         for(Player player : players.values()) {
 
@@ -255,6 +298,8 @@ public class World extends JPanel implements ActionListener {
 
             AffineTransform backup = g2d.getTransform(); // TODO w/ g2d.dispose() ? https://gamedev.stackexchange.com/questions/62196/rotate-image-around-a-specified-origin
             AffineTransform trans = new AffineTransform();
+
+            //System.out.println("player pos: "+player.getRotation()+" "+player.getX()+" "+player.getY());
 
             trans.rotate(player.getRotation(), player.getX(), player.getY());
             g2d.transform(trans);
@@ -367,5 +412,16 @@ public class World extends JPanel implements ActionListener {
         }
     }
 
+    public void setGameStart(boolean gameStart) {
+        this.gameStart = gameStart;
+    }
 
+    public int getPlayerID() {
+        return playerID;
+    }
+
+    public void setPlayerID(int playerID) {
+        System.out.println("init playeriD "+playerID);
+        this.playerID = playerID;
+    }
 }

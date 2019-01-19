@@ -1,6 +1,7 @@
 package main.handler;
 
 import main.game.World;
+import main.game.sprites.type.ObjectType;
 import main.messages.MOMovMessage;
 import main.messages.type.Message;
 import main.messages.type.MessageType;
@@ -18,7 +19,8 @@ public class MOMovHandler<T extends Message> extends NetworkMessageHandler<T> {
 
         MOMovMessage m = (MOMovMessage)message;
 
-        //System.out.println("move: "+m.getObjectType()+" to x: "+m.getxPos()+" y: "+m.getyPos());
+        //if(m.getObjectType() == ObjectType.PLAYER)
+        //    System.out.println("move: "+m.getObjectType()+" to x: "+m.getxPos()+" y: "+m.getyPos());
 
         switch (m.getObjectType())
         {

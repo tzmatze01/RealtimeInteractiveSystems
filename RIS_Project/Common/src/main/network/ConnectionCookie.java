@@ -52,14 +52,15 @@ public class ConnectionCookie {
 
 
     // SERVER METHODS
-    public void addUserPlaying(int userID)
+    public void addUserPlaying(int userID,String userName)
     {
+        this.userName = userName;
         this.isPlaying.put(userID, true);
+        this.isLoggedIn = true;
+        this.userID = userID;
     }
 
-    public void setUserPlaying(int userID, boolean isPlaying)
-    {
-        this.isPlaying.remove(userID);
+    public void setUserPlaying(int userID, boolean isPlaying) {
         this.isPlaying.put(userID, isPlaying);
     }
 
@@ -113,7 +114,14 @@ public class ConnectionCookie {
         return SCREENHEIGHT;
     }
 
+    public void setUserID(int userID) {
+        this.userID = userID;
+        this.isLoggedIn = true;
+    }
 
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
     /*PLAYER METHODS
 
     public void addPlayer(String playerName, Player player)

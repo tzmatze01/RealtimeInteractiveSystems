@@ -34,13 +34,19 @@ public class ClientManager extends Manager implements KeyListener {
     private ObjectInputStream ois = null;
 
     private ConnectionCookie cc;
-    private World world;
 
+    /*/
 
-    public ClientManager(String address, int port, World world)
+    TODO
+
+    Connection cookie von aussen kreieren und INfohandler #  Clientmanager geben
+     */
+
+    public ClientManager(String address, int port, ConnectionCookie cc)
     {
         super();
-        this.world = world;
+        this.cc = cc;
+
 
         this.loggedIn = false;
 
@@ -70,6 +76,7 @@ public class ClientManager extends Manager implements KeyListener {
 
         writeToOOS(new LoginMessage(input, ""));
 
+        /*
         // wait for logged in message
         while(!loggedIn)
         {
@@ -78,14 +85,15 @@ public class ClientManager extends Manager implements KeyListener {
             if(message.getType() == MessageType.LOGIN)
                 if(((LoginMessage)message).isLoggedIn()) {
                     this.loggedIn = true;
-                    this.cc = new ConnectionCookie(message.getUserID(), ((LoginMessage) message).getUserName());
+
+                    this.cc.setUserPlaying(message.getUserID(), true);
 
                     System.out.println("Logged in with name: "+cc.getUserName());
                 }
         }
+        */
 
-
-        while(isAlive && cc.isLoggedIn()) {
+        while(isAlive) {
 
 
             Message message = readFromOIS();
@@ -130,7 +138,10 @@ public class ClientManager extends Manager implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
 
-        if(loggedIn) {
+        //System.out.println(" before key pressed" );
+
+
+        if(cc.isLoggedIn()) {
             //System.out.println("key pressed" + e.paramString());
 
             Message message = null;
@@ -162,7 +173,7 @@ public class ClientManager extends Manager implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
 
-        if(loggedIn) {
+        if(cc.isLoggedIn()) {
 
             Message message = null;
 
@@ -183,6 +194,4 @@ public class ClientManager extends Manager implements KeyListener {
             writeToOOS(message);
         }
     }
-
-
 }

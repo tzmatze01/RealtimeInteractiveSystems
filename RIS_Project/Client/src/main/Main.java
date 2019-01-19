@@ -4,6 +4,7 @@ import main.game.World;
 import main.handler.*;
 import main.client.ClientManager;
 import main.messages.*;
+import main.network.ConnectionCookie;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,16 +33,17 @@ public class Main extends JFrame {
         add(world);
         */
 
+        ConnectionCookie cc = new ConnectionCookie();
         World world = new World(10, 1200, 800);
 
-        ClientManager clientManager = new ClientManager("localhost", 9090, world);
+        ClientManager clientManager = new ClientManager("localhost", 9090, cc);
 
-        LoginHandler<LoginMessage> hLogin = new LoginHandler<>();
+        LoginHandler<LoginMessage> hLogin = new LoginHandler<>(world, cc);
         LogoutHandler<LogoutMessage> hLogout = new LogoutHandler<>();
         MODelHandler<MODelMessage> hMODeletion = new MODelHandler<>(world);
         MOMovHandler<MOMovMessage> hMOMovement = new MOMovHandler<>(world);
         MONewHandler<MONewMessage> hMONew = new MONewHandler<>(world);
-        InfoHandler<InfoMessage> hInfo = new InfoHandler<>(world);
+        InfoHandler<InfoMessage> hInfo = new InfoHandler<>(world, cc);
 
         Thread tLogin = new Thread(hLogin);
         Thread tLogout = new Thread(hLogout);

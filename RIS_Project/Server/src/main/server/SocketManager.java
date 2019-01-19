@@ -3,6 +3,7 @@ package main.server;
 import main.game.sprites.type.ObjectType;
 import main.handler.NetworkMessageHandler;
 import main.manager.Manager;
+import main.messages.InfoMessage;
 import main.messages.LoginMessage;
 import main.messages.MODelMessage;
 import main.messages.MOMovMessage;
@@ -71,7 +72,7 @@ public class SocketManager extends Manager {
 
         System.out.println("user: "+userName+" is logged in!");
         writeToOOS(new LoginMessage(userName, true, cc.getUserID(userName)));
-        cc.setUserPlaying(cc.getUserID(userName), true);
+        cc.addUserPlaying(cc.getUserID(userName),  userName);
 
         // TODO cc is playing
         while(cc.isUserLoggedIn(userName) && cc.isUserPlaying(cc.getUserID(userName)))
@@ -139,6 +140,11 @@ public class SocketManager extends Manager {
 
             writeToOOS(m);
         }
+    }
+
+    public void sendGameStart()
+    {
+        writeToOOS(new InfoMessage(0));
     }
 
     private Message readFromOIS()

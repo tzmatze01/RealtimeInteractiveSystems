@@ -84,4 +84,5 @@ public class Player extends MovingObject {
         System.out.println("players points: "+gamePoints);
     }
 
+
 }
