@@ -167,14 +167,20 @@ public abstract class MovingObject {
                     // if pixel in row to top or bottom is white -> add pixel
                     if(pixelIsWhite(pixels, pos - w) || pixelIsWhite(pixels, pos + w))
                         relevantPoints.add(new Point(width, height));
-                        // first or last black pixel in row
+                    // first or last black pixel in row
                     else if(width == 0 || width == (w - 1))
                         relevantPoints.add(new Point(width, height));
+                    // black pixel follows a white pixel
                     if(!lastPixelBlack)
                         relevantPoints.add(new Point(width, height));
                 }
-                else
+                else {
                     currentPixelBlack = false;
+
+                    // black pixel before a white pixel
+                    if(lastPixelBlack && width != 0)
+                        relevantPoints.add(new Point(width-1, height));
+                }
 
                 lastPixelBlack = currentPixelBlack;
             }

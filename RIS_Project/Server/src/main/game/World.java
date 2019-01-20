@@ -326,6 +326,20 @@ public class World { // implements KeyListener, ActionListener {
                         //System.out.println(""+mo.getType()+" hit "+collMO.getType());
 
                         switch (mo.getType()) {
+
+                            case ENEMY:
+                                if(collMO.getType() == ObjectType.METEORITE)
+                                {
+
+                                    System.out.println("enemy collides with meteorite.");
+
+                                    int enemyEnergy = mo.getEnergy();
+                                    int meteoriteEnergy = collMO.getEnergy();
+
+                                    mo.reduceEnergy(meteoriteEnergy);
+                                    collMO.reduceEnergy(enemyEnergy);
+                                }
+                                break;
                             case PLAYER_BEAM:
                                 if(collMO.getType() == ObjectType.METEORITE || collMO.getType() == ObjectType.ENEMY)
                                 {
@@ -462,13 +476,13 @@ public class World { // implements KeyListener, ActionListener {
 
         double velocity = 1; // TODO calc velocity due size
 
-        // TODO gamepoints
+        int gamePoints = (int) Math.sqrt((double)(imgWidth * imgHeight));
 
         addMessageAll(new MONewMessage(ObjectType.METEORITE, moCounter, screenWidth + (imgWidth / 2), yStart, yEnd, m, velocity, 100, imgWidth, imgHeight, "meteorite"+meteoriteNumber));
 
 
         //System.out.println("created meteorite: "+moCounter);
-        return new Meteorite(moCounter,"meteorite"+meteoriteNumber, imgWidth, imgHeight, screenWidth + (imgWidth / 2), yStart, yEnd, m, velocity, 100, 10);
+        return new Meteorite(moCounter,"meteorite"+meteoriteNumber, imgWidth, imgHeight, screenWidth + (imgWidth / 2), yStart, yEnd, m, velocity, 100, gamePoints);
     }
 
     private Collectable generateCollectable()

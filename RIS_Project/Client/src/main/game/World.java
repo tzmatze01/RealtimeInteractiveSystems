@@ -259,6 +259,7 @@ public class World extends JPanel implements ActionListener {
 
         FontRenderContext frc = g2d.getFontRenderContext();
         Font font1 = new Font("Courier", Font.BOLD, 24);
+
         String str1 = new String("HEALTH "+players.get(playerID).getEnergy());
         TextLayout tl = new TextLayout(str1, font1, frc);
         g2d.setColor(Color.green);
