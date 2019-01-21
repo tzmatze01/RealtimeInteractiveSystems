@@ -28,7 +28,7 @@ public class LoginHandler<T extends Message> extends NetworkMessageHandler<T> {
 
         this.cc.addUserPlaying(lm.getUserID(), lm.getUserName());
         world.setPlayerID(lm.getUserID());
-        world.setGameStart(true);
+        //world.setGameStart(true);
 
 
     }

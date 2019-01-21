@@ -85,7 +85,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
     private void initBoard() {
         setBackground(Color.black);
 
-        players.put(1, new Player(1,"player1", 80, 40, 20,20,100, PLAYER_VELOCITY));
+        players.put(1, new Player(1,"player1", 80, 40, 20,20,10000, PLAYER_VELOCITY));
 
         timer = new Timer(DELAY, this);
         timer.start();
@@ -103,7 +103,6 @@ public class World extends JPanel implements KeyListener, ActionListener {
         Toolkit.getDefaultToolkit().sync();
     }
 
-    @Override
     public void actionPerformed(ActionEvent e) { step(); }
 
     @Override
@@ -312,6 +311,9 @@ public class World extends JPanel implements KeyListener, ActionListener {
         if(enemies.isEmpty()) {
             Enemy enemy = generateEnemy();
             enemies.put(enemy.getEnemyID(), enemy);
+
+            movingObjects.add(generateMeteorite());
+            movingObjects.add(generateMeteorite());
         }
         /*
         if(movingObjects.isEmpty()) {
@@ -456,7 +458,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
             g2d.drawImage(mo.getImage(), midX, midY, this);
         }
 
-        //drawHitboxes(g);
+        drawHitboxes(g);
     }
 
 
@@ -469,7 +471,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
         for(Player player : players.values())
         {
             g2d.rotate(player.getRotation(), player.getX(), player.getY());
-            //g2d.draw(player.getRectangleBounds());
+            g2d.draw(player.getRectangleBounds());
 
             for(Point p : player.getHitboxPoints())
                 g2d.drawOval(p.x, p.y, 1,1);
@@ -503,7 +505,7 @@ public class World extends JPanel implements KeyListener, ActionListener {
 
         for(Enemy enemy : enemies.values())
         {
-            //g2d.draw(enemy.getRectangleBounds());
+            g2d.draw(enemy.getRectangleBounds());
             //g2d.draw(enemy.scanNeighborhood());
 
             for(Point p : enemy.getHitboxPoints())

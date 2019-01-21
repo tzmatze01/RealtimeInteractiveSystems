@@ -141,7 +141,11 @@ public class World extends JPanel implements ActionListener {
         //if(playerID == 1000)
         //    this.playerID = player.getId();
 
+        System.out.println("put playerID"+player.getId());
         players.put(player.getId(), player);
+
+        if(players.size() == 1)
+            setGameStart(true);
     }
 
     public void removePlayer(int playerID)

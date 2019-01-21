@@ -51,14 +51,14 @@ public class Server implements Runnable, ActionListener {
         this.allowedUserNames = new String[]{"hans", "peter", "test"};
 
         // meteorites, collectable, enemies
-        this.gamePlan = new int[][]{{3,1,0}, {4,2,0}, {5,2,1}, {7,3,2}, {7,5,3}};
+        this.gamePlan = new int[][]{{3,1,0}, {4,2,1}, {5,2,1}, {7,3,2}, {7,5,3}};
 
         //this.loggedInUsers = new ArrayList<>();
 
         this.gameStarted = false;
 
         this.cc = new ConnectionCookie();
-        this.world = new World(cc.getScreenWidth(), cc.getScreenHeight(), gamePlan);
+        this.world = new World(cc.getScreenWidth(), cc.getScreenHeight(), gamePlan, NUM_GAME_PLAYERS);
 
         timer = new Timer(DELAY, this);
         timer.start();

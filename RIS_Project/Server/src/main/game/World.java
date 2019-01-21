@@ -61,7 +61,7 @@ public class World { // implements KeyListener, ActionListener {
     // message queues for registered players
     private ConcurrentMap<Integer, LinkedList<Message>> messageQueues;
 
-    public World(int screenWidth, int screenHeight, int[][] gamePlan)
+    public World(int screenWidth, int screenHeight, int[][] gamePlan, int NUM_GAME_PLAYERS)
     {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
@@ -80,6 +80,12 @@ public class World { // implements KeyListener, ActionListener {
         this.wave = 1;
 
         this.messageQueues = new ConcurrentHashMap<>();
+
+        for(int i = 0; i < NUM_GAME_PLAYERS; ++i)
+        {
+            messageQueues.put(i+1, new LinkedList<>());
+        }
+
         //initBoard();
     }
 
@@ -150,12 +156,12 @@ public class World { // implements KeyListener, ActionListener {
         players.put(playerID, new Player(playerID,"player", 80, 40, 20,20, PLAYER_ENERGY, PLAYER_VELOCITY));
 
         // add message queue for new player
-        messageQueues.put(playerID, new LinkedList<>());
+        // messageQueues.put(playerID, new LinkedList<>());
 
         // send messages of existing players to new player
-        for(Player player : players.values())
-            if(player.getId() != playerID)
-                addMessagePlayer(playerID, new MONewMessage(ObjectType.PLAYER, player.getId(), 20, 20, 100, 80, 40, "player"+player.getId()));
+        //for(Player player : players.values())
+        //    if(player.getId() != playerID)
+        //        addMessagePlayer(playerID, new MONewMessage(ObjectType.PLAYER, player.getId(), 20, 20, 100, 80, 40, "player"+player.getId()));
 
         // TODO this might break if userID is generated differently --> LoginHandler
         addMessageAll(new MONewMessage(ObjectType.PLAYER, playerID, 20,20, 100, 80, 40, "player"+playerID));
@@ -211,7 +217,20 @@ public class World { // implements KeyListener, ActionListener {
         for(Enemy enemy : enemies.values())
         {
             int playerID = enemy.getFocusPlayer();
-            enemy.setFocusPlayerPos(players.get(playerID).getX(), players.get(playerID).getY());
+
+            if(players.containsKey(playerID))
+            {
+                enemy.setFocusPlayerPos(players.get(playerID).getX(), players.get(playerID).getY());
+            }
+            else
+            {
+                // take next player if current died
+                for(int tmpPlayerID : players.keySet())
+                {
+                    enemy.setFocusPlayerPos(players.get(tmpPlayerID).getX(), players.get(tmpPlayerID).getY());
+                    break;
+                }
+            }
 
             enemy.move();
 
